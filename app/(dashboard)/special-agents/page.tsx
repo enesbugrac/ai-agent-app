@@ -1,6 +1,6 @@
 import { IoSparkles } from "react-icons/io5";
-import AgentCard from "@/app/components/AgentCard";
-import { agents } from "@/app/data/agents";
+import AgentCard from "@/components/AgentCard";
+import { agents } from "@/data/agents";
 
 export default function SpecialAgents() {
   return (

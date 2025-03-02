@@ -5,9 +5,9 @@ import { IoSend } from "react-icons/io5";
 import { FaRobot, FaEllipsisH, FaCog, FaPaperclip, FaImage } from "react-icons/fa";
 import { notFound } from "next/navigation";
 import { useParams } from "next/navigation";
-import { agents } from "@/app/data/agents";
-import { prompts } from "@/app/data/prompts";
-import PromptCard from "@/app/components/PromptCard";
+import { agents } from "@/data/agents";
+import { prompts } from "@/data/prompts";
+import PromptCard from "@/components/PromptCard";
 
 interface Message {
   id: string;
