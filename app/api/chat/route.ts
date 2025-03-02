@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-const API_URL = "https://aigen-backend-li85.onrender.com/chat/tools";
+const API_URL = "http://localhost:4000/api/chat/tools";
 
 export async function POST(request: Request) {
   try {

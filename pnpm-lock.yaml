@@ -26,6 +26,9 @@ importers:
       viem:
         specifier: ^2.23.5
         version: 2.23.5(bufferutil@4.0.9)(typescript@5.8.2)(utf-8-validate@5.0.10)(zod@3.24.2)
+      zustand:
+        specifier: ^5.0.3
+        version: 5.0.3(@types/react@19.0.10)(react@19.0.0)(use-sync-external-store@1.2.0(react@19.0.0))
     devDependencies:
       '@eslint/eslintrc':
         specifier: ^3

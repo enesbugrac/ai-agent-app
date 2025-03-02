@@ -1,6 +1,6 @@
 "use client";
 
-import { usePrivy, useSolanaWallets, useWallets } from "@privy-io/react-auth";
+import { usePrivy } from "@privy-io/react-auth";
 import { FaUserFriends, FaMapMarkerAlt } from "react-icons/fa";
 import { IoAddCircleOutline } from "react-icons/io5";
 import TokenCarousel from "@/app/components/TokenCarousel";
@@ -10,10 +10,6 @@ import AgentCard from "@/app/components/AgentCard";
 
 export default function Home() {
   const { login, authenticated } = usePrivy();
-  const { wallets } = useWallets();
-  const { wallets: solanaWallets } = useSolanaWallets();
-  console.log(wallets);
-  console.log(solanaWallets);
   const featuredAgents = agents.slice(0, 3); // Show first 2 agents on home page
 
   return (

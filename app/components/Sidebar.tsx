@@ -19,6 +19,7 @@ import {
 import { IoSparkles } from "react-icons/io5";
 import { BsChatDots } from "react-icons/bs";
 import { usePrivy } from "@privy-io/react-auth";
+import { useAuthStore } from "../store/useStore";
 
 interface MenuItem {
   name: string;
@@ -33,6 +34,7 @@ const Sidebar = () => {
   const menuRef = useRef<HTMLDivElement>(null);
   const { user, logout } = usePrivy();
   const pathname = usePathname();
+  const appUser = useAuthStore((state) => state.appUser);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
