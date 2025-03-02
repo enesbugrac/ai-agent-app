@@ -2,28 +2,63 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #0a0a0a;
-  --foreground: #ffffff;
+@layer base {
+  :root {
+    /* Primary Colors */
+    --color-primary: #00FFFF;
+    --color-primary-light: #F3BA2F;
+    --color-primary-dark: #D4A120;
+    --color-neon-green: #00FF88;
+    --color-cyan: #00D4FF;
+    --color-neon-cyan: #00FFFF;
+    --color-yellow: #FFDB48;
+
+    /* Background Colors */
+    --color-background: #13151A;
+    --color-background-card: rgba(19, 21, 26, 0.95);
+    --color-background-overlay: rgba(19, 21, 26, 0.5);
+
+    /* Text Colors */
+    --color-text-primary: #FFFFFF;
+    --color-text-secondary: #888888;
+    --color-text-muted: #666666;
+    --color-text-black: #13151A;
+    --color-text-neon-green: #00FF88;
+    --color-text-neon-cyan: #00FFFF;
+
+    /* Border Colors */
+    --color-border: rgba(136, 136, 136, 0.2);
+    --color-border-light: rgba(243, 186, 47, 0.05);
+    --color-border-dark: rgba(243, 186, 47, 0.2);
+    --color-border-neon-green: #00FF88;
+
+    /* Status Colors */
+    --color-success: #00FF88;
+    --color-success-background: #103020;
+    --color-success-shadow: rgba(34, 197, 94, 0.35);
+    --color-error: #FF3131;
+    --color-error-background: #401010;
+    --color-error-shadow: rgba(239, 68, 68, 0.35);
+  }
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: var(--color-background);
+    --foreground: var(--color-text-primary);
   }
 }
 
 body {
-  color: #ccc;
-  background: #2c001e;
+  color: var(--color-text-secondary);
+  background: var(--color-background);
   font-family: "Ubuntu", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
 /* Windows 98 button hover effect */
 .win98-btn:active {
-  border-color: var(--win98-border-dark) var(--win98-border-light)
-    var(--win98-border-light) var(--win98-border-dark);
+  border-color: var(--color-border-dark) var(--color-border-light)
+    var(--color-border-light) var(--color-border-dark);
   padding-top: 2px;
   padding-left: 2px;
 }
@@ -35,17 +70,17 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #2c001e;
+  background: var(--color-background);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #4c0035;
+  background: var(--color-background-card);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #5c0042;
+  background: var(--color-background-overlay);
 }
 
 .scrollbar-hide {
@@ -59,8 +94,15 @@ body {
 
 /* Smooth transitions */
 * {
-  transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease,
-    box-shadow 0.2s ease, opacity 0.2s ease;
+  transition: transform 0.2s ease,
+    width 0.2s ease,
+    height 0.2s ease,
+    opacity 0.2s ease;
+}
+
+/* Remove transition from hover effects */
+*:hover {
+  transition: transform 0.2s ease;
 }
 
 /* Remove focus outline for clicked buttons */
@@ -71,12 +113,12 @@ button:focus {
 /* Custom shadow for cards */
 .shadow-lg {
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06),
-    0 0 0 1px rgba(243, 186, 47, 0.05);
+    0 0 0 1px var(--color-border-light);
 }
 
 .shadow-xl {
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05),
-    0 0 0 1px rgba(243, 186, 47, 0.1);
+    0 0 0 1px var(--color-border);
 }
 
 @font-face {
@@ -108,4 +150,40 @@ button:focus {
 
 .mask-edges {
   mask-image: linear-gradient(to right, transparent, black 20%, black 80%, transparent);
+}
+
+.logo-background {
+  position: relative;
+  transform: rotate(45deg);
+  background: linear-gradient(135deg, var(--color-yellow) 0%, var(--color-yellow) 100%);
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.logo-background::before {
+  content: '';
+  position: absolute;
+  inset: 1px;
+  background: var(--color-background);
+  border-radius: 3px;
+}
+
+.logo-background::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 4px;
+  background: linear-gradient(135deg, var(--color-yellow) 0%, transparent 100%);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.logo-background:hover::after {
+  opacity: 1;
+}
+
+.logo-content {
+  transform: rotate(-45deg);
+  position: relative;
+  z-index: 1;
 }

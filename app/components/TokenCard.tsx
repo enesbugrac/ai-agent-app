@@ -11,7 +11,7 @@ interface TokenCardProps {
 
 const TokenCard = ({ icon, name, price, percentage, isPositive }: TokenCardProps) => {
   return (
-    <div className="bg-[#2C001E] rounded-xl border border-[#F3BA2F]/10 p-4 hover:bg-[#3C0029] transition-all group">
+    <div className="bg-background-card rounded-xl border border-border p-4 hover:bg-background-overlay transition-all group">
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-3">
           {icon ? (
@@ -23,18 +23,20 @@ const TokenCard = ({ icon, name, price, percentage, isPositive }: TokenCardProps
               className="rounded-full group-hover:scale-110 transition-transform"
             />
           ) : (
-            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#F3BA2F] to-[#E95420] flex items-center justify-center group-hover:scale-110 transition-transform">
+            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-primary-dark flex items-center justify-center group-hover:scale-110 transition-transform">
               <span className="text-lg">{name[0]}</span>
             </div>
           )}
           <div>
-            <h3 className="text-[#F3BA2F] font-medium mb-0.5">{name}</h3>
-            <span className="text-xs text-[#888]">{price}</span>
+            <h3 className="text-primary font-medium mb-0.5">{name}</h3>
+            <span className="text-xs text-secondary">{price}</span>
           </div>
         </div>
         <div
           className={`px-3 py-1 rounded-full ${
-            isPositive ? "bg-green-500/10 text-green-400" : "bg-red-500/10 text-red-400"
+            isPositive 
+              ? "bg-status-success-background text-status-success" 
+              : "bg-status-error-background text-status-error"
           }`}
         >
           <span className="text-sm font-medium">{percentage}</span>
@@ -42,14 +44,14 @@ const TokenCard = ({ icon, name, price, percentage, isPositive }: TokenCardProps
       </div>
       <div className="flex items-center justify-between">
         <div className="flex gap-1">
-          <button className="p-1.5 rounded-lg hover:bg-[#F3BA2F]/10 text-[#666] hover:text-[#F3BA2F] transition-colors">
+          <button className="p-1.5 rounded-lg hover:bg-background-highlight text-muted hover:text-primary transition-colors">
             <span>📊</span>
           </button>
-          <button className="p-1.5 rounded-lg hover:bg-[#F3BA2F]/10 text-[#666] hover:text-[#F3BA2F] transition-colors">
+          <button className="p-1.5 rounded-lg hover:bg-background-highlight text-muted hover:text-primary transition-colors">
             <span>💱</span>
           </button>
         </div>
-        <button className="text-[#666] hover:text-[#F3BA2F]">•••</button>
+        <button className="text-muted hover:text-primary">•••</button>
       </div>
     </div>
   );

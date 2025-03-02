@@ -9,7 +9,7 @@ const geist = Geist({
 });
 
 export const metadata: Metadata = {
-  title: "Griffain",
+  title: "Aigen",
   description: "Windows 98 style crypto dashboard",
 };
 
