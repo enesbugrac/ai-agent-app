@@ -2,7 +2,7 @@
 
 import { useParams, notFound } from "next/navigation";
 import { FaEllipsisH, FaCog } from "react-icons/fa";
-import { agents } from "@/app/data/agents";
+import { agents } from "@/data/agents";
 
 export default function ChatPage() {
   const params = useParams();
