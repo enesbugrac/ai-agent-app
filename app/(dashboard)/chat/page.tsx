@@ -1,36 +1,16 @@
 "use client";
 
 import { useParams, notFound } from "next/navigation";
-import { useState, useRef, useEffect } from "react";
-import { IoSend } from "react-icons/io5";
-import { FaRobot, FaUser, FaEllipsisH, FaCog } from "react-icons/fa";
-import { agents } from "../data/agents";
-
-interface Message {
-  id: number;
-  text: string;
-  sender: "user" | "ai";
-  timestamp: Date;
-  isLoading?: boolean;
-}
+import { FaEllipsisH, FaCog } from "react-icons/fa";
+import { agents } from "@/app/data/agents";
 
 export default function ChatPage() {
   const params = useParams();
-  const agent = agents.find(a => a.id === params.id);
+  const agent = agents.find((a) => a.id === params.id);
 
   if (!agent) {
     notFound();
   }
-
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: 1,
-      text: `Hello! I'm ${agent?.name}. How can I assist you today?`,
-      sender: "ai",
-      timestamp: new Date(),
-    },
-  ]);
-  // ... rest of your states
 
   // Update the header to use the agent info
   return (
@@ -62,4 +42,4 @@ export default function ChatPage() {
       {/* Just update the colors to use the new theme variables */}
     </div>
   );
-} 
+}

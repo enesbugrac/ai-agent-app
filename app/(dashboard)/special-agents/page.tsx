@@ -1,7 +1,6 @@
-import { FaStore, FaUserFriends, FaRobot, FaBrain, FaChartLine } from "react-icons/fa";
 import { IoSparkles } from "react-icons/io5";
-import AgentCard from "../components/AgentCard";
-import { agents } from "../data/agents";
+import AgentCard from "@/app/components/AgentCard";
+import { agents } from "@/app/data/agents";
 
 export default function SpecialAgents() {
   return (
@@ -70,4 +69,4 @@ export default function SpecialAgents() {
       </div>
     </div>
   );
-} 
+}

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
 import "./globals.css";
-import Sidebar from "./components/Sidebar";
+import { Providers } from "./providers";
 
 const geist = Geist({
   variable: "--font-geist",
@@ -21,10 +21,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geist.variable} h-screen overflow-hidden`}>
-        <div className="flex h-full">
-          <Sidebar />
-          <main className="flex-1 overflow-hidden">{children}</main>
-        </div>
+        <Providers>
+          <div className="flex h-full">
+            <main className="flex-1 overflow-hidden">{children}</main>
+          </div>
+        </Providers>
       </body>
     </html>
   );

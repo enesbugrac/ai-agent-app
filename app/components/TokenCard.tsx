@@ -34,8 +34,8 @@ const TokenCard = ({ icon, name, price, percentage, isPositive }: TokenCardProps
         </div>
         <div
           className={`px-3 py-1 rounded-full ${
-            isPositive 
-              ? "bg-status-success-background text-status-success" 
+            isPositive
+              ? "bg-status-success-background text-status-success"
               : "bg-status-error-background text-status-error"
           }`}
         >

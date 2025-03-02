@@ -1,11 +1,6 @@
 import Link from "next/link";
 import { IconType } from "react-icons";
-import {
-  FaEllipsisH,
-  FaChartLine,
-  FaExchangeAlt,
-  FaHeart,
-} from "react-icons/fa";
+import { FaEllipsisH, FaChartLine, FaExchangeAlt, FaHeart } from "react-icons/fa";
 
 interface AgentCardProps {
   id: string;
@@ -15,7 +10,13 @@ interface AgentCardProps {
   icon: IconType;
 }
 
-export default function AgentCard({ id, name, description, type, icon: Icon }: AgentCardProps) {
+export default function AgentCard({
+  id,
+  name,
+  description,
+  type,
+  icon: Icon,
+}: AgentCardProps) {
   return (
     <Link href={`/chat/${id}`} className="block group h-[200px]">
       <div className="bg-background-overlay rounded-lg overflow-hidden border border-border shadow-lg backdrop-blur-sm h-full hover:border-primary/20 transition-[border-color]">

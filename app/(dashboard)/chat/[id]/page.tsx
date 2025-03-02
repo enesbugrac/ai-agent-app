@@ -2,12 +2,12 @@
 
 import { useState, useRef, useEffect } from "react";
 import { IoSend } from "react-icons/io5";
-import { FaRobot, FaUser, FaEllipsisH, FaCog, FaChartLine, FaPaperclip, FaImage, FaEnvelope, FaFileAlt, FaCode } from "react-icons/fa";
+import { FaRobot, FaEllipsisH, FaCog, FaPaperclip, FaImage } from "react-icons/fa";
 import { notFound } from "next/navigation";
 import { useParams } from "next/navigation";
 import { agents } from "@/app/data/agents";
-import PromptCard from "@/app/components/PromptCard";
 import { prompts } from "@/app/data/prompts";
+import PromptCard from "@/app/components/PromptCard";
 
 interface Message {
   id: string;
@@ -19,15 +19,15 @@ interface Message {
 
 // Helper function for consistent time formatting
 const formatTime = (date: Date) => {
-  return date.toLocaleTimeString('en-US', {
-    hour: '2-digit',
-    minute: '2-digit',
+  return date.toLocaleTimeString("en-US", {
+    hour: "2-digit",
+    minute: "2-digit",
   });
 };
 
 export default function ChatPage() {
   const params = useParams();
-  const agent = agents.find(a => a.id === params.id);
+  const agent = agents.find((a) => a.id === params.id);
 
   if (!agent) {
     notFound();
@@ -159,7 +159,7 @@ export default function ChatPage() {
         {/* Welcome Message */}
         <div className="mb-8">
           <h1 className="text-4xl font-medium mb-2">
-          Hello! I'm, <span className="text-tertiary">{agent.name}</span>
+            Hello! I&apos;m, <span className="text-tertiary">{agent.name}</span>
           </h1>
           <h1 className="text-4xl text-primary"> How can I assist you today?</h1>
           <p className="text-secondary text-sm mt-2">
