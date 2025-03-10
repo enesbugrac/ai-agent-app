@@ -1,24 +1,16 @@
 "use client";
 
-interface Token {
-  name: string;
-  price: string;
-  percentage: string;
-  isPositive: boolean;
-}
+import Carousel from './Carousel';
+import { Token } from '../data/tokens';
 
 interface TokenCarouselProps {
   tokens: Token[];
 }
 
 export default function TokenCarousel({ tokens }: TokenCarouselProps) {
-  // Duplicate tokens for seamless loop
-  const displayTokens = [...tokens, ...tokens, ...tokens];
-
   return (
-    <div className="relative overflow-hidden flex-1 mask-edges  flex items-center">
-      <div className="flex whitespace-nowrap animate-scroll">
-        {displayTokens.map((token, index) => (
+    <Carousel className="flex-1" slideDirection="left">
+     {tokens.map((token, index) => (
           <div
             key={`${token.name}-${index}`}
             className="inline-flex items-center gap-2 px-4 py-1 text-xs font-medium group"
@@ -41,7 +33,6 @@ export default function TokenCarousel({ tokens }: TokenCarouselProps) {
             </span>
           </div>
         ))}
-      </div>
-    </div>
+    </Carousel>
   );
 }

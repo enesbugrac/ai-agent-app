@@ -7,20 +7,25 @@ const solanaConnectors = toSolanaWalletConnectors();
 const PRIVY_APP_ID = process.env.NEXT_PUBLIC_PRIVY_APP_ID || "";
 
 export function Providers({ children }: { children: React.ReactNode }) {
+
+
   return (
     <PrivyProvider
       appId={PRIVY_APP_ID}
       config={{
         appearance: {
           theme: "dark",
-          accentColor: "#676FFF",
-          logo: "https://your-logo-url",
+          accentColor: "#FFDB48",
+          logo: "/logo.png",
           walletChainType: "ethereum-and-solana",
         },
+
+
         loginMethods: ["email", "wallet"],
         externalWallets: {
           solana: { connectors: solanaConnectors },
         },
+         
       }}
     >
       {children}

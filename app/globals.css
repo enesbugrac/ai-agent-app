@@ -5,7 +5,7 @@
 @layer base {
   :root {
     /* Primary Colors */
-    --color-primary: #00FFFF;
+    --color-primary: #FFDB48;
     --color-primary-light: #F3BA2F;
     --color-primary-dark: #D4A120;
     --color-neon-green: #00FF88;
@@ -39,6 +39,11 @@
     --color-error: #FF3131;
     --color-error-background: #401010;
     --color-error-shadow: rgba(239, 68, 68, 0.35);
+
+
+
+    /* Privy Variables */
+
   }
 }
 
@@ -53,6 +58,30 @@ body {
   color: var(--color-text-secondary);
   background: var(--color-background);
   font-family: "Ubuntu", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+
+
+  --privy-color-foreground: var(--color-text-secondary);
+  --privy-color-background: var(--color-background);
+  /* --privy-color-foreground-2: var(--color-primary); */
+  /* --privy-color-foreground-3: var(--color-primary); */
+  --privy-color-foreground-4: rgba(255, 219, 72, 0.2);
+  --privy-color-accent: var(--color-primary);
+  --privy-color-foreground-accent: var(--color-primary);
+
+
+  /* --privy-color-background: #13151A;
+  --privy-color-background-2: #13151A;
+  --privy-color-background-3: #13151A;
+  --privy-color-foreground-2: #FFFFFF;
+  --privy-color-foreground-3: #FFFFFF;
+  --privy-color-foreground-4: #FFFFFF;
+  --privy-color-accent-light: #00FFFF;
+  --privy-color-accent-lightest: #00FFFF;
+  --privy-color-accent-darkest: #00FFFF;
+  --privy-color-success: #00FFFF;
+  --privy-color-error: #00FFFF;
+  --privy-color-error-light: #00FFFF; */
 }
 
 /* Windows 98 button hover effect */
@@ -131,21 +160,37 @@ button:focus {
   letter-spacing: 0.1em;
 }
 
-@keyframes scroll {
+@keyframes scroll-left {
   0% {
     transform: translateX(0);
   }
   100% {
-    transform: translateX(-33.333%);
+    transform: translateX(-50%);
   }
 }
 
-.animate-scroll {
-  animation: scroll 30s linear infinite;
-  will-change: transform;
-  &:hover {
-    animation-play-state: paused;
+@keyframes scroll-right {
+  0% {
+    transform: translateX(-50%);
   }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.animate-scroll-left {
+  animation: scroll-left 30s linear infinite;
+  will-change: transform;
+}
+
+.animate-scroll-right {
+  animation: scroll-right 30s linear infinite;
+  will-change: transform;
+}
+
+.animate-scroll-left:hover,
+.animate-scroll-right:hover {
+  animation-play-state: paused;
 }
 
 .mask-edges {
@@ -186,4 +231,69 @@ button:focus {
   transform: rotate(-45deg);
   position: relative;
   z-index: 1;
+}
+
+.hhIwZq.hhIwZq >svg {
+  color: var(--color-primary) !important;
+}
+.gaBDBv{
+  box-shadow: none !important;
+}
+.dhZduJ {
+  backdrop-filter: blur(6px) !important;
+}
+
+.typing-animation {
+  padding: 4px 8px;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  background-color: #ffffff;
+  border-radius: 50%;
+  animation: typing 1.5s infinite ease-in-out;
+}
+
+.dot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.dot:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+
+
+@keyframes typing-dot {
+  0%, 20%, 53%, 100% {
+    transform: translate3d(0, 0, 0);
+  }
+40%, 43% {
+  -webkit-animation-timing-function: cubic-bezier(0.755, 0.05, 0.855, 0.06);
+  animation-timing-function: cubic-bezier(0.755, 0.05, 0.855, 0.06);
+  -webkit-transform: translate3d(0, -30px, 0) scaleY(1.1);
+  transform: translate3d(0, 0, 0) scaleY(1.1);
+}
+70% {
+  -webkit-animation-timing-function: cubic-bezier(0.755, 0.05, 0.855, 0.06);
+  animation-timing-function: cubic-bezier(0.755, 0.05, 0.855, 0.06);
+  -webkit-transform: translate3d(0, -15px, 0) scaleY(1.05);
+  transform: translate3d(0, -5px, 0) scaleY(1.05);
+}
+80% {
+  -webkit-transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+  transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+  -webkit-transform: translate3d(0, 0, 0) scaleY(0.95);
+  transform: translate3d(0, 0, 0) scaleY(0.95);
+}
+90% {
+  -webkit-transform: translate3d(0, -4px, 0) scaleY(1.02);
+  transform: translate3d(0, -4px, 0) scaleY(1.02);
+}}
+
+@layer utilities {
+  .animate-typing-dot {
+    animation: typing-dot 1s infinite;
+  }
 }
