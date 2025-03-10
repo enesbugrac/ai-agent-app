@@ -1,7 +1,8 @@
-import { FaStore, FaUserFriends, FaRobot, FaBrain, FaChartLine } from "react-icons/fa";
+import { FaChartLine } from "react-icons/fa";
 import { IconType } from "react-icons";
 
 export interface Agent {
+  displayId: string;
   id: string;
   name: string;
   description: string;
@@ -11,38 +12,11 @@ export interface Agent {
 
 export const agents: Agent[] = [
   {
-    id: "sniper-bot",
+    id: "asst_DNjos1zUGKOjV7lgD6wwtxRJ",
+    displayId: "sniper-bot",
     name: "Sniper",
     description: "Snipe new tokens on pump.fun",
     type: "Token Sniper",
     icon: FaChartLine,
   },
-  {
-    id: "neural-ai",
-    name: "Neural",
-    description: "Advanced AI model for market analysis and predictions.",
-    type: "Market Analyzer",
-    icon: FaBrain,
-  },
-  {
-    id: "auto-trade",
-    name: "AutoTrade",
-    description: "Automated trading with customizable strategies.",
-    type: "Trading Bot",
-    icon: FaRobot,
-  },
-  {
-    id: "social-sense",
-    name: "SocialSense",
-    description: "Social media sentiment analysis for crypto markets.",
-    type: "Social Analyzer",
-    icon: FaUserFriends,
-  },
-  {
-    id: "referral-bot",
-    name: "ReferralBot",
-    description: "Earn rewards by referring friends and growing your network with our automated referral system.",
-    type: "AI Trading Bot",
-    icon: FaStore,
-  },
-]; 
+];

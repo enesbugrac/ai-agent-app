@@ -84,8 +84,8 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {featuredAgents.map((agent) => (
               <AgentCard
-                key={agent.id}
-                id={agent.id}
+                key={agent.displayId}
+                id={agent.displayId}
                 name={agent.name}
                 description={agent.description}
                 type={agent.type}
