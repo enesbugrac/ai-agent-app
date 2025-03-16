@@ -1,14 +1,15 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import { IoSend } from "react-icons/io5";
 import { FaEllipsisH, FaCog, FaPaperclip, FaImage } from "react-icons/fa";
 import { notFound, useRouter } from "next/navigation";
 import { useParams } from "next/navigation";
 import { agents } from "@/data/agents";
-import { prompts } from "@/data/prompts";
-import PromptCard from "@/components/PromptCard";
+import AgentView from "../components/AgentView";
+import ThreadView from "../components/ThreadView";
 import "animate.css";
+import { useThreadsStore } from "@/app/store/useThreadsStore";
 
 interface Message {
   _id: string;
@@ -16,6 +17,7 @@ interface Message {
   role: "user" | "assistant";
   timestamp: string;
   isLoading?: boolean;
+  createdAt?: string;
 }
 
 // Helper function for consistent time formatting
@@ -29,12 +31,9 @@ const formatTime = (date: Date) => {
 export default function ChatPage() {
   const router = useRouter();
   const params = useParams();
-  const agent = agents.find((a) => a.displayId === params.displayId);
-  const { id } = params;
 
-  if (!agent && !id) {
-    notFound();
-  }
+  const { threads } = useThreadsStore();
+  const { id } = params;
 
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
@@ -42,8 +41,20 @@ export default function ChatPage() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [streamingText, setStreamingText] = useState("");
   const [isStreaming, setIsStreaming] = useState(false);
-  const [streamingMessageId, setStreamingMessageId] = useState<string | null>(null);
   const [threadId, setThreadId] = useState<string | null>(null);
+
+  const currentThread = useMemo(
+    () => threads.find((t) => t._id === threadId),
+    [threads, threadId]
+  );
+  const agent = useMemo(
+    () =>
+      agents.find(
+        (a) => a.displayId === params.id || a.id === currentThread?.assistantId
+      ),
+    [params.id, currentThread]
+  );
+
   const [welcomeMessageDissapear, setWelcomeMessageDissapear] = useState(false);
   const inputContainerRef = useRef<HTMLDivElement>(null);
 
@@ -51,7 +62,7 @@ export default function ChatPage() {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  const simulateStream = (message: any) => {
+  const simulateStream = (message: Message) => {
     setIsStreaming(true);
     setStreamingText("");
     let index = 0;
@@ -66,13 +77,14 @@ export default function ChatPage() {
         setMessages((prev) => [
           ...prev,
           {
-            _id: `ai-${Date.now()}`,
+            _id: message._id,
             content: message.content,
             role: "assistant",
-            timestamp: formatTime(new Date()),
+            timestamp: formatTime(
+              message?.createdAt ? new Date(message.createdAt) : new Date()
+            ),
           },
         ]);
-        setStreamingMessageId(null);
       }
     }, 30);
   };
@@ -82,7 +94,7 @@ export default function ChatPage() {
       setWelcomeMessageDissapear(true);
       const response = await fetch(`/api/chat/thread/${threadId}`);
       const data = await response.json();
-      setThreadId(data.openAiThreadId);
+      setThreadId(data._id);
       setMessages(data.messages);
     } catch (error) {
       console.error("Thread fetch error:", error);
@@ -108,10 +120,9 @@ export default function ChatPage() {
       }
 
       const data = await response.json();
-      setThreadId(data.thread.openAiThreadId);
+      setThreadId(data.id);
 
-      // URL'i güncelle
-      router.replace(`/chat/${data.thread.openAiThreadId}`);
+      router.replace(`/chat/${data.id}`);
 
       return data;
     } catch (error) {
@@ -125,8 +136,7 @@ export default function ChatPage() {
 
     if (threadId) setWelcomeMessageDissapear(true);
 
-    // Input container animasyonu
-    if (inputContainerRef.current) {
+    if (inputContainerRef.current && !threadId) {
       inputContainerRef.current.style.transform = "translateY(100%)";
       setTimeout(() => {
         if (inputContainerRef.current) {
@@ -139,7 +149,6 @@ export default function ChatPage() {
       }, 100);
     }
 
-    // User mesajını ekle
     const userMessageId = `user-${Date.now()}`;
     setMessages((prev) => [
       ...prev,
@@ -154,7 +163,6 @@ export default function ChatPage() {
     setIsTyping(true);
 
     try {
-      // İlk mesajsa thread oluştur
       if (!threadId) {
         const threadResponse = await createThread(message);
         if (!threadResponse) {
@@ -164,35 +172,22 @@ export default function ChatPage() {
         const lastMessage = threadResponse.messages[threadResponse.messages.length - 1];
         simulateStream(lastMessage);
       } else {
-        // Mevcut thread'e mesaj gönder
         const response = await fetch(`/api/chat/thread/${threadId}`, {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            content: message.trim(),
-          }),
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ content: message.trim() }),
         });
 
-        if (!response.ok) {
-          throw new Error("Failed to send message");
-        }
+        if (!response.ok) throw new Error("Failed to send message");
 
         const data = await response.json();
-        const lastMessage = data.assistantMessage;
-        simulateStream(lastMessage);
+        simulateStream(data);
       }
       setIsTyping(false);
     } catch (error) {
       console.error("Message send error:", error);
       setIsTyping(false);
-      // Hata mesajı göster
     }
-  };
-
-  const handlePromptClick = (text: string) => {
-    handleSend(text);
   };
 
   useEffect(() => {
@@ -208,7 +203,7 @@ export default function ChatPage() {
   }, [id]);
 
   return (
-    <div className="flex flex-col justify-center items-center h-full bg-background">
+    <div className="flex flex-col h-screen bg-background">
       {/* Chat Header */}
       <div className="z-50 h-16 w-full bg-background-overlay border-b border-border backdrop-blur-sm px-6 flex items-center justify-between">
         <div className="flex items-center gap-3">
@@ -232,89 +227,29 @@ export default function ChatPage() {
         </div>
       </div>
 
-      {/* Main Chat Area */}
-
       <div
-        className={`flex-1 flex flex-col w-[70%] ${
-          messages?.length > 0 ? "justify-between" : "justify-center"
-        } py-4 gap-4`}
+        className={`flex-1 flex flex-col w-[70%] mx-auto ${
+          threadId ? "justify-between" : "justify-center"
+        } py-4 gap-4 h-[calc(100vh-4rem)] overflow-hidden`}
       >
-        {/* Welcome Message */}
-
-        {messages?.length === 0 && (
-          <div
-            id="welcome-message"
-            className={`animate__animated ${
-              welcomeMessageDissapear ? "animate__fadeOutUp" : ""
-            }`}
-          >
-            <div className="mb-8">
-              <h1 className="text-4xl font-medium mb-2">
-                Hello! I&apos;m, <span className="text-tertiary">{agent?.name}</span>
-              </h1>
-              <h1 className="text-4xl text-primary"> How can I assist you today?</h1>
-              <p className="text-secondary text-sm mt-2">
-                Use one of the most common prompts below or use your own to begin
-              </p>
-            </div>
-
-            {/* Prompt Cards */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
-              {prompts.map((prompt, index) => (
-                <PromptCard
-                  key={index}
-                  icon={prompt.icon}
-                  text={prompt.text}
-                  onClick={() => handlePromptClick(prompt.text)}
-                />
-              ))}
-            </div>
-          </div>
+        {!threadId ? (
+          <AgentView
+            agent={agent!}
+            onPromptClick={handleSend}
+            welcomeMessageDissapear={welcomeMessageDissapear}
+          />
+        ) : (
+          <ThreadView
+            messages={messages}
+            isTyping={isTyping}
+            isStreaming={isStreaming}
+            streamingText={streamingText}
+          />
         )}
-
-        {messages?.length > 0 && (
-          <div>
-            {messages.map((message) => (
-              <div
-                key={message._id}
-                className={`flex ${
-                  message.role === "user" ? "justify-end" : "justify-start"
-                }`}
-              >
-                <div
-                  className={`mb-4 rounded-lg max-w-2xl ${
-                    message.role === "user"
-                      ? "bg-[#1A1D23] text-white ml-auto py-3 px-4"
-                      : " text-white mr-auto p-0"
-                  }`}
-                >
-                  <p>{message.content}</p>
-                </div>
-              </div>
-            ))}
-            {isTyping && (
-              <div className="flex justify-start">
-                <div className="h-2 w-2 bg-primary rounded-full animate-typing-dot [animation-delay:-0.3s]"></div>
-                <div className="h-2 w-2 bg-primary rounded-full animate-typing-dot [animation-delay:-0.15s]"></div>
-                <div className="h-2 w-2 bg-primary rounded-full animate-typing-dot"></div>
-              </div>
-            )}
-
-            {isStreaming && (
-              <div className="flex justify-start">
-                <div className="rounded-lg max-w-2xl text-white mr-auto mb-4">
-                  <p>{streamingText}</p>
-                </div>
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* Chat Input */}
 
         <div
           ref={inputContainerRef}
-          className={`flex flex-col bg-[#1A1D23] rounded-2xl shadow-sm w-full transition-transform duration-300`}
+          className="flex flex-col bg-[#1A1D23] rounded-2xl shadow-sm w-full transition-transform duration-300"
         >
           <textarea
             value={input}

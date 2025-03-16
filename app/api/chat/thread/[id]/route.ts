@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 
-const API_URL = "http://localhost:4000/api/chat/thread";
+const API_URL = "http://localhost:4000/api/threads";
 
 export async function GET(request: Request, { params }: { params: { id: string } }) {
   try {
