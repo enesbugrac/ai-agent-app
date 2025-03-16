@@ -40,7 +40,7 @@ const Sidebar = () => {
       threads
         ?.filter((thread) => isToday(thread.updatedAt))
         .map((thread) => ({
-          name: thread._id,
+          name: thread?.lastMessage?.content.slice(0, 20) + "..." || thread._id,
           icon: BsChatDots,
           path: `/chat/${thread._id}`,
         })),
@@ -52,7 +52,7 @@ const Sidebar = () => {
       threads
         ?.filter((thread) => isLastWeek(thread.updatedAt))
         .map((thread) => ({
-          name: thread._id,
+          name: thread?.lastMessage?.content.slice(0, 20) + "..." || thread._id,
           icon: BsChatDots,
           path: `/chat/${thread._id}`,
         })),

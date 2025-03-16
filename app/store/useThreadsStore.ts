@@ -13,6 +13,11 @@ export interface Thread {
   }[];
   createdAt: string;
   updatedAt: string;
+  lastMessage: {
+    content: string;
+    role: "user" | "assistant";
+    timestamp: string;
+  };
 }
 
 interface ThreadsState {
