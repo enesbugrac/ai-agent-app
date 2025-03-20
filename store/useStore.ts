@@ -5,7 +5,6 @@ interface User {
   wallet: string;
   role: string;
   credits: number;
-  // API'den gelecek diğer user fieldları buraya eklenebilir
 }
 
 interface AuthState {

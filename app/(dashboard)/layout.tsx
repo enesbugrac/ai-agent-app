@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { FaSpinner } from "react-icons/fa";
 import Sidebar from "@/components/Sidebar";
-import { useAuthSetup } from "../hooks/useAuth";
+import { useAuthSetup } from "@/hooks/useAuth";
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const { ready, authenticated } = usePrivy();
