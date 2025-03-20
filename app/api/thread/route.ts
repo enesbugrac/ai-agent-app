@@ -1,9 +1,11 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 
-const API_URL = "http://localhost:4000/api/threads";
+const API_URL = `${process.env.NEXT_PUBLIC_API_URL}/threads`;
 
-export async function GET(request: Request, { params }: { params: { id: string } }) {
+
+// Get all threads
+export async function GET() {
   try {
     const cookiesStore = await cookies();
     const privyToken = cookiesStore.get("privy-token");
@@ -12,9 +14,7 @@ export async function GET(request: Request, { params }: { params: { id: string }
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { id } = params;
-
-    const response = await fetch(`${API_URL}/${id}`, {
+    const response = await fetch(API_URL, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -23,18 +23,20 @@ export async function GET(request: Request, { params }: { params: { id: string }
     });
 
     if (!response.ok) {
-      throw new Error(`Thread fetch failed: ${response.status}`);
+      throw new Error(`Threads fetch failed: ${response.status}`);
     }
 
     const data = await response.json();
     return NextResponse.json(data);
   } catch (error) {
-    console.error("Thread API Error:", error);
+    console.error("Threads API Error:", error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }
 
-export async function POST(request: Request, { params }: { params: { id: string } }) {
+
+// Add a new thread
+export async function POST(request: Request) {
   try {
     const cookiesStore = await cookies();
     const privyToken = cookiesStore.get("privy-token");
@@ -43,33 +45,33 @@ export async function POST(request: Request, { params }: { params: { id: string 
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { id } = await params;
     const body = await request.json();
 
     // Validate request body
-    if (!body.content || body.content.trim().length === 0) {
-      return NextResponse.json({ error: "Message is required" }, { status: 400 });
+    if (!body.message || body.message.trim().length === 0) {
+      return NextResponse.json({ error: "First message is required" }, { status: 400 });
     }
 
-    const response = await fetch(`${API_URL}/${id}/message`, {
+    const response = await fetch(API_URL, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${privyToken.value}`,
       },
       body: JSON.stringify({
-        content: body.content.trim(),
+        assistantId: body.assistantId,
+        message: body.message.trim(),
       }),
     });
 
     if (!response.ok) {
-      throw new Error(`Message send failed: ${response.status}`);
+      throw new Error(`Chat API failed: ${response.status}`);
     }
 
     const data = await response.json();
     return NextResponse.json(data);
   } catch (error) {
-    console.error("Thread API Error:", error);
+    console.error("Chat API Error:", error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }
