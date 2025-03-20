@@ -78,6 +78,9 @@ export default {
         'success-glow': '0 0 10px var(--success-shadow)',
         'error-glow': '0 0 10px var(--error-shadow)',
       },
+      fontFamily: {
+        "markpro": ['MarkPro', 'sans-serif'],
+      },
     },
   },
   plugins: [],

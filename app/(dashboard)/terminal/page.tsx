@@ -41,7 +41,7 @@ export default function Home() {
           {/* Welcome Section */}
           <div className="flex flex-col items-center gap-8 py-12">
             <div className="text-4xl font-medium text-white">
-              Welcome to <span className="text-tertiary">Aigen</span>
+              Welcome to <span className="text-tertiary font-markpro">AIGEN</span>
             </div>
             <div className="w-full max-w-2xl">
               <div className="bg-[#1A1D23] backdrop-blur-sm rounded-2xl p-0.5 border border-border">

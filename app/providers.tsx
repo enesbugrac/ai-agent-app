@@ -6,6 +6,7 @@ import { toSolanaWalletConnectors } from "@privy-io/react-auth/solana";
 const solanaConnectors = toSolanaWalletConnectors();
 const PRIVY_APP_ID = process.env.NEXT_PUBLIC_PRIVY_APP_ID || "";
 
+
 export function Providers({ children }: { children: React.ReactNode }) {
 
 
@@ -16,7 +17,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
         appearance: {
           theme: "dark",
           accentColor: "#FFDB48",
-          logo: "/logo.png",
+          logo: "https://i.imgur.com/oCSydNJ.png",
           walletChainType: "ethereum-and-solana",
         },
 

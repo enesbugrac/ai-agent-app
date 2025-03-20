@@ -19,6 +19,7 @@ import {
 import { IoSparkles } from "react-icons/io5";
 import { BsChatDots } from "react-icons/bs";
 import { usePrivy } from "@privy-io/react-auth";
+import Logo from "./Logo";
 
 interface MenuItem {
   name: string;
@@ -80,8 +81,8 @@ const Sidebar = () => {
       key={item.name}
       href={item.path || "#"}
       className={`flex items-center ${
-        isCollapsed ? "justify-center px-5" : "justify-between px-3"
-      } h-9 rounded transition-all duration-200 relative group ${
+        isCollapsed ? "justify-center" : "justify-between"
+      } px-3 h-12 rounded transition-all duration-200 relative group ${
         pathname === item.path
           ? "text-primary bg-primary/10 border border-primary/20"
           : "text-white/80 hover:text-primary hover:bg-background-highlight"
@@ -90,7 +91,7 @@ const Sidebar = () => {
     >
       <div
         className={`flex items-center ${
-          isCollapsed ? "justify-center w-full px-3" : "gap-3"
+          isCollapsed ? "justify-center w-full" : "gap-3"
         }`}
       >
         <item.icon
@@ -135,45 +136,14 @@ const Sidebar = () => {
 
   return (
     <aside
-      className={`bg-background-card flex flex-col h-full transition-all duration-200 ease-in-out backdrop-blur-sm border-r border-border ${
-        isCollapsed ? "w-24" : "w-64"
-      } overflow-hidden will-change-[width]`}
+      className={`relative bg-background-card flex flex-col h-full transition-all duration-200 ease backdrop-blur-sm border-r border-border ${
+        isCollapsed ? "w-20" : "w-64"
+      } will-change-[width]`}
     >
       {/* Logo */}
-      <Link href="/">
-        <div className="h-16 flex items-center px-4 border-b border-border cursor-pointer">
-          <div className="flex items-center gap-2 w-full h-full">
-            <div
-              className={`logo-background flex items-center justify-center ${
-                isCollapsed ? "w-8 h-8" : "w-8 h-8"
-              }`}
-            >
-              <span className="logo-content text-primary text-sm font-medium">A</span>
-            </div>
-
-            <div
-              className={`ml-3 transition-all duration-200 overflow-hidden ${
-                isCollapsed
-                  ? "w-0 opacity-0 translate-x-2"
-                  : "w-auto opacity-100 translate-x-0"
-              }`}
-            >
-              <span className="text-primary text-2xl font-medium whitespace-nowrap">
-                Aigen
-              </span>
-            </div>
-          </div>
-          <div className="flex-1" />
-          <button
-            onClick={() => setIsCollapsed(!isCollapsed)}
-            className={`text-secondary hover:text-primary transition-transform duration-200 ml-2 ${
-              isCollapsed ? "rotate-180" : ""
-            }`}
-          >
-            <FaChevronLeft className="text-base" />
-          </button>
-        </div>
-      </Link>
+      <div className="h-16 flex items-center px-4 border-b border-border cursor-pointer">
+        <Logo withText={!isCollapsed} />
+      </div>
       {/* Main Menu */}
       <div className="flex-1 py-2 space-y-4 overflow-y-auto overflow-x-hidden scrollbar-thin bg-background-overlay">
         <nav className="px-2 space-y-0.5">{mainMenu.map(renderMenuItem)}</nav>
@@ -234,9 +204,10 @@ const Sidebar = () => {
                 <div className="ml-3 flex-1">
                   <div className="text-white text-base font-medium truncate">
                     {user?.wallet?.address
-                      ? `${user.wallet.address.slice(0, 6)}...${user.wallet.address.slice(
-                          -4
-                        )}`
+                      ? `${user.wallet.address.slice(
+                          0,
+                          6
+                        )}...${user.wallet.address.slice(-4)}`
                       : "Anonymous"}
                   </div>
                   <div className="text-xs text-secondary hover:text-primary cursor-pointer">
@@ -261,12 +232,15 @@ const Sidebar = () => {
             <div className="px-4 py-2 border-b border-border">
               <div className="text-sm font-medium text-white">
                 {user?.wallet?.address
-                  ? `${user.wallet.address.slice(0, 6)}...${user.wallet.address.slice(
-                      -4
-                    )}`
+                  ? `${user.wallet.address.slice(
+                      0,
+                      6
+                    )}...${user.wallet.address.slice(-4)}`
                   : "Anonymous"}
               </div>
-              <div className="text-xs text-secondary mt-1">Connected Wallet</div>
+              <div className="text-xs text-secondary mt-1">
+                Connected Wallet
+              </div>
             </div>
             <Link
               href="/account"
@@ -288,6 +262,14 @@ const Sidebar = () => {
           </div>
         </div>
       </div>
+      <button
+        onClick={() => setIsCollapsed(!isCollapsed)}
+        className={`absolute top-4 -right-[10px] z-10 border border-primary/50 rounded-full p-2 text-tertiary hover:text-primary transition-transform duration-200 ${
+          isCollapsed ? "rotate-180" : ""
+        }`}
+      >
+        <FaChevronLeft className="text-base" size={12}/>
+      </button>
     </aside>
   );
 };
