@@ -17,6 +17,7 @@ import {
 import { IoSparkles } from "react-icons/io5";
 import { BsChatDots } from "react-icons/bs";
 import { usePrivy } from "@privy-io/react-auth";
+import Logo from "./Logo";
 import { useThreadsStore } from "@/store/useThreadsStore";
 import { isToday, isLastWeek } from "@/utils/date";
 
@@ -90,16 +91,19 @@ const Sidebar = () => {
     <Link
       key={item.name}
       href={item.path || "#"}
-      className={`flex items-center ${isCollapsed ? "justify-center px-5" : "justify-between px-3"
-        } h-9 rounded transition-all duration-200 relative group ${pathname === item.path
+      className={`flex items-center ${
+        isCollapsed ? "justify-center" : "justify-between"
+      } px-3 h-12 rounded transition-all duration-200 relative group ${
+        pathname === item.path
           ? "text-primary bg-primary/10 border border-primary/20"
           : "text-white/80 hover:text-primary hover:bg-background-highlight"
         }`}
       title={isCollapsed ? item.name : ""}
     >
       <div
-        className={`flex items-center ${isCollapsed ? "justify-center w-full px-3" : "gap-3"
-          }`}
+        className={`flex items-center ${
+          isCollapsed ? "justify-center w-full" : "gap-3"
+        }`}
       >
         <item.icon
           className={`text-lg transition-colors duration-200 ${isCollapsed
@@ -297,6 +301,14 @@ const Sidebar = () => {
           </div>
         </div>
       </div>
+      <button
+        onClick={() => setIsCollapsed(!isCollapsed)}
+        className={`absolute top-4 -right-[10px] z-10 border border-primary/50 rounded-full p-2 text-tertiary hover:text-primary transition-transform duration-200 ${
+          isCollapsed ? "rotate-180" : ""
+        }`}
+      >
+        <FaChevronLeft className="text-base" size={12}/>
+      </button>
     </aside>
   );
 };

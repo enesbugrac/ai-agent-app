@@ -21,10 +21,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geist.variable} h-screen overflow-hidden`}>
+      <body className={`${geist.variable} h-screen`}>
         <Providers>
           <div className="flex h-full">
-            <main className="flex-1 overflow-hidden">{children}</main>
+            <main className="flex-1">{children}</main>
           </div>
         </Providers>
       </body>
