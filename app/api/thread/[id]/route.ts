@@ -1,33 +1,14 @@
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
+import { fetchWithAuth } from "@/utils/fetch.utilts";
+import type { Thread, ThreadMessage } from "@/types/thread.types";
 
 const API_URL = `${process.env.NEXT_PUBLIC_API_URL}/threads`;
 
 // Get a thread by id
 export async function GET(request: Request, { params }: { params: { id: string } }) {
   try {
-    const cookiesStore = await cookies();
-    const privyToken = cookiesStore.get("privy-token");
-
-    if (!privyToken) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
-    const { id } = params;
-
-    const response = await fetch(`${API_URL}/${id}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${privyToken.value}`,
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error(`Thread fetch failed: ${response.status}`);
-    }
-
-    const data = await response.json();
+    const { id } = await params;
+    const data = await fetchWithAuth<Thread>(`${API_URL}/${id}`);
     return NextResponse.json(data);
   } catch (error) {
     console.error("Thread API Error:", error);
@@ -38,13 +19,6 @@ export async function GET(request: Request, { params }: { params: { id: string }
 // Add a message to a thread
 export async function POST(request: Request, { params }: { params: { id: string } }) {
   try {
-    const cookiesStore = await cookies();
-    const privyToken = cookiesStore.get("privy-token");
-
-    if (!privyToken) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
     const { id } = await params;
     const body = await request.json();
 
@@ -53,22 +27,13 @@ export async function POST(request: Request, { params }: { params: { id: string 
       return NextResponse.json({ error: "Message is required" }, { status: 400 });
     }
 
-    const response = await fetch(`${API_URL}/${id}/message`, {
+    const data = await fetchWithAuth<ThreadMessage>(`${API_URL}/${id}/message`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${privyToken.value}`,
-      },
       body: JSON.stringify({
         content: body.content.trim(),
       }),
     });
 
-    if (!response.ok) {
-      throw new Error(`Message send failed: ${response.status}`);
-    }
-
-    const data = await response.json();
     return NextResponse.json(data);
   } catch (error) {
     console.error("Thread API Error:", error);

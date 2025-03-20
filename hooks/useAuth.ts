@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { usePrivy } from "@privy-io/react-auth";
-import { useAuthStore } from "../store/useStore";
-import { useThreadsStore } from "../store/useThreadsStore";
+import { useAuthStore } from "@/store/useStore";
+import { useThreadsStore } from "@/store/useThreadsStore";
 
 export function useAuthSetup() {
   const { user: privyUser, ready } = usePrivy();
@@ -23,18 +23,9 @@ export function useAuthSetup() {
 
         const userData = await userResponse.json();
         setUser(userData);
+        setThreads(userData.threads);
 
-        const threadsResponse = await fetch("/api/chat/thread", {
-          method: "GET",
-        });
-
-        if (!threadsResponse.ok) {
-          throw new Error("Threads fetch failed");
-        }
-
-        const threadsData = await threadsResponse.json();
-
-        setThreads(threadsData);
+        console.log("userData", userData);
       } catch (error) {
         console.error("Auth initialization failed:", error);
         setUser(null);

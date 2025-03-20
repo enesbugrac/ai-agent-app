@@ -1,6 +1,6 @@
 import PromptCard from "@/components/PromptCard";
 import { prompts } from "@/data/prompts";
-import { Agent } from "@/app/types/agent";
+import { Agent } from "@/types/agent.types";
 
 interface AgentViewProps {
   agent: Agent;
@@ -9,6 +9,7 @@ interface AgentViewProps {
 }
 
 export default function AgentView({
+
   agent,
   onPromptClick,
   welcomeMessageDissapear,
@@ -16,9 +17,8 @@ export default function AgentView({
   return (
     <div
       id="welcome-message"
-      className={`animate__animated ${
-        welcomeMessageDissapear ? "animate__fadeOutUp" : ""
-      }`}
+      className={`animate__animated ${welcomeMessageDissapear ? "animate__fadeOutUp" : ""
+        }`}
     >
       <div className="mb-8">
         <h1 className="text-4xl font-medium mb-2">
