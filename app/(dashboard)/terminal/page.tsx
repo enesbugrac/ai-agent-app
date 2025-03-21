@@ -13,10 +13,10 @@ export default function Home() {
   const featuredAgents = agents.slice(0, 3); // Show first 2 agents on home page
 
   return (
-    <div className="h-screen w-[calc(100vw-260px)] overflow-hidden bg-background">
+    <div className="h-screen bg-background">
       {/* Top Bar */}
       <div className="h-16 bg-background-overlay border-b border-border backdrop-blur-sm px-6 flex items-center justify-between">
-        <div className="flex items-center gap-6 flex-1 overflow-hidden">
+        <div className="flex items-center gap-6 flex-1  max-w-screen-xl overflow-hidden">
           <h1 className="text-primary font-medium text-sm shrink-0">Overview</h1>
           <div className="overflow-hidden">
             <TokenCarousel tokens={tokens} />
