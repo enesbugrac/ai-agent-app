@@ -6,10 +6,7 @@ import { toSolanaWalletConnectors } from "@privy-io/react-auth/solana";
 const solanaConnectors = toSolanaWalletConnectors();
 const PRIVY_APP_ID = process.env.NEXT_PUBLIC_PRIVY_APP_ID || "";
 
-
 export function Providers({ children }: { children: React.ReactNode }) {
-
-
   return (
     <PrivyProvider
       appId={PRIVY_APP_ID}
@@ -21,12 +18,10 @@ export function Providers({ children }: { children: React.ReactNode }) {
           walletChainType: "ethereum-and-solana",
         },
 
-
         loginMethods: ["email", "wallet"],
         externalWallets: {
           solana: { connectors: solanaConnectors },
         },
-         
       }}
     >
       {children}
@@ -34,7 +29,6 @@ export function Providers({ children }: { children: React.ReactNode }) {
   );
 }
 
-// Create a hook for easy access to auth state
 export function useAuth() {
   const { ready, authenticated, login, user, logout } = usePrivy();
 

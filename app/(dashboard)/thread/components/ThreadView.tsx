@@ -5,24 +5,23 @@ interface ThreadViewProps {
   isMessageWaiting: boolean;
 }
 
-export default function ThreadView({
-  messages,
-  isMessageWaiting,
-}: ThreadViewProps) {
+export default function ThreadView({ messages, isMessageWaiting }: ThreadViewProps) {
   return (
     <div className="flex-1 overflow-y-scroll overflow-x-hidden pr-4">
-      <div className="flex flex-col gap-4">
+      <div key={messages.length} className="flex flex-col gap-4">
         {messages.map((message) => (
           <div
             key={message._id}
-            className={`flex animate__animated animate__fadeInUp animate__faster ${message.role === "user" ? "justify-end" : "justify-start"
-              }`}
+            className={`flex animate__animated animate__fadeInUp animate__faster ${
+              message.role === "user" ? "justify-end" : "justify-start"
+            }`}
           >
             <div
-              className={`mb-4 rounded-lg max-w-2xl ${message.role === "user"
-                ? "bg-[#1A1D23] text-white ml-auto py-3 px-4"
-                : "text-white mr-auto p-0"
-                }`}
+              className={`mb-4 rounded-lg max-w-2xl ${
+                message.role === "user"
+                  ? "bg-[#1A1D23] text-white ml-auto py-3 px-4"
+                  : "text-white mr-auto p-0"
+              }`}
             >
               <p>{message.content}</p>
             </div>
@@ -36,13 +35,10 @@ export default function ThreadView({
             <div className="h-2 w-2 bg-primary rounded-full animate-typing-dot"></div>
           </div>
         )}
-
-
       </div>
     </div>
   );
 }
-
 
 /**
  *   {isStreaming && (

@@ -15,7 +15,9 @@ export const useThreadsStore = create<ThreadsState>((set) => ({
   threads: [],
   setThreads: (threads) => {
     console.log("setThreads - new threads:", threads);
-    set({ threads });
+    set(() => ({
+      threads: [...threads],
+    }));
   },
   addThread: (thread) => {
     console.log("addThread - adding thread:", thread);
@@ -26,12 +28,12 @@ export const useThreadsStore = create<ThreadsState>((set) => ({
   upsertThread: (threadId, updatedThread) => {
     console.log("upsertThread - upserting thread:", threadId, updatedThread);
     set((state) => {
-      const threadExists = state.threads.some(thread => thread._id === threadId);
+      const threadExists = state.threads.some((thread) => thread._id === threadId);
 
       if (!threadExists) {
         console.log("upsertThread - thread not found, adding new thread");
         return {
-          threads: [updatedThread, ...state.threads]
+          threads: [updatedThread, ...state.threads],
         };
       }
 
@@ -47,10 +49,10 @@ export const useThreadsStore = create<ThreadsState>((set) => ({
       threads: state.threads.map((thread) =>
         thread._id === threadId
           ? {
-            ...thread,
-            messages: [...thread.messages, message],
-            lastMessage: message,
-          }
+              ...thread,
+              messages: [...thread.messages, message],
+              lastMessage: message,
+            }
           : thread
       ),
     })),
@@ -60,4 +62,3 @@ export const useThreadsStore = create<ThreadsState>((set) => ({
       threads: state.threads.filter((thread) => thread._id !== threadId),
     })),
 }));
-
