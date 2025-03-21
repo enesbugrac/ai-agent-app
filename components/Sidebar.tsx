@@ -35,12 +35,19 @@ const Sidebar = () => {
   const pathname = usePathname();
   const threads = useThreadsStore((state) => state.threads);
 
+  useEffect(() => {
+    console.log(threads);
+  }, [threads]);
+
   const todayThreads = useMemo(
     () =>
       threads
         ?.filter((thread) => isToday(thread.updatedAt || ""))
         .map((thread) => ({
-          name: thread?.lastMessage?.content.slice(0, 20) + "..." || thread._id,
+          name:
+            thread?.lastMessage?.content && thread?.lastMessage?.content?.length > 20
+              ? thread?.lastMessage?.content.slice(0, 20) + "..."
+              : thread._id,
           icon: BsChatDots,
           path: `/thread/${thread._id}`,
         })),
@@ -52,7 +59,10 @@ const Sidebar = () => {
       threads
         ?.filter((thread) => isLastWeek(thread.updatedAt || ""))
         .map((thread) => ({
-          name: thread?.lastMessage?.content.slice(0, 20) + "..." || thread._id,
+          name:
+            thread?.lastMessage?.content.length > 20
+              ? thread?.lastMessage?.content.slice(0, 20) + "..."
+              : thread._id,
           icon: BsChatDots,
           path: `/thread/${thread._id}`,
         })),

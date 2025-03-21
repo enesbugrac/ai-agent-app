@@ -14,24 +14,20 @@ interface ThreadsState {
 export const useThreadsStore = create<ThreadsState>((set) => ({
   threads: [],
   setThreads: (threads) => {
-    console.log("setThreads - new threads:", threads);
     set(() => ({
       threads: [...threads],
     }));
   },
   addThread: (thread) => {
-    console.log("addThread - adding thread:", thread);
     set((state) => ({
       threads: [thread, ...state.threads],
     }));
   },
   upsertThread: (threadId, updatedThread) => {
-    console.log("upsertThread - upserting thread:", threadId, updatedThread);
     set((state) => {
       const threadExists = state.threads.some((thread) => thread._id === threadId);
 
       if (!threadExists) {
-        console.log("upsertThread - thread not found, adding new thread");
         return {
           threads: [updatedThread, ...state.threads],
         };
@@ -40,7 +36,6 @@ export const useThreadsStore = create<ThreadsState>((set) => ({
       const newThreads = state.threads.map((thread) =>
         thread._id === threadId ? updatedThread : thread
       );
-      console.log("upsertThread - thread updated, new threads state:", newThreads);
       return { threads: newThreads };
     });
   },

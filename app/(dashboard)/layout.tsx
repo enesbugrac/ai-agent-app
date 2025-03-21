@@ -12,6 +12,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const { ready, authenticated, user: privyUser } = usePrivy();
   const { threads } = useThreadsStore();
   const router = useRouter();
+  const { appUser } = useAuthStore();
   const setUser = useAuthStore((state) => state.setUser);
   const setThreads = useThreadsStore((state) => state.setThreads);
 
@@ -28,7 +29,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
   useEffect(() => {
     const initAuth = async () => {
-      if (!ready || !privyUser) return;
+      if (!ready || !privyUser || appUser) return;
 
       try {
         const userResponse = await fetch("/api/auth", {

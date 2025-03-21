@@ -3,19 +3,25 @@ import { FaImage } from "react-icons/fa";
 import { FaPaperclip } from "react-icons/fa";
 import { useThreadMutation, useThreadQuery } from "@/hooks/queries/thread.query";
 
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { FaCog, FaEllipsisH } from "react-icons/fa";
 import { IoSend } from "react-icons/io5";
 import { useInput } from "@/hooks/input.hooks";
 import ThreadView from "@/app/(dashboard)/thread/components/ThreadView";
+import { ThreadMessage } from "@/types/thread.types";
+import { useAuthStore } from "@/store/useStore";
 
 function Thread({}) {
   const { input, setInput } = useInput();
-
+  const { appUser } = useAuthStore();
   const { thread, isLoading } = useThreadQuery();
 
   const { addMessageToThreadAsync, isMessageWaiting } = useThreadMutation();
-  const messages = thread?.messages;
+  const [messages, setMessages] = useState<ThreadMessage[] | undefined>([]);
+
+  useEffect(() => {
+    setMessages(thread?.messages);
+  }, [thread]);
 
   // TODO: agents and assitances should be fetched from BE and stored on zuztang
   // Find from zuztang
@@ -24,12 +30,10 @@ function Thread({}) {
   }, [thread]);
 
   const handleSend = async (messageContent: string) => {
-    if (!messageContent.trim()) return;
+    if (!messageContent.trim() || !(appUser?.credits ?? 0 > 0)) return;
 
     setInput("");
-    //setIsTyping(true); ??
     addMessageToThreadAsync(messageContent);
-    // setIsTyping(false); ??
   };
 
   if (!isLoading && !thread) {
@@ -64,14 +68,18 @@ function Thread({}) {
       <div
         className={`flex-1 flex flex-col w-[70%] mx-auto justify-between py-4 gap-4 h-[calc(100vh-4rem)] overflow-hidden`}
       >
-        <ThreadView messages={messages ?? []} isMessageWaiting={isMessageWaiting} />
+        <ThreadView
+          messages={messages ?? []}
+          isMessageWaiting={isMessageWaiting}
+          isLoading={isLoading}
+        />
 
         <div className="flex flex-col bg-[#1A1D23] rounded-2xl shadow-sm w-full transition-transform duration-300">
           <textarea
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyPress={(e) => {
-              if (e.key === "Enter" && !e.shiftKey) {
+              if (e.key === "Enter" && !e.shiftKey && !isMessageWaiting) {
                 e.preventDefault();
                 handleSend(input);
               }
@@ -92,8 +100,11 @@ function Thread({}) {
               </button>
             </div>
             <button
+              disabled={isMessageWaiting}
               onClick={() => handleSend(input)}
-              className="w-8 h-8 rounded-lg bg-primary text-background hover:bg-primary/90 transition-all flex items-center justify-center"
+              className={`w-8 h-8 rounded-lg bg-primary text-background hover:bg-primary/90 transition-all flex items-center justify-center ${
+                isMessageWaiting ? "opacity-50 cursor-not-allowed" : ""
+              }`}
             >
               <IoSend className="text-lg" />
             </button>

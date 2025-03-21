@@ -10,7 +10,6 @@ export const useThreadQuery = () => {
 
   const currentThread = useMemo(() => {
     const found = threads.find((thread) => thread._id === threadId);
-    console.log("useThreadQuery - currentThread:", found);
     return found;
   }, [threads, threadId]);
 
@@ -28,7 +27,6 @@ export const useThreadQuery = () => {
       if (!data) {
         throw new Error("Thread not found");
       }
-      console.log("fetchThreadAsync - received data:", data);
 
       upsertThread(threadId as string, data);
 
@@ -45,6 +43,7 @@ export const useThreadQuery = () => {
     if (threadId) {
       fetchThreadAsync();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [threadId]); // threadId'yi dependency array'e ekledik
 
   return {
