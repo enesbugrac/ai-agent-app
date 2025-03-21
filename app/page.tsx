@@ -11,17 +11,15 @@ import {
   FaUsers,
   FaQuestionCircle,
 } from "react-icons/fa";
-import { IoSend } from "react-icons/io5";
 import Carousel from "../components/Carousel";
 import Logo from "../components/Logo";
 import Link from "next/link";
-import landingPageBackground from "../app/assets/landing-page-background.jpg";
+import landingPageBackground from "@/assets/landing-page-background.jpg";
 import Image from "next/image";
 import { useInView, motion, useScroll, useTransform } from "framer-motion";
 import { landingAgents } from "@/data/agents";
 import AgentCard from "@/components/AgentCard";
 import { AnimatePresence } from "framer-motion";
-import agentImg from "../public/assets/agent.avif"
 
 export default function LoginPage() {
   const [chatInput, setChatInput] = useState("");
@@ -102,12 +100,9 @@ export default function LoginPage() {
     setIsExpanded(true);
     // Additional logic here
   };
-  
-
-
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background overflow-x-hidden">
       <AnimatePresence>
         {isLoading ? (
           <motion.div
@@ -130,9 +125,7 @@ export default function LoginPage() {
                 transition={{ duration: 0.5 }}
                 className="logo flex items-center gap-2"
               >
-                <h1 className="text-primary font-syne text-6xl font-bold">
-                  AIGEN
-                </h1>
+                <h1 className="text-primary font-syne text-6xl font-bold">AIGEN</h1>
                 <Logo withText={false} width={100} height={100} />
               </motion.div>
               <motion.span
@@ -210,24 +203,22 @@ export default function LoginPage() {
         </header>
         <div className="z-30 h-full w-[100vw] backdrop-blur-[2px] bg-black/10 relative">
           <div className="vertical-gradient-overlay"></div>
-          <main className="min-h-screen flex flex-col items-center justify-center gap-16 px-4 z-50 relative">
+          <main className="min-h-screen flex flex-col items-center justify-center gap-16 px-4 z-50 relative max-w-full">
             <div
               className={`flex flex-col items-center justify-center gap-6 text-center transition-all duration-700 ${
                 isExpanded ? "opacity-0 -translate-y-full" : ""
               }`}
             >
-              <p className="z-50 text-lg text-secondary">
-                Your AI-Powered Task Force:
-              </p>
+              <p className="z-50 text-lg text-secondary">Your AI-Powered Task Force:</p>
               <h1 className="z-50 text-[clamp(2rem,calc(2rem+2*((100vw-23.4375rem)/66.5625)),4rem)] font-semibold text-white leading-[1.1]">
                 Effortlessly Solve Problems,
                 <br />
                 Automate Work, and Get Results.
               </h1>
               <p className="z-50 text-lg text-secondary max-w-2xl mx-auto">
-                From swapping crypto to managing projects, our specialized AI
-                agents handle the heavy lifting. Just ask, and watch it
-                happen—smarter, faster, and hassle-free.
+                From swapping crypto to managing projects, our specialized AI agents
+                handle the heavy lifting. Just ask, and watch it happen—smarter, faster,
+                and hassle-free.
               </p>
               <div className="z-50 flex flex-col gap-4 justify-center items-center">
                 <button
@@ -238,17 +229,12 @@ export default function LoginPage() {
                   <FaArrowRight className="text-sm" />
                 </button>
                 <p className="text-sm text-secondary">
-                  By connecting, you agree to our Terms of Service and Privacy
-                  Policy
+                  By connecting, you agree to our Terms of Service and Privacy Policy
                 </p>
               </div>
             </div>
 
-            <div
-              className={`w-full flex flex-col gap-4 transition-all duration-700 ${
-                isExpanded ? "opacity-0 -translate-y-full" : ""
-              }`}
-            >
+            <div className="w-full flex flex-col gap-4 transition-all duration-700 overflow-hidden">
               <Carousel slideDirection="left" className="w-full">
                 {prompts1.map((prompt, index) => (
                   <PromptButton key={`left-${index}`} text={prompt} />
@@ -264,7 +250,7 @@ export default function LoginPage() {
           </main>
         </div>
 
-        <section className="h-[100vh] flex flex-col gap-4 items-center justify-center text-center text-white">
+        <section className="h-[100vh] flex flex-col gap-4 items-center justify-center text-center text-white max-w-full overflow-hidden">
           <h1 className="max-w-7xl w-full h-[40%] flex items-center justify-center px-[10%] relative text-white text-4xl font-syne leading-[1.3] tracking-wide">
             <TypingText />
 
@@ -275,7 +261,7 @@ export default function LoginPage() {
 
         <section
           ref={sectionRef}
-          className="w-full h-[100vh] flex flex-col items-center justify-center gap-10 relative"
+          className="w-full h-[100vh] flex flex-col items-center justify-center gap-10 relative overflow-hidden"
         >
           <div
             className="w-full h-[90%] flex gap-4 p-4 max-w-7xl relative"
@@ -355,7 +341,10 @@ export default function LoginPage() {
               </ul>
             </motion.div>
 
-            <div className="w-3/4 grid grid-cols-3 gap-2 items-start justify-start" style={{perspective: "1000px"}}>
+            <div
+              className="w-3/4 grid grid-cols-3 gap-2 items-start justify-start"
+              style={{ perspective: "1000px" }}
+            >
               {landingAgents.map((agent) => (
                 <motion.div
                   key={agent.id}
@@ -369,31 +358,21 @@ export default function LoginPage() {
                         "translate3d(0, 0, 0)",
                       ]
                     ),
-                    opacity: useTransform(
-                      scrollYProgress,
-                      [0, 0.5],
-                      [agent.opacity, 1]
-                    ),
-                    scale: useTransform(
-                      scrollYProgress,
-                      [0, 0.5],
-                      [agent.scale, 1]
-                    ),
+                    opacity: useTransform(scrollYProgress, [0, 0.5], [agent.opacity, 1]),
+                    scale: useTransform(scrollYProgress, [0, 0.5], [agent.scale, 1]),
                   }}
                   className="h-[200px] group"
                 >
-                  <AgentCard 
-                    description={agent.description} 
-                    id={agent.id} 
-                    name={agent.name} 
-                    type={agent.type} 
-                    icon={agent.icon} 
+                  <AgentCard
+                    description={agent.description}
+                    id={agent.id}
+                    name={agent.name}
+                    type={agent.type}
+                    icon={agent.icon}
                   />
                 </motion.div>
               ))}
             </div>
-
-        
           </div>
         </section>
       </div>
@@ -401,74 +380,75 @@ export default function LoginPage() {
   );
 }
 
-  const infoText = "Implementing an AI solution is not just a matter of technology. It must be an integral part of your business processes while respecting your company's culture. With Skazy AI, your AI strategy evolves in line with your ambitions."
+const infoText =
+  "Implementing an AI solution is not just a matter of technology. It must be an integral part of your business processes while respecting your company's culture. With Skazy AI, your AI strategy evolves in line with your ambitions.";
 
-  interface TypingTextProps {
-    text?: string;
-  }
+interface TypingTextProps {
+  text?: string;
+}
 
-  const TypingText = ({ text = infoText }: TypingTextProps) => {
-    const [currentWordIndex, setCurrentWordIndex] = useState(0);
-    const [isInView, setIsInView] = useState(false);
-    const textRef = useRef(null);
-  
-    const words = text.split(" ");
-  
-    useEffect(() => {
-      const observer = new IntersectionObserver(
-        (entries) => {
-          const [entry] = entries;
-          if (entry.isIntersecting) {
-            setIsInView(true);
-          }
-        },
-        { threshold: 0.5 } // Element %50 görünür olduğunda
-      );
-      
-      if (textRef.current) {
-        observer.observe(textRef.current);
-      }
-      
-      return () => {
-        if (textRef.current) {
-          observer.unobserve(textRef.current);
+const TypingText = ({ text = infoText }: TypingTextProps) => {
+  const [currentWordIndex, setCurrentWordIndex] = useState(0);
+  const [isInView, setIsInView] = useState(false);
+  const textRef = useRef(null);
+
+  const words = text.split(" ");
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const [entry] = entries;
+        if (entry.isIntersecting) {
+          setIsInView(true);
         }
-      };
-    }, []);
-  
-    // Kelime kelime opaklık animasyonu
-    useEffect(() => {
-      if (isInView && currentWordIndex < words.length) {
-        const timeout = setTimeout(() => {
-          setCurrentWordIndex(prev => prev + 1);
-        }, 120); // Her kelime için 120ms bekleyelim
-        
-        return () => clearTimeout(timeout);
-      }
-    }, [currentWordIndex, words.length, isInView]);
-  
-    return (
-      <motion.div 
-        ref={textRef}
-        className="relative text-white text-4xl font-syne leading-[1.3] tracking-wide min-w-full min-h-[250px]"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.5 }}
-      >
-        <div className="h-full w-full">
-          {words.map((word, index) => (
-            <span 
-              key={index} 
-              className="mr-[0.3em] inline-block transition-all duration-300"
-              style={{ 
-                opacity: index < currentWordIndex ? 1 : 0.2,
-                color: index < currentWordIndex ? 'white' : 'rgba(255, 255, 255, 0.5)'
-              }}
-            >
-              {word}
-            </span>
-          ))}
-        </div>
-      </motion.div>
+      },
+      { threshold: 0.5 } // Element %50 görünür olduğunda
     );
-  };
+
+    if (textRef.current) {
+      observer.observe(textRef.current);
+    }
+
+    return () => {
+      if (textRef.current) {
+        observer.unobserve(textRef.current);
+      }
+    };
+  }, []);
+
+  // Kelime kelime opaklık animasyonu
+  useEffect(() => {
+    if (isInView && currentWordIndex < words.length) {
+      const timeout = setTimeout(() => {
+        setCurrentWordIndex((prev) => prev + 1);
+      }, 120); // Her kelime için 120ms bekleyelim
+
+      return () => clearTimeout(timeout);
+    }
+  }, [currentWordIndex, words.length, isInView]);
+
+  return (
+    <motion.div
+      ref={textRef}
+      className="relative text-white text-4xl font-syne leading-[1.3] tracking-wide min-w-full min-h-[250px]"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+    >
+      <div className="h-full w-full">
+        {words.map((word, index) => (
+          <span
+            key={index}
+            className="mr-[0.3em] inline-block transition-all duration-300"
+            style={{
+              opacity: index < currentWordIndex ? 1 : 0.2,
+              color: index < currentWordIndex ? "white" : "rgba(255, 255, 255, 0.5)",
+            }}
+          >
+            {word}
+          </span>
+        ))}
+      </div>
+    </motion.div>
+  );
+};
