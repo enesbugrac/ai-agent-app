@@ -17,7 +17,6 @@ import {
 import { IoSparkles } from "react-icons/io5";
 import { BsChatDots } from "react-icons/bs";
 import { usePrivy } from "@privy-io/react-auth";
-import Logo from "./Logo";
 import { useThreadsStore } from "@/store/useThreadsStore";
 import { isToday, isLastWeek } from "@/utils/date";
 
@@ -36,12 +35,19 @@ const Sidebar = () => {
   const pathname = usePathname();
   const threads = useThreadsStore((state) => state.threads);
 
+  useEffect(() => {
+    console.log(threads);
+  }, [threads]);
+
   const todayThreads = useMemo(
     () =>
       threads
         ?.filter((thread) => isToday(thread.updatedAt || ""))
         .map((thread) => ({
-          name: thread?.lastMessage?.content.slice(0, 20) + "..." || thread._id,
+          name:
+            thread?.lastMessage?.content && thread?.lastMessage?.content?.length > 20
+              ? thread?.lastMessage?.content.slice(0, 20) + "..."
+              : thread._id,
           icon: BsChatDots,
           path: `/thread/${thread._id}`,
         })),
@@ -53,7 +59,10 @@ const Sidebar = () => {
       threads
         ?.filter((thread) => isLastWeek(thread.updatedAt || ""))
         .map((thread) => ({
-          name: thread?.lastMessage?.content.slice(0, 20) + "..." || thread._id,
+          name:
+            thread?.lastMessage?.content.length > 20
+              ? thread?.lastMessage?.content.slice(0, 20) + "..."
+              : thread._id,
           icon: BsChatDots,
           path: `/thread/${thread._id}`,
         })),
@@ -97,45 +106,47 @@ const Sidebar = () => {
         pathname === item.path
           ? "text-primary bg-primary/10 border border-primary/20"
           : "text-white/80 hover:text-primary hover:bg-background-highlight"
-        }`}
+      }`}
       title={isCollapsed ? item.name : ""}
     >
       <div
-        className={`flex items-center ${
-          isCollapsed ? "justify-center w-full" : "gap-3"
-        }`}
+        className={`flex items-center ${isCollapsed ? "justify-center w-full" : "gap-3"}`}
       >
         <item.icon
-          className={`text-lg transition-colors duration-200 ${isCollapsed
-            ? pathname === item.path
-              ? "text-primary"
-              : "text-white/80 group-hover:text-primary"
-            : ""
-            }`}
+          className={`text-lg transition-colors duration-200 ${
+            isCollapsed
+              ? pathname === item.path
+                ? "text-primary"
+                : "text-white/80 group-hover:text-primary"
+              : ""
+          }`}
         />
         <span
-          className={`text-sm overflow-hidden transition-all duration-200 ${isCollapsed
-            ? "w-0 opacity-0 translate-x-2"
-            : "w-auto opacity-100 translate-x-0"
-            }`}
+          className={`text-sm overflow-hidden transition-all duration-200 ${
+            isCollapsed
+              ? "w-0 opacity-0 translate-x-2"
+              : "w-auto opacity-100 translate-x-0"
+          }`}
         >
           {item.name}
         </span>
       </div>
       {item.badge && !isCollapsed && (
         <span
-          className={`text-[10px] px-1.5 py-0.5 rounded-full font-medium transition-all duration-200 ${pathname === item.path
-            ? "bg-primary/20 text-primary"
-            : "bg-primary/10 text-primary/80"
-            }`}
+          className={`text-[10px] px-1.5 py-0.5 rounded-full font-medium transition-all duration-200 ${
+            pathname === item.path
+              ? "bg-primary/20 text-primary"
+              : "bg-primary/10 text-primary/80"
+          }`}
         >
           {item.badge}
         </span>
       )}
       {item.badge && isCollapsed && (
         <span
-          className={`absolute -right-1 top-1 w-2 h-2 rounded-full transition-all duration-200 ${pathname === item.path ? "bg-primary" : "bg-primary/80"
-            }`}
+          className={`absolute -right-1 top-1 w-2 h-2 rounded-full transition-all duration-200 ${
+            pathname === item.path ? "bg-primary" : "bg-primary/80"
+          }`}
         />
       )}
     </Link>
@@ -143,8 +154,9 @@ const Sidebar = () => {
 
   return (
     <aside
-      className={`bg-background-card flex flex-col h-screen transition-all duration-200 ease-in-out backdrop-blur-sm border-r border-border ${isCollapsed ? "w-24" : "w-64"
-        } overflow-hidden will-change-[width]`}
+      className={`bg-background-card flex flex-col h-screen transition-all duration-200 ease-in-out backdrop-blur-sm border-r border-border ${
+        isCollapsed ? "w-24" : "w-64"
+      } overflow-hidden will-change-[width]`}
     >
       {/* Logo */}
       <div className="flex-none">
@@ -152,17 +164,19 @@ const Sidebar = () => {
           <div className="h-16 flex items-center px-4 border-b border-border cursor-pointer">
             <div className="flex items-center gap-2 w-full h-full">
               <div
-                className={`logo-background flex items-center justify-center ${isCollapsed ? "w-8 h-8" : "w-8 h-8"
-                  }`}
+                className={`logo-background flex items-center justify-center ${
+                  isCollapsed ? "w-8 h-8" : "w-8 h-8"
+                }`}
               >
                 <span className="logo-content text-primary text-sm font-medium">A</span>
               </div>
 
               <div
-                className={`ml-3 transition-all duration-200 overflow-hidden ${isCollapsed
-                  ? "w-0 opacity-0 translate-x-2"
-                  : "w-auto opacity-100 translate-x-0"
-                  }`}
+                className={`ml-3 transition-all duration-200 overflow-hidden ${
+                  isCollapsed
+                    ? "w-0 opacity-0 translate-x-2"
+                    : "w-auto opacity-100 translate-x-0"
+                }`}
               >
                 <span className="text-primary text-2xl font-medium whitespace-nowrap">
                   Aigen
@@ -170,13 +184,6 @@ const Sidebar = () => {
               </div>
             </div>
             <div className="flex-1" />
-            <button
-              onClick={() => setIsCollapsed(!isCollapsed)}
-              className={`text-secondary hover:text-primary transition-transform duration-200 ml-2 ${isCollapsed ? "rotate-180" : ""
-                }`}
-            >
-              <FaChevronLeft className="text-base" />
-            </button>
           </div>
         </Link>
       </div>
@@ -191,10 +198,11 @@ const Sidebar = () => {
         {/* Scrollable Threads */}
         <div className="flex-1 overflow-y-auto overflow-x-hidden scrollbar-thin">
           <div
-            className={`transition-all duration-200 transform ${isCollapsed
-              ? "opacity-0 invisible h-0 translate-x-2"
-              : "opacity-100 visible translate-x-0"
-              }`}
+            className={`transition-all duration-200 transform ${
+              isCollapsed
+                ? "opacity-0 invisible h-0 translate-x-2"
+                : "opacity-100 visible translate-x-0"
+            }`}
           >
             {todayThreads?.length > 0 && (
               <div className="px-2 space-y-0.5">
@@ -227,29 +235,37 @@ const Sidebar = () => {
           {/* User Profile */}
           <div ref={menuRef} className="relative">
             <div
-              className={`mt-2 p-3 bg-background/50 hover:bg-background-overlay rounded-lg border border-border/50 transition-all duration-200 cursor-pointer group ${showUserMenu ? "border-primary/20" : "hover:border-primary/20"
-                }`}
+              className={`mt-2 p-3 bg-background/50 hover:bg-background-overlay rounded-lg border border-border/50 transition-all duration-200 cursor-pointer group ${
+                showUserMenu ? "border-primary/20" : "hover:border-primary/20"
+              }`}
               onClick={() => setShowUserMenu(!showUserMenu)}
             >
               <div className="flex items-center justify-center">
-                <div className="w-8 h-8 rounded-lg bg-background-overlay flex items-center justify-center group-hover:scale-105 transition-transform">
-                  <span className="text-primary/80 group-hover:text-primary text-sm font-medium">
-                    {user?.wallet?.address.slice(0, 2) || "A"}
+                <div
+                  className={`w-8 h-8 rounded-lg bg-background-overlay flex items-center justify-center group-hover:scale-105 transition-transform ${
+                    isCollapsed ? "w-full" : ""
+                  }`}
+                >
+                  <span className="text-primary/80 group-hover:text-primary text-sm font-medium text-center">
+                    {isCollapsed
+                      ? user?.wallet?.address?.slice(-3) || "A"
+                      : user?.wallet?.address?.slice(0, 2) || "A"}
                   </span>
                 </div>
                 <div
-                  className={`flex items-center justify-between flex-1 overflow-hidden transition-all duration-200 ${isCollapsed
-                    ? "w-0 opacity-0 translate-x-2"
-                    : "w-auto opacity-100 translate-x-0 ml-3"
-                    }`}
+                  className={`flex items-center justify-between flex-1 overflow-hidden transition-all duration-200 ${
+                    isCollapsed
+                      ? "w-0 opacity-0 translate-x-2"
+                      : "w-auto opacity-100 translate-x-0 ml-3"
+                  }`}
                 >
                   <div className="ml-3 flex-1">
                     <div className="text-white text-base font-medium truncate">
                       {user?.wallet?.address
                         ? `${user.wallet.address.slice(
-                          0,
-                          6
-                        )}...${user.wallet.address.slice(-4)}`
+                            0,
+                            6
+                          )}...${user.wallet.address.slice(-4)}`
                         : "Anonymous"}
                     </div>
                     <div className="text-xs text-secondary hover:text-primary cursor-pointer">
@@ -265,37 +281,47 @@ const Sidebar = () => {
 
             {/* User Menu Dropdown */}
             <div
-              className={`absolute bottom-full mb-2 right-0 w-full py-2 bg-background-card backdrop-blur-sm rounded-lg border border-border shadow-xl transform transition-all duration-200 origin-bottom ${showUserMenu
-                ? "opacity-100 scale-100 translate-y-0"
-                : "opacity-0 scale-95 translate-y-2 pointer-events-none"
-                }`}
+              className={`absolute bottom-full mb-2 ${
+                isCollapsed ? "w-[90px] -right-2" : "w-full right-0"
+              } py-2 bg-background-card backdrop-blur-sm rounded-lg border border-border shadow-xl transform transition-all duration-200 origin-bottom ${
+                showUserMenu
+                  ? "opacity-100 scale-100 translate-y-0"
+                  : "opacity-0 scale-95 translate-y-2 pointer-events-none"
+              }`}
             >
-              <div className="px-4 py-2 border-b border-border">
-                <div className="text-sm font-medium text-white">
-                  {user?.wallet?.address
-                    ? `${user.wallet.address.slice(0, 6)}...${user.wallet.address.slice(
-                      -4
-                    )}`
-                    : "Anonymous"}
+              {!isCollapsed && (
+                <div className="px-4 py-2 border-b border-border">
+                  <div className="text-sm font-medium text-white truncate">
+                    {user?.wallet?.address
+                      ? `${user.wallet.address.slice(0, 6)}...${user.wallet.address.slice(
+                          -4
+                        )}`
+                      : "Anonymous"}
+                  </div>
+                  <div className="text-xs text-secondary mt-1">Connected Wallet</div>
                 </div>
-                <div className="text-xs text-secondary mt-1">Connected Wallet</div>
-              </div>
+              )}
+
               <Link
                 href="/account"
-                className="w-full px-4 py-3 text-sm font-medium text-left text-white hover:text-primary hover:bg-background-overlay transition-colors flex items-center gap-3"
+                className={`w-full px-4 py-2.5 text-sm font-medium text-white hover:text-primary hover:bg-background-overlay transition-colors flex items-center ${
+                  isCollapsed ? "justify-center" : "gap-3"
+                }`}
               >
-                <FaUser className="text-sm" />
-                Account Settings
+                <FaUser className="text-base" />
+                {!isCollapsed && "Account Settings"}
               </Link>
               <button
                 onClick={() => {
                   logout();
                   setShowUserMenu(false);
                 }}
-                className="w-full px-4 py-3 text-sm font-medium text-left text-white hover:text-primary hover:bg-background-overlay transition-colors flex items-center gap-3"
+                className={`w-full px-4 py-2.5 text-sm font-medium text-white hover:text-primary hover:bg-background-overlay transition-colors flex items-center ${
+                  isCollapsed ? "justify-center" : "gap-3"
+                }`}
               >
-                <FaSignOutAlt className="text-sm" />
-                Logout
+                <FaSignOutAlt className="text-base" />
+                {!isCollapsed && "Logout"}
               </button>
             </div>
           </div>
@@ -307,7 +333,7 @@ const Sidebar = () => {
           isCollapsed ? "rotate-180" : ""
         }`}
       >
-        <FaChevronLeft className="text-base" size={12}/>
+        <FaChevronLeft className="text-base" size={12} />
       </button>
     </aside>
   );
