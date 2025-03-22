@@ -354,12 +354,12 @@ button:focus {
   z-index: 10;
 }
 
-
-.blur-card {
-  background: rgba( 255, 255, 255, 0.25 );
-
-backdrop-filter: blur( 4px );
--webkit-backdrop-filter: blur( 4px );
-border-radius: 10px;
-border: 1px solid rgba( 255, 255, 255, 0.18 );
+.gradient-background{
+  background: linear-gradient(135deg, #13151A 0%, #1E212A 100%);
 }
+
+#fixed-price:hover{
+  background: var(--color-primary);
+  transition: all 0.3s ease;
+}
+
