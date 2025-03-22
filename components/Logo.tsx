@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import Image from "next/image";
-import logo from "../public/logos/logo.png"
+import logo from "../public/logos/logoa-01.png"
 import { StaticImageData } from 'next/image';
 interface LogoProps {
   width?: number;
