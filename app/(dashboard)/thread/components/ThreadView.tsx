@@ -6,12 +6,14 @@ interface ThreadViewProps {
   messages: ThreadMessage[];
   isMessageWaiting: boolean;
   isLoading?: boolean;
+  streamingMessage?: string;
 }
 
 export default function ThreadView({
   messages,
   isMessageWaiting,
   isLoading = false,
+  streamingMessage = "",
 }: ThreadViewProps) {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -21,7 +23,7 @@ export default function ThreadView({
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages, isMessageWaiting]);
+  }, [messages, isMessageWaiting, streamingMessage]);
 
   if (isLoading) {
     return (
@@ -34,7 +36,7 @@ export default function ThreadView({
     );
   }
 
-  if (!messages || messages.length === 0) {
+  if (!messages || (messages.length === 0 && !streamingMessage)) {
     return (
       <div className="flex-1 flex items-center justify-center">
         <div className="text-center">
@@ -49,34 +51,44 @@ export default function ThreadView({
 
   return (
     <div className="flex-1 overflow-y-scroll overflow-x-hidden pr-4">
-      {messages.map((message, index) => (
-        <div
-          key={`${message._id}-${index}`}
-          className={`flex animate__animated animate__fadeInUp animate__faster ${
-            message.role === "user" ? "justify-end" : "justify-start"
-          }`}
-        >
+      <div className="flex flex-col gap-4">
+        {messages.map((message, index) => (
           <div
-            className={`mb-4 rounded-lg max-w-2xl ${
-              message.role === "user"
-                ? "bg-[#1A1D23] text-white ml-auto py-3 px-4"
-                : "text-white mr-auto p-0"
+            key={`${message._id}-${index}`}
+            className={`flex animate__animated animate__fadeInUp animate__faster ${
+              message.role === "user" ? "justify-end" : "justify-start"
             }`}
           >
-            <p>{message.content}</p>
+            <div
+              className={`mb-4 rounded-lg max-w-2xl ${
+                message.role === "user"
+                  ? "bg-[#1A1D23] text-white ml-auto py-3 px-4"
+                  : "text-white mr-auto p-0"
+              }`}
+            >
+              <p>{message.content}</p>
+            </div>
           </div>
-        </div>
-      ))}
+        ))}
 
-      {isMessageWaiting && (
-        <div className="flex justify-start">
-          <div className="h-2 w-2 bg-primary rounded-full animate-typing-dot [animation-delay:-0.3s]"></div>
-          <div className="h-2 w-2 bg-primary rounded-full animate-typing-dot [animation-delay:-0.15s]"></div>
-          <div className="h-2 w-2 bg-primary rounded-full animate-typing-dot"></div>
-        </div>
-      )}
+        {streamingMessage && (
+          <div className="flex justify-start animate__animated animate__fadeInUp animate__faster">
+            <div className="text-white mr-auto p-0 mb-4 rounded-lg max-w-2xl">
+              <p>{streamingMessage}</p>
+            </div>
+          </div>
+        )}
 
-      <div ref={messagesEndRef} />
+        {isMessageWaiting && !streamingMessage && (
+          <div className="flex justify-start">
+            <div className="h-2 w-2 bg-primary rounded-full animate-typing-dot [animation-delay:-0.3s]"></div>
+            <div className="h-2 w-2 bg-primary rounded-full animate-typing-dot [animation-delay:-0.15s]"></div>
+            <div className="h-2 w-2 bg-primary rounded-full animate-typing-dot"></div>
+          </div>
+        )}
+
+        <div ref={messagesEndRef} />
+      </div>
     </div>
   );
 }

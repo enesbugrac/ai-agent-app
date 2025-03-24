@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { fetchWithAuth } from "@/utils/fetch.utilts";
-import type { Thread, ThreadMessage } from "@/types/thread.types";
+import type { Thread } from "@/types/thread.types";
 
 const API_URL = `${process.env.NEXT_PUBLIC_API_URL}/threads`;
 
@@ -22,19 +22,19 @@ export async function POST(request: Request, { params }: { params: { id: string 
     const { id } = await params;
     const body = await request.json();
 
-    // Validate request body
     if (!body.content || body.content.trim().length === 0) {
       return NextResponse.json({ error: "Message is required" }, { status: 400 });
     }
 
-    const data = await fetchWithAuth<ThreadMessage>(`${API_URL}/${id}/message`, {
+    const response = await fetchWithAuth(`${API_URL}/${id}/messages/stream`, {
       method: "POST",
+      isStream: true,
       body: JSON.stringify({
         content: body.content.trim(),
       }),
     });
 
-    return NextResponse.json(data);
+    return response;
   } catch (error) {
     console.error("Thread API Error:", error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });

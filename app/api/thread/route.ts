@@ -20,20 +20,20 @@ export async function POST(request: Request) {
   try {
     const body = await request.json();
 
-    // Validate request body
     if (!body.message || body.message.trim().length === 0) {
       return NextResponse.json({ error: "First message is required" }, { status: 400 });
     }
 
-    const data = await fetchWithAuth<Thread>(API_URL, {
+    const response = await fetchWithAuth(`${API_URL}`, {
       method: "POST",
+      isStream: true,
       body: JSON.stringify({
         assistantId: body.assistantId,
         message: body.message.trim(),
       }),
     });
 
-    return NextResponse.json(data);
+    return response;
   } catch (error) {
     console.error("Chat API Error:", error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });

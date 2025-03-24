@@ -16,11 +16,10 @@ type Props = {
 
 function ThreadStarter({ agent }: Props) {
   const { input, setInput } = useInput();
-  const { addThreadAsync, isThreadAdding, firstMessage } = useThreadMutation();
+  const { createThreadAsync, isThreadCreating, initialMessage, streamingMessage } =
+    useThreadMutation();
   const [welcomeMessageDisappear, setWelcomeMessageDisappear] = useState(false);
-
   const router = useRouter();
-
   const inputContainerRef = useRef<HTMLDivElement>(null);
 
   const addNewThread = async (messageContent: string) => {
@@ -41,8 +40,13 @@ function ThreadStarter({ agent }: Props) {
       }, 100);
     }
 
-    const thread = await addThreadAsync(messageContent, agent.id);
-    router.replace(`/thread/${thread._id}`);
+    try {
+      const thread = await createThreadAsync(messageContent, agent.id);
+      router.replace(`/thread/${thread._id}`);
+    } catch (error) {
+      console.error("Failed to create thread:", error);
+      // Hata durumunda kullanıcıya bilgi ver
+    }
   };
 
   return (
@@ -80,11 +84,11 @@ function ThreadStarter({ agent }: Props) {
           welcomeMessageDissapear={welcomeMessageDisappear}
         />
 
-        {isThreadAdding && (
+        {isThreadCreating && (
           <ThreadView
-            messages={[firstMessage!]}
+            messages={initialMessage ? [initialMessage] : []}
             isMessageWaiting={true}
-            isLoading={true}
+            streamingMessage={streamingMessage}
           />
         )}
 
