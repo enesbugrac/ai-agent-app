@@ -6,14 +6,12 @@ interface ThreadViewProps {
   messages: ThreadMessage[];
   isMessageWaiting: boolean;
   isLoading?: boolean;
-  streamingMessage?: string;
 }
 
 export default function ThreadView({
   messages,
   isMessageWaiting,
   isLoading = false,
-  streamingMessage = "",
 }: ThreadViewProps) {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -23,7 +21,7 @@ export default function ThreadView({
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages, isMessageWaiting, streamingMessage]);
+  }, [messages, isMessageWaiting]);
 
   if (isLoading) {
     return (
@@ -36,7 +34,7 @@ export default function ThreadView({
     );
   }
 
-  if (!messages || (messages.length === 0 && !streamingMessage)) {
+  if (!messages || (messages.length === 0)) {
     return (
       <div className="flex-1 flex items-center justify-center">
         <div className="text-center">
@@ -55,31 +53,22 @@ export default function ThreadView({
         {messages.map((message, index) => (
           <div
             key={`${message._id}-${index}`}
-            className={`flex animate__animated animate__fadeInUp animate__faster ${
-              message.role === "user" ? "justify-end" : "justify-start"
-            }`}
+            className={`flex animate__animated animate__fadeInUp animate__faster ${message.role === "user" ? "justify-end" : "justify-start"
+              }`}
           >
             <div
-              className={`mb-4 rounded-lg max-w-2xl ${
-                message.role === "user"
-                  ? "bg-[#1A1D23] text-white ml-auto py-3 px-4"
-                  : "text-white mr-auto p-0"
-              }`}
+              className={`mb-4 rounded-lg max-w-2xl ${message.role === "user"
+                ? "bg-[#1A1D23] text-white ml-auto py-3 px-4"
+                : "text-white mr-auto p-0"
+                }`}
             >
               <p>{message.content}</p>
             </div>
           </div>
         ))}
 
-        {streamingMessage && (
-          <div className="flex justify-start animate__animated animate__fadeInUp animate__faster">
-            <div className="text-white mr-auto p-0 mb-4 rounded-lg max-w-2xl">
-              <p>{streamingMessage}</p>
-            </div>
-          </div>
-        )}
 
-        {isMessageWaiting && !streamingMessage && (
+        {isMessageWaiting && (
           <div className="flex justify-start">
             <div className="h-2 w-2 bg-primary rounded-full animate-typing-dot [animation-delay:-0.3s]"></div>
             <div className="h-2 w-2 bg-primary rounded-full animate-typing-dot [animation-delay:-0.15s]"></div>

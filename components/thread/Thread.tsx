@@ -11,17 +11,14 @@ import ThreadView from "@/app/(dashboard)/thread/components/ThreadView";
 import { ThreadMessage } from "@/types/thread.types";
 import { useAuthStore } from "@/store/useStore";
 
-function Thread({}) {
+function Thread({ }) {
   const { input, setInput } = useInput();
   const { appUser } = useAuthStore();
   const { thread, isLoading } = useThreadQuery();
 
   const { addMessageToThreadAsync, isMessageWaiting } = useThreadMutation();
-  const [messages, setMessages] = useState<ThreadMessage[] | undefined>([]);
 
-  useEffect(() => {
-    setMessages(thread?.messages);
-  }, [thread]);
+  const messages = thread?.messages
 
   // TODO: agents and assitances should be fetched from BE and stored on zuztang
   // Find from zuztang
@@ -102,9 +99,8 @@ function Thread({}) {
             <button
               disabled={isMessageWaiting}
               onClick={() => handleSend(input)}
-              className={`w-8 h-8 rounded-lg bg-primary text-background hover:bg-primary/90 transition-all flex items-center justify-center ${
-                isMessageWaiting ? "opacity-50 cursor-not-allowed" : ""
-              }`}
+              className={`w-8 h-8 rounded-lg bg-primary text-background hover:bg-primary/90 transition-all flex items-center justify-center ${isMessageWaiting ? "opacity-50 cursor-not-allowed" : ""
+                }`}
             >
               <IoSend className="text-lg" />
             </button>

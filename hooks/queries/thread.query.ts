@@ -61,6 +61,37 @@ export const useThreadMutation = () => {
   const [isThreadCreating, setIsThreadCreating] = useState(false);
   const [initialMessage, setInitialMessage] = useState<ThreadMessage | null>(null);
 
+  // Helper function to parse stream chunks
+  const parseStreamChunks = (chunk: string) => {
+    try {
+      // Split the chunk into individual JSON objects
+      const jsonObjects = chunk.match(/\{[^}]+\}/g) || [];
+
+      let extractedContent = "";
+      let extractedThreadId = "";
+
+      // Process each JSON object
+      jsonObjects.forEach(jsonStr => {
+        try {
+          const jsonObj = JSON.parse(jsonStr);
+          if (jsonObj.threadId && !extractedThreadId) {
+            extractedThreadId = jsonObj.threadId;
+          }
+          if (jsonObj.content) {
+            extractedContent += jsonObj.content;
+          }
+        } catch (e) {
+          console.error("Error parsing JSON object:", e);
+        }
+      });
+
+      return { content: extractedContent, threadId: extractedThreadId };
+    } catch (error) {
+      console.error("Error parsing stream chunks:", error);
+      return { content: "", threadId: "" };
+    }
+  };
+
   // Yeni thread oluşturma fonksiyonu
   const createThreadAsync = async (message: string, assistantId: string) => {
     try {
@@ -87,25 +118,38 @@ export const useThreadMutation = () => {
       if (!response.body) {
         throw new Error("Stream response failed");
       }
-      console.log(response.body);
-
-      // Yeni thread'i store'a ekle
 
       // Stream okuyucu
       const reader = response.body.getReader();
       const decoder = new TextDecoder();
       let accumulatedMessage = "";
-      let threadId;
+      let extractedThreadId = "";
+
       while (true) {
         const { value, done } = await reader.read();
         if (done) break;
+
         const chunk = decoder.decode(value);
-        if (!threadId) threadId = chunk.split('"threadId":"')[1].split('"')[0];
-        accumulatedMessage += chunk.split('"content":"')[1].split('"')[0];
-        setStreamingMessage(accumulatedMessage);
+        console.log("Raw chunk:", chunk);
+
+        const { content, threadId } = parseStreamChunks(chunk);
+
+        if (threadId && !extractedThreadId) {
+          extractedThreadId = threadId;
+        }
+
+        if (content) {
+          accumulatedMessage += content;
+          setStreamingMessage(accumulatedMessage);
+        }
       }
+
+      if (!extractedThreadId) {
+        throw new Error("Could not extract thread ID from response");
+      }
+
       const newThread = {
-        _id: threadId!,
+        _id: extractedThreadId,
         messages: [userMessage],
         assistantId,
         userId: "temp",
@@ -113,15 +157,18 @@ export const useThreadMutation = () => {
         lastMessage: userMessage,
         openAiThreadId: "temp",
       };
+
       addThread(newThread);
+
       // Stream tamamlandığında asistan mesajını store'a ekle
       const assistantMessage = {
         _id: `${Date.now()}-assistant`,
-        threadId: threadId!,
+        threadId: extractedThreadId,
         role: MessageRole.ASSISTANT,
         content: accumulatedMessage,
       };
-      addMessageToThread(threadId!, assistantMessage);
+
+      addMessageToThread(extractedThreadId, assistantMessage);
 
       // Stream'i temizle
       setStreamingMessage("");
@@ -169,9 +216,16 @@ export const useThreadMutation = () => {
       while (true) {
         const { value, done } = await reader.read();
         if (done) break;
+
         const chunk = decoder.decode(value);
-        accumulatedMessage += chunk.split('"content":"')[1].split('"')[0];
-        setStreamingMessage(accumulatedMessage);
+        console.log("Raw chunk:", chunk);
+
+        const { content } = parseStreamChunks(chunk);
+
+        if (content) {
+          accumulatedMessage += content;
+          setStreamingMessage(accumulatedMessage);
+        }
       }
 
       // Stream tamamlandığında mesajı store'a ekle

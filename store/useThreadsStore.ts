@@ -44,10 +44,10 @@ export const useThreadsStore = create<ThreadsState>((set) => ({
       threads: state.threads.map((thread) =>
         thread._id === threadId
           ? {
-              ...thread,
-              messages: [...thread.messages, message],
-              lastMessage: message,
-            }
+            ...thread,
+            messages: [...thread.messages, message],
+            lastMessage: message,
+          }
           : thread
       ),
     })),

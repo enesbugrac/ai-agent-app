@@ -16,7 +16,7 @@ type Props = {
 
 function ThreadStarter({ agent }: Props) {
   const { input, setInput } = useInput();
-  const { createThreadAsync, isThreadCreating, initialMessage, streamingMessage } =
+  const { createThreadAsync, isThreadCreating, initialMessage } =
     useThreadMutation();
   const [welcomeMessageDisappear, setWelcomeMessageDisappear] = useState(false);
   const router = useRouter();
@@ -88,7 +88,6 @@ function ThreadStarter({ agent }: Props) {
           <ThreadView
             messages={initialMessage ? [initialMessage] : []}
             isMessageWaiting={true}
-            streamingMessage={streamingMessage}
           />
         )}
 
