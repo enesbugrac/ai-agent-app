@@ -9,11 +9,11 @@ import { IoSend } from "react-icons/io5";
 import { useInput } from "@/hooks/input.hooks";
 import ThreadView from "@/app/(dashboard)/thread/components/ThreadView";
 import { ThreadMessage } from "@/types/thread.types";
-import { useAuthStore } from "@/store/useStore";
+import { useAuth } from "@/hooks/auth.hooks";
 
 function Thread({ }) {
   const { input, setInput } = useInput();
-  const { appUser } = useAuthStore();
+  const { user } = useAuth();
   const { thread, isLoading } = useThreadQuery();
 
   const { addMessageToThreadAsync, isMessageWaiting } = useThreadMutation();
@@ -27,7 +27,7 @@ function Thread({ }) {
   }, [thread]);
 
   const handleSend = async (messageContent: string) => {
-    if (!messageContent.trim() || !(appUser?.credits ?? 0 > 0)) return;
+    if (!messageContent.trim() || !(user?.credits ?? 0 > 0)) return;
 
     setInput("");
     addMessageToThreadAsync(messageContent);

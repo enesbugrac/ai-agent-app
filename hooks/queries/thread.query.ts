@@ -90,7 +90,6 @@ export const useThreadMutation = () => {
         assistantId,
         userId: "temp",
         name: message.slice(0, 30) + "...",
-        lastMessage: userMessage,
         openAiThreadId: "temp",
       };
 

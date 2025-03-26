@@ -1,53 +1,25 @@
 "use client";
 
-import { usePrivy } from "@privy-io/react-auth";
+
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { FaSpinner } from "react-icons/fa";
 import Sidebar from "@/components/Sidebar";
-import { useThreadsStore } from "@/store/useThreadsStore";
-import { useAuthStore } from "@/store/useStore";
+
+import { useAuth } from "@/hooks/auth.hooks";
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
-  const { ready, authenticated, user: privyUser } = usePrivy();
   const router = useRouter();
-  const { appUser } = useAuthStore();
-  const setUser = useAuthStore((state) => state.setUser);
-  const setThreads = useThreadsStore((state) => state.setThreads);
+  const { user, isLoading } = useAuth();
 
   useEffect(() => {
-    if (ready && !authenticated) {
+    if (!user && !isLoading) {
       router.push("/");
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ready, authenticated]);
 
-  useEffect(() => {
-    const initAuth = async () => {
-      if (!ready || !privyUser || appUser) return;
+  }, [user, isLoading, router]);
 
-      try {
-        const userResponse = await fetch("/api/auth", {
-          method: "GET",
-        });
-
-        if (!userResponse.ok) {
-          throw new Error("Auth failed");
-        }
-
-        const userData = await userResponse.json();
-        setUser(userData);
-        setThreads(userData.threads);
-      } catch (error) {
-        console.error("Auth initialization failed:", error);
-        setUser(null);
-      }
-    };
-
-    initAuth();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ready, privyUser]);
-  if (!ready) {
+  if (isLoading) {
     return (
       <div className="h-screen flex items-center justify-center bg-background">
         <div className="flex flex-col items-center gap-4">
@@ -57,11 +29,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       </div>
     );
   }
-
-  if (!authenticated) {
-    return null;
-  }
-
   return (
     <div className="flex h-screen">
       <Sidebar />
@@ -69,3 +36,4 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     </div>
   );
 }
+

@@ -23,16 +23,7 @@ export default function ThreadView({
     scrollToBottom();
   }, [messages, isMessageWaiting]);
 
-  if (isLoading) {
-    return (
-      <div className="flex-1 flex items-center justify-center">
-        <div className="flex flex-col items-center gap-4">
-          <FaSpinner className="text-primary text-3xl animate-spin" />
-          <p className="text-secondary text-sm">Loading messages...</p>
-        </div>
-      </div>
-    );
-  }
+
 
   if (!messages || (messages.length === 0)) {
     return (

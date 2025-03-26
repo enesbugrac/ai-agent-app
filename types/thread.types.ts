@@ -16,10 +16,12 @@ export type Thread = {
     _id: string;
     userId: string;
     name: string
-    lastMessage: ThreadMessage;
     assistantId: string;
     openAiThreadId: string;
     messages: ThreadMessage[];
     updatedAt?: string;
     createdAt?: string;
 }
+
+
+export type ThreadWithoutMessages = Omit<Thread, 'messages'>;
