@@ -1,13 +1,14 @@
 import { useThreadsStore } from "@/store/useThreadsStore";
 import { MessageRole, Thread, ThreadMessage } from "@/types/thread.types";
 import { useParams } from "next/navigation";
-import { useMemo, useEffect, useState } from "react";
+import { useMemo, useEffect, useState, useRef } from "react";
 import { api } from "@/utils/fetch.utilts";
 
 export const useThreadQuery = () => {
   const { id: threadId } = useParams();
   const [isLoading, setIsLoading] = useState(false);
   const { threads, upsertThread } = useThreadsStore();
+  const isMounted = useRef(false);
 
   const currentThread = useMemo(() => {
     return threads.find((thread) => thread._id === threadId);
@@ -22,7 +23,11 @@ export const useThreadQuery = () => {
 
       setIsLoading(true);
       const data = await api.fetch<Thread>(`/threads/${threadId}`);
-      upsertThread(threadId as string, data);
+      upsertThread(threadId as string, {
+        ...data,
+        messages:
+          currentThread?.messages?.length > 0 ? currentThread?.messages : data.messages,
+      });
       return data;
     } catch (error) {
       console.error("Thread fetch error:", error);
@@ -32,6 +37,11 @@ export const useThreadQuery = () => {
   };
 
   useEffect(() => {
+    if (!isMounted.current) {
+      isMounted.current = true;
+      return;
+    }
+
     if (threadId) {
       fetchThreadAsync();
     }

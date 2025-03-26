@@ -23,7 +23,12 @@ class ApiClient {
 
   async fetch<T>(endpoint: string, options: FetchOptions = {}): Promise<T> {
     try {
-      const { skipAuth = false, headers: customHeaders, ...restOptions } = options;
+      const {
+        skipAuth = false,
+        headers: customHeaders,
+        signal,
+        ...restOptions
+      } = options;
 
       const headers = new Headers(customHeaders || {});
       headers.set("Content-Type", "application/json");
@@ -36,6 +41,7 @@ class ApiClient {
       const response = await fetch(`${this.baseUrl}${endpoint}`, {
         ...restOptions,
         headers,
+        signal,
       });
 
       if (!response.ok) {

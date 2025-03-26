@@ -10,7 +10,6 @@ import { useAuthStore } from "@/store/useStore";
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const { ready, authenticated, user: privyUser } = usePrivy();
-  const { threads } = useThreadsStore();
   const router = useRouter();
   const { appUser } = useAuthStore();
   const setUser = useAuthStore((state) => state.setUser);
@@ -22,10 +21,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ready, authenticated]);
-
-  useEffect(() => {
-    console.log("DashboardLayout", threads);
-  }, [threads]);
 
   useEffect(() => {
     const initAuth = async () => {

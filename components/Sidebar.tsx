@@ -35,10 +35,6 @@ const Sidebar = () => {
   const pathname = usePathname();
   const threads = useThreadsStore((state) => state.threads);
 
-  useEffect(() => {
-    console.log(threads);
-  }, [threads]);
-
   const todayThreads = useMemo(
     () =>
       threads
