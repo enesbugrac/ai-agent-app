@@ -29,16 +29,3 @@ export function Providers({ children }: { children: React.ReactNode }) {
   );
 }
 
-export function useAuth() {
-  const { ready, authenticated, login, user, logout } = usePrivy();
-
-  return {
-    isReady: ready,
-    isAuthenticated: authenticated,
-    isLoading: !ready,
-    user,
-    login,
-    logout,
-    disableLogin: !ready || (ready && authenticated),
-  };
-}

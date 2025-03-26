@@ -26,7 +26,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geist.variable} h-screen`}>
+      <body className={`${geist.variable} w-screen h-screen`}>
         <Providers>
           <div className="flex h-full">
             <main className="flex-1">{children}</main>

@@ -113,5 +113,9 @@ export function useAuth(): UseAuthReturn {
 
     const isLoading = !ready || isFetchingApi;
 
+
+    console.log('user', user);
+    console.log('isLoading', isLoading);
+
     return { isLoading, user, logout };
 }

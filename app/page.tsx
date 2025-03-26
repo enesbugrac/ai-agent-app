@@ -22,17 +22,19 @@ import AnimatedLayout from "@/components/landing/AnimatedLayout";
 import DescriptionSection from "@/components/landing/DescriptionSection";
 import VisionAndMission from "@/components/landing/VisionAndMission";
 import FeaturesSection from "@/components/landing/FeatureSection";
+import { useAuth } from "@/hooks/auth.hooks";
 export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(true);
 
-  const { login, ready, authenticated } = usePrivy();
+  const { login } = usePrivy();
+  const { user } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
-    if (ready && authenticated) {
+    if (user) {
       router.push("/terminal");
     }
-  }, [ready, authenticated, router]);
+  }, [user, router]);
 
   useEffect(() => {
     setIsLoading(true);
@@ -102,9 +104,8 @@ export default function LoginPage() {
       </AnimatePresence>
 
       <div
-        className={`transition-opacity duration-500 ${
-          isLoading ? "opacity-0" : "opacity-100"
-        } relative z-50 bg-[#13151a]`}
+        className={`transition-opacity duration-500 ${isLoading ? "opacity-0" : "opacity-100"
+          } relative z-50 bg-[#13151a]`}
       >
         <Navbar login={login} />
         <Header login={login} />
