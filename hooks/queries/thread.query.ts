@@ -26,7 +26,9 @@ export const useThreadQuery = () => {
       upsertThread(threadId as string, {
         ...data,
         messages:
-          currentThread?.messages?.length > 0 ? currentThread?.messages : data.messages,
+          currentThread?.messages && currentThread.messages.length > 0
+            ? currentThread.messages
+            : data.messages || [],
       });
       return data;
     } catch (error) {
