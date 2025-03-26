@@ -2,6 +2,7 @@ import { useThreadsStore } from "@/store/useThreadsStore";
 import { MessageRole, Thread, ThreadMessage } from "@/types/thread.types";
 import { useParams } from "next/navigation";
 import { useMemo, useEffect, useState } from "react";
+import { api } from "@/utils/fetch.utilts";
 
 export const useThreadQuery = () => {
   const { id: threadId } = useParams();
@@ -9,8 +10,7 @@ export const useThreadQuery = () => {
   const { threads, upsertThread } = useThreadsStore();
 
   const currentThread = useMemo(() => {
-    const found = threads.find((thread) => thread._id === threadId);
-    return found;
+    return threads.find((thread) => thread._id === threadId);
   }, [threads, threadId]);
 
   const fetchThreadAsync = async () => {
@@ -21,15 +21,8 @@ export const useThreadQuery = () => {
       }
 
       setIsLoading(true);
-      const response = await fetch(`/api/thread/${threadId}`);
-      const data: Thread = await response.json();
-
-      if (!data) {
-        throw new Error("Thread not found");
-      }
-
+      const data = await api.fetch<Thread>(`/threads/${threadId}`);
       upsertThread(threadId as string, data);
-
       return data;
     } catch (error) {
       console.error("Thread fetch error:", error);
@@ -38,66 +31,26 @@ export const useThreadQuery = () => {
     }
   };
 
-  // threadId değiştiğinde fetchThreadAsync'i çağır
   useEffect(() => {
     if (threadId) {
       fetchThreadAsync();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [threadId]); // threadId'yi dependency array'e ekledik
+  }, [threadId]);
 
-  return {
-    thread: currentThread,
-    fetchThreadAsync,
-    isLoading,
-  };
+  return { thread: currentThread, fetchThreadAsync, isLoading };
 };
 
 export const useThreadMutation = () => {
-  const [streamingMessage, setStreamingMessage] = useState("");
   const { id: threadId } = useParams();
   const { addMessageToThread, addThread } = useThreadsStore();
   const [isMessageWaiting, setIsMessageWaiting] = useState(false);
   const [isThreadCreating, setIsThreadCreating] = useState(false);
   const [initialMessage, setInitialMessage] = useState<ThreadMessage | null>(null);
 
-  // Helper function to parse stream chunks
-  const parseStreamChunks = (chunk: string) => {
-    try {
-      // Split the chunk into individual JSON objects
-      const jsonObjects = chunk.match(/\{[^}]+\}/g) || [];
-
-      let extractedContent = "";
-      let extractedThreadId = "";
-
-      // Process each JSON object
-      jsonObjects.forEach(jsonStr => {
-        try {
-          const jsonObj = JSON.parse(jsonStr);
-          if (jsonObj.threadId && !extractedThreadId) {
-            extractedThreadId = jsonObj.threadId;
-          }
-          if (jsonObj.content) {
-            extractedContent += jsonObj.content;
-          }
-        } catch (e) {
-          console.error("Error parsing JSON object:", e);
-        }
-      });
-
-      return { content: extractedContent, threadId: extractedThreadId };
-    } catch (error) {
-      console.error("Error parsing stream chunks:", error);
-      return { content: "", threadId: "" };
-    }
-  };
-
-  // Yeni thread oluşturma fonksiyonu
   const createThreadAsync = async (message: string, assistantId: string) => {
     try {
       setIsThreadCreating(true);
 
-      // İlk kullanıcı mesajını oluştur
       const userMessage = {
         _id: `${Date.now()}`,
         role: MessageRole.USER,
@@ -106,51 +59,22 @@ export const useThreadMutation = () => {
       };
       setInitialMessage(userMessage);
 
-      // Stream response için fetch
-      const response = await fetch("/api/thread", {
+      const data = await api.fetch<{ threadId: string; content: string }>("/threads", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
         body: JSON.stringify({ message, assistantId }),
       });
 
-      if (!response.body) {
-        throw new Error("Stream response failed");
-      }
-
-      // Stream okuyucu
-      const reader = response.body.getReader();
-      const decoder = new TextDecoder();
-      let accumulatedMessage = "";
-      let extractedThreadId = "";
-
-      while (true) {
-        const { value, done } = await reader.read();
-        if (done) break;
-
-        const chunk = decoder.decode(value);
-        console.log("Raw chunk:", chunk);
-
-        const { content, threadId } = parseStreamChunks(chunk);
-
-        if (threadId && !extractedThreadId) {
-          extractedThreadId = threadId;
-        }
-
-        if (content) {
-          accumulatedMessage += content;
-          setStreamingMessage(accumulatedMessage);
-        }
-      }
-
-      if (!extractedThreadId) {
-        throw new Error("Could not extract thread ID from response");
-      }
-
-      const newThread = {
-        _id: extractedThreadId,
-        messages: [userMessage],
+      const newThread: Thread = {
+        _id: data.threadId,
+        messages: [
+          userMessage,
+          {
+            _id: `${Date.now()}-assistant`,
+            threadId: data.threadId,
+            role: MessageRole.ASSISTANT,
+            content: data.content,
+          },
+        ],
         assistantId,
         userId: "temp",
         name: message.slice(0, 30) + "...",
@@ -159,20 +83,6 @@ export const useThreadMutation = () => {
       };
 
       addThread(newThread);
-
-      // Stream tamamlandığında asistan mesajını store'a ekle
-      const assistantMessage = {
-        _id: `${Date.now()}-assistant`,
-        threadId: extractedThreadId,
-        role: MessageRole.ASSISTANT,
-        content: accumulatedMessage,
-      };
-
-      addMessageToThread(extractedThreadId, assistantMessage);
-
-      // Stream'i temizle
-      setStreamingMessage("");
-
       return newThread;
     } catch (error) {
       console.error("Thread creation error:", error);
@@ -187,57 +97,26 @@ export const useThreadMutation = () => {
     try {
       setIsMessageWaiting(true);
 
-      // Kullanıcı mesajını ekle
-      addMessageToThread(threadId as string, {
+      const userMessage = {
         _id: `${Date.now()}`,
         threadId: threadId as string,
         role: MessageRole.USER,
         content,
-      });
+      };
+      addMessageToThread(threadId as string, userMessage);
 
-      // Stream response için fetch
-      const response = await fetch(`/api/thread/${threadId}`, {
+      const data = await api.fetch<{ content: string }>(`/threads/${threadId}/messages`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
         body: JSON.stringify({ content }),
       });
 
-      if (!response.ok || !response.body) {
-        throw new Error("Stream response failed");
-      }
-
-      // Stream okuyucu
-      const reader = response.body.getReader();
-      const decoder = new TextDecoder();
-      let accumulatedMessage = "";
-
-      while (true) {
-        const { value, done } = await reader.read();
-        if (done) break;
-
-        const chunk = decoder.decode(value);
-        console.log("Raw chunk:", chunk);
-
-        const { content } = parseStreamChunks(chunk);
-
-        if (content) {
-          accumulatedMessage += content;
-          setStreamingMessage(accumulatedMessage);
-        }
-      }
-
-      // Stream tamamlandığında mesajı store'a ekle
-      addMessageToThread(threadId as string, {
+      const assistantMessage = {
         _id: `${Date.now()}-assistant`,
         threadId: threadId as string,
         role: MessageRole.ASSISTANT,
-        content: accumulatedMessage,
-      });
-
-      // Stream'i temizle
-      setStreamingMessage("");
+        content: data.content,
+      };
+      addMessageToThread(threadId as string, assistantMessage);
     } catch (error) {
       console.error("Message send error:", error);
       throw error;
@@ -247,7 +126,6 @@ export const useThreadMutation = () => {
   };
 
   return {
-    streamingMessage,
     isMessageWaiting,
     isThreadCreating,
     initialMessage,

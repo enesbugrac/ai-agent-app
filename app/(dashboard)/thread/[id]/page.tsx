@@ -7,41 +7,20 @@ import "animate.css";
 import ThreadStarter from "@/components/thread/ThreadStarter";
 import Thread from "@/components/thread/Thread";
 
-
-// Helper function for consistent time formatting
-const formatTime = (date: Date) => {
-  return date.toLocaleTimeString("en-US", {
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-};
-
 export default function ChatPage() {
   const params = useParams();
   const { id: paramsId } = params;
 
-
   // TODO: agents and assitances should be fetched from BE and stored on zuztang
   // Find from zuztang
-  const agent = useMemo(
-    () =>
-      agents.find(
-        (a) => a.displayId === params.id
-      ),
-    [paramsId]
-  );
+  const agent = useMemo(() => agents.find((a) => a.displayId === params.id), [paramsId]);
 
   if (agent) {
-    return <ThreadStarter agent={agent} />
+    return <ThreadStarter agent={agent} />;
   }
 
-
-  return (
-    <Thread />
-  );
+  return <Thread />;
 }
-
-
 
 /**
  *   const simulateStream = (message: ThreadMessage) => {

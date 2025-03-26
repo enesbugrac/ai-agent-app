@@ -1,79 +1,54 @@
-import { cookies } from "next/headers";
+import { getAccessToken } from "@privy-io/react-auth";
 
 interface FetchOptions extends RequestInit {
   skipAuth?: boolean;
-  isStream?: boolean;
 }
 
-export async function fetchWithAuth<T = unknown>(
-  url: string,
-  options: FetchOptions = {}
-): Promise<T | Response> {
-  try {
-    const {
-      skipAuth = false,
-      isStream = false,
-      headers: customHeaders,
-      ...restOptions
-    } = options;
+const API_URL = "http://localhost:4000/api";
 
-    // Get auth token
-    const cookieStore = await cookies();
-    const privyToken = cookieStore.get("privy-token");
+class ApiClient {
+  private static instance: ApiClient;
+  private baseUrl: string;
 
-    // Prepare headers
-    const headers = new Headers(customHeaders || {});
-    headers.set("Content-Type", "application/json");
+  private constructor(baseUrl: string) {
+    this.baseUrl = baseUrl;
+  }
 
-    if (!skipAuth && privyToken) {
-      headers.set("Authorization", `Bearer ${privyToken.value}`);
+  public static getInstance(): ApiClient {
+    if (!ApiClient.instance) {
+      ApiClient.instance = new ApiClient(API_URL);
     }
+    return ApiClient.instance;
+  }
 
-    const response = await fetch(url, {
-      ...restOptions,
-      headers,
-    });
+  async fetch<T>(endpoint: string, options: FetchOptions = {}): Promise<T> {
+    try {
+      const { skipAuth = false, headers: customHeaders, ...restOptions } = options;
 
-    if (isStream && response.body) {
-      const reader = response.body.getReader();
-      const decoder = new TextDecoder();
+      const headers = new Headers(customHeaders || {});
+      headers.set("Content-Type", "application/json");
 
-      return new Response(
-        new ReadableStream({
-          async start(controller) {
-            try {
-              while (true) {
-                const { done, value } = await reader.read();
-                console.log("value", value);
-                console.log("done", done);
+      if (!skipAuth) {
+        const token = await getAccessToken();
+        headers.set("Authorization", `Bearer ${token}`);
+      }
 
-                if (done) break;
+      const response = await fetch(`${this.baseUrl}${endpoint}`, {
+        ...restOptions,
+        headers,
+      });
 
-                // Uint8Array'i text'e çevir
-                const text = decoder.decode(value);
-                // Text'i UTF-8 bytes'a çevir
-                const bytes = new TextEncoder().encode(text);
-                controller.enqueue(bytes);
-              }
-              controller.close();
-            } catch (error) {
-              controller.error(error);
-            }
-          },
-        }),
-        {
-          headers: {
-            "Content-Type": "text/event-stream",
-            "Cache-Control": "no-cache",
-            Connection: "keep-alive",
-          },
-        }
-      );
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message || "API request failed");
+      }
+
+      return response.json();
+    } catch (error) {
+      console.error("API request error:", error);
+      throw error;
     }
-
-    return (await response.json()) as T;
-  } catch (error) {
-    console.error("Fetch error:", error);
-    throw error;
   }
 }
+
+export const api = ApiClient.getInstance();
