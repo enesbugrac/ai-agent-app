@@ -1,9 +1,8 @@
-@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400..800&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Syne:wght@400..800&display=swap");
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
 
 @layer base {
   :root {
@@ -57,8 +56,7 @@
 body {
   color: var(--color-text-secondary);
   background: var(--color-background);
-  font-family: "Ubuntu", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-    sans-serif;
+  font-family: "Ubuntu", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 
   --privy-color-foreground: var(--color-text-secondary);
   --privy-color-background: var(--color-background);
@@ -121,8 +119,7 @@ body {
 
 /* Smooth transitions */
 * {
-  transition: transform 0.2s ease, width 0.2s ease, height 0.2s ease,
-    opacity 0.2s ease;
+  transition: transform 0.2s ease, width 0.2s ease, height 0.2s ease, opacity 0.2s ease;
 }
 
 /* Remove transition from hover effects */
@@ -137,13 +134,13 @@ button:focus {
 
 /* Custom shadow for cards */
 .shadow-lg {
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
-    0 2px 4px -1px rgba(0, 0, 0, 0.06), 0 0 0 1px var(--color-border-light);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06),
+    0 0 0 1px var(--color-border-light);
 }
 
 .shadow-xl {
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
-    0 4px 6px -2px rgba(0, 0, 0, 0.05), 0 0 0 1px var(--color-border);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05),
+    0 0 0 1px var(--color-border);
 }
 
 @font-face {
@@ -201,23 +198,13 @@ button:focus {
 }
 
 .mask-edges {
-  mask-image: linear-gradient(
-    to right,
-    transparent,
-    black 20%,
-    black 80%,
-    transparent
-  );
+  mask-image: linear-gradient(to right, transparent, black 20%, black 80%, transparent);
 }
 
 .logo-background {
   position: relative;
   transform: rotate(45deg);
-  background: linear-gradient(
-    135deg,
-    var(--color-yellow) 0%,
-    var(--color-yellow) 100%
-  );
+  background: linear-gradient(135deg, var(--color-yellow) 0%, var(--color-yellow) 100%);
   border-radius: 4px;
   transition: all 0.2s ease;
 }
@@ -321,8 +308,6 @@ button:focus {
   }
 }
 
-
-
 .curved-line {
   width: 40px;
   height: 40px;
@@ -354,12 +339,76 @@ button:focus {
   z-index: 10;
 }
 
-.gradient-background{
-  background: linear-gradient(135deg, #13151A 0%, #1E212A 100%);
+.gradient-background {
+  background: linear-gradient(135deg, #13151a 0%, #1e212a 100%);
 }
 
-#fixed-price:hover{
+#fixed-price:hover {
   background: var(--color-primary);
   transition: all 0.3s ease;
 }
 
+.markdown-content {
+  @apply text-sm leading-relaxed;
+}
+
+.markdown-content p {
+  @apply mb-4 last:mb-0;
+}
+
+.markdown-content h1 {
+  @apply text-2xl font-bold mb-4;
+}
+
+.markdown-content h2 {
+  @apply text-xl font-bold mb-3;
+}
+
+.markdown-content h3 {
+  @apply text-lg font-bold mb-2;
+}
+
+.markdown-content ul {
+  @apply list-disc pl-5 mb-4;
+}
+
+.markdown-content ol {
+  @apply list-decimal pl-5 mb-4;
+}
+
+.markdown-content li {
+  @apply mb-1;
+}
+
+.markdown-content code {
+  @apply bg-black/20 rounded px-1.5 py-0.5 text-xs font-mono;
+}
+
+.markdown-content pre {
+  @apply mb-4 rounded-lg overflow-x-auto;
+}
+
+.markdown-content pre > div {
+  @apply bg-transparent !important;
+}
+
+.markdown-content blockquote {
+  @apply border-l-4 border-primary/30 pl-4 italic my-4;
+}
+
+.markdown-content a {
+  @apply text-primary hover:underline;
+}
+
+.markdown-content table {
+  @apply w-full mb-4;
+}
+
+.markdown-content th,
+.markdown-content td {
+  @apply border border-border/50 px-4 py-2;
+}
+
+.markdown-content th {
+  @apply bg-background-overlay;
+}

@@ -3,22 +3,21 @@ import { FaImage } from "react-icons/fa";
 import { FaPaperclip } from "react-icons/fa";
 import { useThreadMutation, useThreadQuery } from "@/hooks/queries/thread.query";
 
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo } from "react";
 import { FaCog, FaEllipsisH } from "react-icons/fa";
 import { IoSend } from "react-icons/io5";
 import { useInput } from "@/hooks/input.hooks";
 import ThreadView from "@/app/(dashboard)/thread/components/ThreadView";
-import { ThreadMessage } from "@/types/thread.types";
 import { useAuth } from "@/hooks/auth.hooks";
 
-function Thread({ }) {
+function Thread({}) {
   const { input, setInput } = useInput();
   const { user } = useAuth();
   const { thread, isLoading } = useThreadQuery();
 
   const { addMessageToThreadAsync, isMessageWaiting } = useThreadMutation();
 
-  const messages = thread?.messages
+  const messages = thread?.messages;
 
   // TODO: agents and assitances should be fetched from BE and stored on zuztang
   // Find from zuztang
@@ -65,11 +64,7 @@ function Thread({ }) {
       <div
         className={`flex-1 flex flex-col w-[70%] mx-auto justify-between py-4 gap-4 h-[calc(100vh-4rem)] overflow-hidden`}
       >
-        <ThreadView
-          messages={messages ?? []}
-          isMessageWaiting={isMessageWaiting}
-          isLoading={isLoading}
-        />
+        <ThreadView messages={messages ?? []} isMessageWaiting={isMessageWaiting} />
 
         <div className="flex flex-col bg-[#1A1D23] rounded-2xl shadow-sm w-full transition-transform duration-300">
           <textarea
@@ -99,8 +94,9 @@ function Thread({ }) {
             <button
               disabled={isMessageWaiting}
               onClick={() => handleSend(input)}
-              className={`w-8 h-8 rounded-lg bg-primary text-background hover:bg-primary/90 transition-all flex items-center justify-center ${isMessageWaiting ? "opacity-50 cursor-not-allowed" : ""
-                }`}
+              className={`w-8 h-8 rounded-lg bg-primary text-background hover:bg-primary/90 transition-all flex items-center justify-center ${
+                isMessageWaiting ? "opacity-50 cursor-not-allowed" : ""
+              }`}
             >
               <IoSend className="text-lg" />
             </button>

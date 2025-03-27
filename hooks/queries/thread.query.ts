@@ -56,6 +56,7 @@ export const useThreadMutation = () => {
   const { id: threadId } = useParams();
   const { addMessageToThread, addThread } = useThreadsStore();
   const [isMessageWaiting, setIsMessageWaiting] = useState(false);
+  const { thread: currentThread } = useThreadQuery();
   const [isThreadCreating, setIsThreadCreating] = useState(false);
   const [initialMessage, setInitialMessage] = useState<ThreadMessage | null>(null);
 
@@ -115,10 +116,17 @@ export const useThreadMutation = () => {
         content,
       };
       addMessageToThread(threadId as string, userMessage);
-
+      const messageHistory = currentThread?.messages?.map((message) => ({
+        role: message.role,
+        content: message.content,
+      }));
+      messageHistory?.push(userMessage);
       const data = await api.fetch<{ content: string }>(`/threads/${threadId}/messages`, {
         method: "POST",
-        body: JSON.stringify({ content }),
+        body: JSON.stringify({
+          content,
+          messageHistory: messageHistory,
+        }),
       });
 
       const assistantMessage = {
