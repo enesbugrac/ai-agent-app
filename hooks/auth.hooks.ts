@@ -4,101 +4,94 @@ import { useAuthStore } from '@/store/useStore';
 import { useThreadsStore } from '@/store/useThreadsStore';
 import { User, UserProfile } from '@/types/user.types';
 import { useRouter } from 'next/navigation';
+import { usePrivateFetch } from './fetch.hooks';
 
 interface UseAuthReturn {
     isLoading: boolean;
     user: User | null;
-    logout: () => Promise<void>;
 }
 
 export function useAuth(): UseAuthReturn {
-    const {
-        ready,
-        authenticated,
-        user: privyUser,
-        logout: privyLogout
-    } = usePrivy();
+    const { ready, authenticated, user: privyUser } = usePrivy();
     const { user, setUser } = useAuthStore();
     const { updateThreadsWithoutMessages, clearThreads } = useThreadsStore();
-    const router = useRouter();
+    const { privateFetch } = usePrivateFetch();
+    const [isFetching, setIsFetching] = useState(false);
 
-    const [isFetchingApi, setIsFetchingApi] = useState(false);
+    useEffect(() => {
+        if (!ready) return;
 
-    const fetchAndSetUser = useCallback(async () => {
-        if (isFetchingApi || user || !privyUser) return; // Added privyUser check
-
-        setIsFetchingApi(true);
-        try {
-            const response = await fetch('/api/auth');
-            if (!response.ok) {
-                setUser(null);
-                clearThreads();
-                throw new Error(`API fetch failed: ${response.statusText}`);
-            }
-
-            const userProfile: UserProfile = await response.json();
-
-            if (!userProfile) { // Removed !privyUser check here, handled above
-                throw new Error('User profile data not found in API response');
-            }
-
-            const combinedUser: User = {
-                ...userProfile,
-                privyData: privyUser // Warning: Potential serialization/staleness issues persist
-            };
-
-            setUser(combinedUser);
-
-            if (userProfile.threads) {
-                updateThreadsWithoutMessages(userProfile.threads);
-            } else {
-                clearThreads(); // Warning: This might unintentionally clear existing threads
-            }
-
-        } catch (error) {
-            console.error('Error during fetchAndSetUser:', error);
+        // If not authenticated, clear user data if previously set, and return
+        if (!authenticated || !privyUser) {
             if (user !== null) {
                 setUser(null);
                 clearThreads();
             }
-        } finally {
-            setIsFetchingApi(false);
-        }
-
-    }, [user, isFetchingApi, setUser, clearThreads, updateThreadsWithoutMessages, privyUser]);
-
-
-    useEffect(() => {
-        if (!ready) {
             return;
         }
 
-        if (authenticated && privyUser) {
-            if (!user && !isFetchingApi) { // Added !isFetchingApi check
-                fetchAndSetUser();
-            }
-        } else {
-            if (user !== null) {
-                setUser(null);
-                clearThreads();
-            }
-            if (isFetchingApi) {
-                setIsFetchingApi(false);
-            }
-        }
+        // If user already fetched, do not fetch again
+        if (user !== null || isFetching) return;
+
+        // Fetch User Profile
+        setIsFetching(true);
+        privateFetch('/user/auth')
+            .then(async (res) => {
+                if (!res.ok) {
+                    console.error('Failed to fetch user:', res.statusText);
+                    return null; // explicitly return null to avoid loops
+                }
+
+                const profile: UserProfile = await res.json();
+                if (!profile) {
+                    console.error('User profile not found');
+                    return null;
+                }
+
+                const combinedUser: User = { ...profile, privyData: privyUser };
+                setUser(combinedUser);
+
+                if (profile.threads) {
+                    updateThreadsWithoutMessages(profile.threads);
+                } else {
+                    clearThreads();
+                }
+            })
+            .catch((error) => {
+                console.error('Error fetching user:', error);
+            })
+            .finally(() => {
+                setIsFetching(false);
+            });
+
     }, [
         ready,
         authenticated,
         privyUser,
-        user,
-        isFetchingApi, // Added isFetchingApi
-        fetchAndSetUser,
+        // intentionally exclude `user` and `isFetching` to avoid loop
+        privateFetch,
         setUser,
-        clearThreads
+        clearThreads,
+        updateThreadsWithoutMessages,
     ]);
+
+    const isLoading = !ready || isFetching;
+
+    return { isLoading, user };
+}
+
+
+export const useAuthMutations = () => {
+    const { setUser } = useAuthStore();
+    const { clearThreads } = useThreadsStore();
+    const router = useRouter();
+    const {
+        logout: privyLogout
+    } = usePrivy();
 
     const logout = useCallback(async () => {
         try {
+            console.log('logging out');
             setUser(null);
             clearThreads();
             await privyLogout();
@@ -111,11 +104,5 @@ export function useAuth(): UseAuthReturn {
         }
     }, [privyLogout, setUser, clearThreads, router]);
 
-    const isLoading = !ready || isFetchingApi;
-
-
-    console.log('user', user);
-    console.log('isLoading', isLoading);
-
-    return { isLoading, user, logout };
+    return { logout };
 }

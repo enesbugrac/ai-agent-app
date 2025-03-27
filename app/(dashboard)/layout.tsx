@@ -12,9 +12,13 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const router = useRouter();
   const { user, isLoading } = useAuth();
 
+
+  console.log('user', user);
+  console.log('isLoading', isLoading);
+
   useEffect(() => {
     if (!user && !isLoading) {
-      router.push("/");
+      // router.push("/");
     }
 
   }, [user, isLoading, router]);

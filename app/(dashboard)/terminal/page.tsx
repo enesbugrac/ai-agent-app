@@ -9,78 +9,21 @@ import { tokens } from "@/data/tokens";
 import AgentCard from "@/components/AgentCard";
 import AIMessage from "@/components/ai/AIMessage";
 import { useState } from "react";
-import { AiResponse } from "@/types/aiResponse.type";
 
-// Mock responses for testing
-const mockResponses: AiResponse[] = [
-  {
-    content: "Here's the current weather information for Istanbul:",
-    toolJson: {
-      isUi: true,
-      content: "Weather data for Istanbul",
-      toolData: {
-        type: "checkWeather",
-        weatherInfo: {
-          temperature: 24,
-          condition: "Sunny",
-          humidity: 65
-        },
-        location: "Istanbul"
-      }
-    }
-  },
-  {
-    content: "I've completed the token swap for you:",
-    toolJson: {
-      isUi: true,
-      content: "Swap details",
-      toolData: {
-        type: "swapCryptoToken",
-        swapDetails: {
-          amount: 1.5,
-          rate: 2240.75,
-          fee: 0.0025
-        },
-        fromToken: "ETH",
-        toToken: "USDC"
-      }
-    }
-  },
-  {
-    content: "This is a simple text response without any UI elements.",
-    toolJson: {
-      isUi: false,
-      content: "Additional information that's not displayed as a UI component",
-      toolData: {
-        type: "checkWeather",
-        weatherInfo: {
-          temperature: 0,
-          condition: "",
-          humidity: 0
-        },
-        location: ""
-      }
-    }
-  }
-];
+
 
 export default function Home() {
   const { login, authenticated } = usePrivy();
   const featuredAgents = agents.slice(0, 3); // Show first 2 agents on home page
   const [currentResponseIndex, setCurrentResponseIndex] = useState(0);
-  const [response, setResponse] = useState<AiResponse>(mockResponses[0]);
 
-  // Function to cycle through mock responses
-  const cycleResponse = () => {
-    const nextIndex = (currentResponseIndex + 1) % mockResponses.length;
-    setCurrentResponseIndex(nextIndex);
-    setResponse(mockResponses[nextIndex]);
-  };
+
+
 
   return (
     <div className="h-screen bg-background">
       {/* Top Bar */}
-      {/* <div className="h-16 bg-background-overlay border-b border-border backdrop-blur-sm px-6 flex items-center justify-between">
+      <div className="h-16 bg-background-overlay border-b border-border backdrop-blur-sm px-6 flex items-center justify-between">
         <div className="flex items-center gap-6 flex-1  max-w-screen-xl overflow-hidden">
           <h1 className="text-primary font-medium text-sm shrink-0">Overview</h1>
           <div className="overflow-hidden">
@@ -102,10 +45,10 @@ export default function Home() {
             </button>
           )}
         </div>
-      </div> */}
+      </div>
 
       {/* Main Content */}
-      {/* <div className="h-[calc(100vh-4rem)] overflow-y-auto overflow-x-hidden">
+      <div className="h-[calc(100vh-4rem)] overflow-y-auto overflow-x-hidden">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
 
           <div className="flex flex-col items-center gap-8 py-12 w-full">
@@ -164,18 +107,9 @@ export default function Home() {
             ))}
           </div>
         </div>
-      </div> */}
-
-      <div className="h-full flex flex-col items-center justify-center w-full gap-8">
-        <AIMessage response={response} />
-        
-        <button 
-          onClick={cycleResponse}
-          className="bg-primary text-background px-4 py-2 rounded-lg text-xs font-medium hover:bg-primary/90 transition-all"
-        >
-          Next Example
-        </button>
       </div>
+
+
     </div>
   );
 }

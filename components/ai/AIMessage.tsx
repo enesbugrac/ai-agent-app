@@ -1,22 +1,36 @@
 import React from 'react';
 import CheckWeatherUI from './agentUi/CheckWeatherUI';
-import SwapCryptoUI from './agentUi/SwapCryptoUI';
-import { AIMessageProps, CheckWeatherMetadata, SwapCryptoMetadata } from '../../types/aiResponse.type';
+import SwapCryptoUI from './agentUi/SwapCryptoUI';;
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { ThreadMessage } from '@/types/thread.types';
+import { SwapCryptoMetadata } from '@/types/tools.types';
+import { CheckWeatherMetadata } from '@/types/tools.types';
 
-const AIMessage: React.FC<AIMessageProps> = ({ response }) => {
-  const { content, toolJson } = response;
+type AIMessageProps = {
+  message: ThreadMessage;
+}
 
+const AIMessage: React.FC<AIMessageProps> = ({ message }) => {
+  const { content, toolJson } = message;
+
+  console.log("toolJson", toolJson);
   const renderAgentUi = () => {
     if (!toolJson) return null;
-    
-    const toolData = toolJson.toolData;
-    const toolType = toolData.type;
-    
+
+    const metadata = toolJson.metadata
+    const toolType = metadata.type;
+
+    console.log(metadata);
+    console.log(toolType);
+
     switch (toolType) {
-      case "checkWeather":
-        return <CheckWeatherUI toolData={toolData as CheckWeatherMetadata} />;
+      case "check-weather":
+        return <CheckWeatherUI toolData={metadata as CheckWeatherMetadata} />;
       case "swapCryptoToken":
-        return <SwapCryptoUI toolData={toolData as SwapCryptoMetadata} />;
+        return <SwapCryptoUI toolData={metadata as SwapCryptoMetadata} />;
     }
   };
 
@@ -27,16 +41,78 @@ const AIMessage: React.FC<AIMessageProps> = ({ response }) => {
         <span className="ml-3 text-white font-medium">AI Agent</span>
       </div>
 
-      <p className="text-secondary mb-4">{content}</p>
+      <p className="text-secondary mb-4">
+
+        <ReactMarkdown
+          remarkPlugins={[remarkGfm]}
+          components={{
+            // Paragraf stili
+            p: ({ children }) => (
+              <p className="mb-4 last:mb-0 leading-relaxed">{children}</p>
+            ),
+            // Başlık stilleri
+            h1: ({ children }) => (
+              <h1 className="text-2xl font-bold mb-4">{children}</h1>
+            ),
+            h2: ({ children }) => (
+              <h2 className="text-xl font-bold mb-3">{children}</h2>
+            ),
+            h3: ({ children }) => (
+              <h3 className="text-lg font-bold mb-2">{children}</h3>
+            ),
+            // Liste stilleri
+            ul: ({ children }) => (
+              <ul className="list-disc pl-5 mb-4">{children}</ul>
+            ),
+            ol: ({ children }) => (
+              <ol className="list-decimal pl-5 mb-4">{children}</ol>
+            ),
+            li: ({ children }) => <li className="mb-1">{children}</li>,
+            // Kod bloğu stili
+            code(props) {
+              const { className, children } = props;
+              const match = /language-(\w+)/.exec(className || "");
+              return match ? (
+                <SyntaxHighlighter
+                  style={vscDarkPlus}
+                  language={match[1]}
+                  PreTag="div"
+                >
+                  {String(children).replace(/\n$/, "")}
+                </SyntaxHighlighter>
+              ) : (
+                <code className="bg-black/20 rounded px-1.5 py-0.5 text-xs font-mono">
+                  {children}
+                </code>
+              );
+            },
+            // Blockquote stili
+            blockquote: ({ children }) => (
+              <blockquote className="border-l-4 border-primary/30 pl-4 italic my-4">
+                {children}
+              </blockquote>
+            ),
+            // Link stili
+            a: ({ children, href }) => (
+              <a href={href} className="text-primary hover:underline">
+                {children}
+              </a>
+            ),
+          }}
+        >
+          {content}
+        </ReactMarkdown>
+
+      </p>
 
       {toolJson?.isUi && (
         <div className="ai-agent-tool-ui mt-2">
-            {renderAgentUi()}
+          {renderAgentUi()}
         </div>
       )}
-      {toolJson?.content && !toolJson.isUi && (
+      {toolJson?.metadata?.content && !toolJson.isUi && (
         <div className="ai-agent-tool-ui mt-2 p-3 bg-slate-800 rounded text-gray-400 text-sm">
-          <p>{toolJson.content}</p>
+          <p>{toolJson.metadata.content}</p>
         </div>
       )}
     </div>

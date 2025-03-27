@@ -1,3 +1,6 @@
+import { ToolJson, PossibleToolJson } from "./tools.types";
+
+
 export enum MessageRole {
     USER = 'user',
     ASSISTANT = 'assistant'
@@ -8,6 +11,7 @@ export type ThreadMessage = {
     threadId: string
     role: MessageRole;
     content: string;
+    toolJson?: PossibleToolJson
     createdAt?: string;
     updatedAt?: string;
 }

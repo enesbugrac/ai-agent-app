@@ -2,7 +2,7 @@ import { useThreadsStore } from "@/store/useThreadsStore";
 import { MessageRole, Thread, ThreadMessage } from "@/types/thread.types";
 import { useParams } from "next/navigation";
 import { useMemo, useEffect, useState, useRef } from "react";
-import { api } from "@/utils/fetch.utilts";
+import { api } from "@/utils/fetch.utils";
 
 export const useThreadQuery = () => {
   const { id: threadId } = useParams();
@@ -23,12 +23,10 @@ export const useThreadQuery = () => {
 
       setIsLoading(true);
       const data = await api.fetch<Thread>(`/threads/${threadId}`);
+      console.log("data", data);
       upsertThread(threadId as string, {
         ...data,
-        messages:
-          currentThread?.messages && currentThread.messages.length > 0
-            ? currentThread.messages
-            : data.messages || [],
+        messages: data.messages,
       });
       return data;
     } catch (error) {
@@ -133,7 +131,7 @@ export const useThreadMutation = () => {
         _id: `${Date.now()}-assistant`,
         threadId: threadId as string,
         role: MessageRole.ASSISTANT,
-        content: data.content,
+        ...data
       };
       addMessageToThread(threadId as string, assistantMessage);
     } catch (error) {

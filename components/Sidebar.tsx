@@ -18,7 +18,7 @@ import { IoSparkles } from "react-icons/io5";
 import { BsChatDots } from "react-icons/bs";
 import { useThreadsStore } from "@/store/useThreadsStore";
 import { isToday, isLastWeek } from "@/utils/date";
-import { useAuth } from "@/hooks/auth.hooks";
+import { useAuth, useAuthMutations } from "@/hooks/auth.hooks";
 
 interface MenuItem {
   name: string;
@@ -31,7 +31,8 @@ const Sidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
+  const { logout } = useAuthMutations();
   const walletAddress = user?.privyData?.wallet?.address;
 
   const pathname = usePathname();
