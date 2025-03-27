@@ -7,15 +7,80 @@ import TokenCarousel from "@/components/TokenCarousel";
 import { agents } from "@/data/agents";
 import { tokens } from "@/data/tokens";
 import AgentCard from "@/components/AgentCard";
+import AIMessage from "@/components/ai/AIMessage";
+import { useState } from "react";
+import { AiResponse } from "@/types/aiResponse.type";
+
+// Mock responses for testing
+const mockResponses: AiResponse[] = [
+  {
+    content: "Here's the current weather information for Istanbul:",
+    toolJson: {
+      isUi: true,
+      content: "Weather data for Istanbul",
+      toolData: {
+        type: "checkWeather",
+        weatherInfo: {
+          temperature: 24,
+          condition: "Sunny",
+          humidity: 65
+        },
+        location: "Istanbul"
+      }
+    }
+  },
+  {
+    content: "I've completed the token swap for you:",
+    toolJson: {
+      isUi: true,
+      content: "Swap details",
+      toolData: {
+        type: "swapCryptoToken",
+        swapDetails: {
+          amount: 1.5,
+          rate: 2240.75,
+          fee: 0.0025
+        },
+        fromToken: "ETH",
+        toToken: "USDC"
+      }
+    }
+  },
+  {
+    content: "This is a simple text response without any UI elements.",
+    toolJson: {
+      isUi: false,
+      content: "Additional information that's not displayed as a UI component",
+      toolData: {
+        type: "checkWeather",
+        weatherInfo: {
+          temperature: 0,
+          condition: "",
+          humidity: 0
+        },
+        location: ""
+      }
+    }
+  }
+];
 
 export default function Home() {
   const { login, authenticated } = usePrivy();
   const featuredAgents = agents.slice(0, 3); // Show first 2 agents on home page
+  const [currentResponseIndex, setCurrentResponseIndex] = useState(0);
+  const [response, setResponse] = useState<AiResponse>(mockResponses[0]);
+
+  // Function to cycle through mock responses
+  const cycleResponse = () => {
+    const nextIndex = (currentResponseIndex + 1) % mockResponses.length;
+    setCurrentResponseIndex(nextIndex);
+    setResponse(mockResponses[nextIndex]);
+  };
 
   return (
     <div className="h-screen bg-background">
       {/* Top Bar */}
-      <div className="h-16 bg-background-overlay border-b border-border backdrop-blur-sm px-6 flex items-center justify-between">
+      {/* <div className="h-16 bg-background-overlay border-b border-border backdrop-blur-sm px-6 flex items-center justify-between">
         <div className="flex items-center gap-6 flex-1  max-w-screen-xl overflow-hidden">
           <h1 className="text-primary font-medium text-sm shrink-0">Overview</h1>
           <div className="overflow-hidden">
@@ -37,18 +102,18 @@ export default function Home() {
             </button>
           )}
         </div>
-      </div>
+      </div> */}
 
       {/* Main Content */}
-      <div className="h-[calc(100vh-4rem)] overflow-y-auto overflow-x-hidden">
+      {/* <div className="h-[calc(100vh-4rem)] overflow-y-auto overflow-x-hidden">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-          {/* Welcome Section */}
+
           <div className="flex flex-col items-center gap-8 py-12 w-full">
             <div className="text-4xl font-medium text-white text-center">
               Welcome to <span className="text-tertiary font-markpro">AIGEN</span>
             </div>
 
-            {/* Input Container */}
+
             <div className="w-full max-w-2xl">
               <div className="bg-[#1A1D23] backdrop-blur-sm rounded-2xl p-0.5 border border-border">
                 <div className="flex items-center p-3">
@@ -71,7 +136,7 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Filter Bar */}
+
           <div className="flex items-center justify-between gap-4 flex-wrap">
             <div className="flex gap-3 flex-wrap">
               <button className="shrink-0 flex items-center gap-2 bg-primary px-3 py-1.5 rounded-lg hover:bg-primary/90 transition-all text-xs font-medium text-black">
@@ -86,7 +151,6 @@ export default function Home() {
             <div className="text-xs text-primary/50">3 agents available</div>
           </div>
 
-          {/* Agent Cards Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-8 w-full">
             {featuredAgents.map((agent) => (
               <AgentCard
@@ -100,6 +164,17 @@ export default function Home() {
             ))}
           </div>
         </div>
+      </div> */}
+
+      <div className="h-full flex flex-col items-center justify-center w-full gap-8">
+        <AIMessage response={response} />
+        
+        <button 
+          onClick={cycleResponse}
+          className="bg-primary text-background px-4 py-2 rounded-lg text-xs font-medium hover:bg-primary/90 transition-all"
+        >
+          Next Example
+        </button>
       </div>
     </div>
   );
