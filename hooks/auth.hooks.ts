@@ -6,12 +6,9 @@ import { User, UserProfile } from '@/types/user.types';
 import { useRouter } from 'next/navigation';
 import { usePrivateFetch } from './fetch.hooks';
 
-interface UseAuthReturn {
-    isLoading: boolean;
-    user: User | null;
-}
 
-export function useAuth(): UseAuthReturn {
+
+export function useAuth() {
     const { ready, authenticated, user: privyUser } = usePrivy();
     const { user, setUser } = useAuthStore();
     const { updateThreadsWithoutMessages, clearThreads } = useThreadsStore();
@@ -77,7 +74,7 @@ export function useAuth(): UseAuthReturn {
 
     const isLoading = !ready || isFetching;
 
-    return { isLoading, user };
+    return { isLoading, user, isAuthenticated: !!user };
 }
 
 
