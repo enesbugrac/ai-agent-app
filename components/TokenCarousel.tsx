@@ -1,7 +1,7 @@
 "use client";
 
-import Carousel from './Carousel';
-import { Token } from '../data/tokens';
+import Carousel from "./Carousel";
+import { Token } from "../data/tokens";
 
 interface TokenCarouselProps {
   tokens: Token[];
@@ -9,8 +9,9 @@ interface TokenCarouselProps {
 
 export default function TokenCarousel({ tokens }: TokenCarouselProps) {
   return (
-    <Carousel className="flex-1" slideDirection="left">
-     {tokens.map((token, index) => (
+    <div className="fixed bottom-0 top-16 left-0 right-0 bg-background border-t border-border">
+      <Carousel className="flex-1" slideDirection="left">
+        {tokens.map((token, index) => (
           <div
             key={`${token.name}-${index}`}
             className="inline-flex items-center gap-2 px-4 py-1 text-xs font-medium group"
@@ -33,6 +34,7 @@ export default function TokenCarousel({ tokens }: TokenCarouselProps) {
             </span>
           </div>
         ))}
-    </Carousel>
+      </Carousel>
+    </div>
   );
 }

@@ -7,18 +7,10 @@ import TokenCarousel from "@/components/TokenCarousel";
 import { agents } from "@/data/agents";
 import { tokens } from "@/data/tokens";
 import AgentCard from "@/components/AgentCard";
-import AIMessage from "@/components/ai/AIMessage";
-import { useState } from "react";
-
-
 
 export default function Home() {
   const { login, authenticated } = usePrivy();
   const featuredAgents = agents.slice(0, 3); // Show first 2 agents on home page
-  const [currentResponseIndex, setCurrentResponseIndex] = useState(0);
-
-
-
 
   return (
     <div className="h-screen bg-background">
@@ -31,17 +23,12 @@ export default function Home() {
           </div>
         </div>
         <div className="shrink-0">
-          {!authenticated ? (
+          {!authenticated && (
             <button
               onClick={login}
               className="bg-primary text-background px-4 py-2 rounded-lg text-xs font-medium hover:bg-primary/90 transition-all flex items-center gap-2"
             >
               Connect Wallet
-            </button>
-          ) : (
-            <button className="text-secondary hover:text-primary text-xs transition-colors flex items-center gap-1">
-              View Markets
-              <span className="text-lg">→</span>
             </button>
           )}
         </div>
@@ -50,12 +37,10 @@ export default function Home() {
       {/* Main Content */}
       <div className="h-[calc(100vh-4rem)] overflow-y-auto overflow-x-hidden">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-
-          <div className="flex flex-col items-center gap-8 py-12 w-full">
+          <div className="flex flex-col items-center gap-8 pt-12 lg:pt-28 w-full">
             <div className="text-4xl font-medium text-white text-center">
               Welcome to <span className="text-tertiary font-markpro">AIGEN</span>
             </div>
-
 
             <div className="w-full max-w-2xl">
               <div className="bg-[#1A1D23] backdrop-blur-sm rounded-2xl p-0.5 border border-border">
@@ -78,7 +63,6 @@ export default function Home() {
               </div>
             </div>
           </div>
-
 
           <div className="flex items-center justify-between gap-4 flex-wrap">
             <div className="flex gap-3 flex-wrap">
@@ -108,8 +92,6 @@ export default function Home() {
           </div>
         </div>
       </div>
-
-
     </div>
   );
 }

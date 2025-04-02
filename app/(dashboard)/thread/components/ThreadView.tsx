@@ -1,10 +1,6 @@
 import AIMessage from "@/components/ai/AIMessage";
 import { ThreadMessage } from "@/types/thread.types";
 import { useEffect, useRef } from "react";
-import ReactMarkdown from "react-markdown";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
-import remarkGfm from "remark-gfm";
 
 interface ThreadViewProps {
   messages: ThreadMessage[];
@@ -43,22 +39,21 @@ export default function ThreadView({ messages, isMessageWaiting }: ThreadViewPro
         {messages.map((message, index) => (
           <div
             key={`${message._id}-${index}`}
-            className={`flex animate__animated animate__fadeInUp animate__faster ${message.role === "user" ? "justify-end" : "justify-start"
-              }`}
+            className={`flex animate__animated animate__fadeInUp animate__faster ${
+              message.role === "user" ? "justify-end" : "justify-start"
+            }`}
           >
             <div
-              className={`mb-4 rounded-lg max-w-2xl ${message.role === "user"
-                ? "bg-[#1A1D23] text-white ml-auto py-3 px-4"
-                : "bg-[#1A1D23]/50 text-white mr-auto p-4"
-                }`}
+              className={`mb-4 rounded-lg max-w-2xl ${
+                message.role === "user"
+                  ? "bg-[#1A1D23] text-white ml-auto py-3 px-4"
+                  : "bg-[#1A1D23]/50 text-white mr-auto p-4"
+              }`}
             >
               {message.role === "user" ? (
                 <p>{message.content}</p>
               ) : (
-
                 <AIMessage message={message} />
-
-
               )}
             </div>
           </div>
