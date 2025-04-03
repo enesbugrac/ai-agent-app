@@ -1,6 +1,7 @@
 import Link from "next/link";
 import React from "react";
 import Logo from "../Logo";
+import JoinWhitelistButton from "../whitelist/JoinWhitelistButton";
 
 interface NavbarProps {
   login: () => void;
@@ -30,10 +31,14 @@ const Navbar = ({ login }: NavbarProps) => {
       </div>
       <Logo />
 
-      <div className="flex-1 flex items-center justify-end gap-4">
+      <div className="flex-1 flex items-center justify-end gap-3">
+        <JoinWhitelistButton 
+          variant="outline" 
+          className="text-xs px-3 py-1.5 hidden sm:flex"
+        />
         <button
           onClick={() => login()}
-          className="text-sm text-black  transition-colors bg-primary px-6 py-3 rounded-lg font-medium hover:bg-white  flex items-center justify-center gap-2"
+          className="text-sm text-black transition-colors bg-primary px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg font-medium hover:bg-white flex items-center justify-center gap-2 text-xs"
         >
           Connect Wallet
         </button>

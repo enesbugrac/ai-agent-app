@@ -4,6 +4,7 @@ import Image from "next/image";
 import Carousel from "../Carousel";
 import { FaArrowRight } from "react-icons/fa";
 import PromptButton from "../PromptButton";
+import JoinWhitelistButton from "../whitelist/JoinWhitelistButton";
 
 interface HeaderProps {
   login: () => void;
@@ -53,13 +54,13 @@ const Header = ({ login }: HeaderProps) => {
             faster, and hassle-free.
           </p>
           <div className="z-50 flex flex-col gap-4 justify-center items-center">
-            <button
-              onClick={() => login()}
-              className="w-2/5 bg-primary text-black px-6 py-3 rounded-lg font-medium hover:bg-white/90 transition-all flex items-center justify-center gap-2"
-            >
-              Start now
-              <FaArrowRight className="text-sm" />
-            </button>
+            <div className="flex gap-4 w-3/5">
+              <JoinWhitelistButton 
+                className="flex-1 py-3 text-sm flex items-center justify-center gap-2"
+                text={<>Join the Whitelist <FaArrowRight className="text-sm" /></>}
+              />
+
+            </div>
             <p className="text-sm text-secondary">
               By connecting, you agree to our Terms of Service and Privacy
               Policy
