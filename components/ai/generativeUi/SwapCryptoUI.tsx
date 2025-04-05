@@ -1,5 +1,5 @@
 import React from 'react';
-import { SwapCryptoMetadata } from '../../../types/aiResponse.type';
+import { SwapCryptoMetadata } from '@/types/tools.types';
 
 const SwapCryptoUI: React.FC<{ toolData: SwapCryptoMetadata }> = ({ toolData }) => {
     return (
