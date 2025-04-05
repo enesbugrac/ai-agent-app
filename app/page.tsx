@@ -20,6 +20,7 @@ import DescriptionSection from "@/components/landing/DescriptionSection";
 import VisionAndMission from "@/components/landing/VisionAndMission";
 import FeaturesSection from "@/components/landing/FeatureSection";
 import { useAuth } from "@/hooks/auth.hooks";
+import Header from "@/components/landing/Header";
 export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(true);
 
@@ -105,6 +106,7 @@ export default function LoginPage() {
         } relative z-50 bg-[#13151a]`}
       >
         <Navbar login={login} />
+        <Header />
         <DescriptionSection />
         <AnimatedLayout />
         <FeaturesSection />
