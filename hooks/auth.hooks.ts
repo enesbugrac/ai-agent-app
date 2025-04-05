@@ -34,8 +34,6 @@ export function useAuth() {
         setIsFetching(true);
         privateFetch('/user/auth')
             .then(async (res) => {
-                console.log('res', res);
-                
                 if (!res.ok) {
                     console.error('Failed to fetch user:', res.statusText);
                     return null; // explicitly return null to avoid loops
