@@ -44,7 +44,7 @@ export default function Home() {
   return (
     <div className="h-screen bg-background">
 
-      {/* <div className="h-16 bg-background-overlay border-b border-border backdrop-blur-sm px-6 flex items-center justify-between">
+      <div className="h-16 bg-background-overlay border-b border-border backdrop-blur-sm px-6 flex items-center justify-between">
         <div className="flex items-center gap-6 flex-1  max-w-screen-xl overflow-hidden">
           <h1 className="text-primary font-medium text-sm shrink-0">Overview</h1>
           <div className="overflow-hidden">
@@ -120,10 +120,8 @@ export default function Home() {
           </div>
         </div>
       </div>
-      </div> */}
-
-      <button onClick={handleOpenModal}>Open Modal</button>
-
     </div>
+
+
   );
 }
