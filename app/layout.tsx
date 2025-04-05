@@ -4,6 +4,7 @@ import "./globals.css";
 import { Providers } from "./providers";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Modal from "@/components/Modal";
 
 const geist = Geist({
   variable: "--font-geist",
@@ -37,6 +38,7 @@ export default function RootLayout({
             draggable
             theme="dark"
           />
+          <Modal />
         </Providers>
       </body>
     </html>
