@@ -1,5 +1,5 @@
 import React from 'react';
-import { CheckWeatherMetadata } from '../../../types/aiResponse.type';
+import { CheckWeatherMetadata } from '@/types/tools.types';
 
 const CheckWeatherUI: React.FC<{ toolData: CheckWeatherMetadata }> = ({ toolData }) => {
   // Function to determine weather icon based on condition

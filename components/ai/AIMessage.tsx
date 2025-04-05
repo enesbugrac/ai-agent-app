@@ -1,13 +1,17 @@
 import React from 'react';
-import CheckWeatherUI from './agentUi/CheckWeatherUI';
-import SwapCryptoUI from './agentUi/SwapCryptoUI';;
+import CheckWeatherUI from './generativeUi/CheckWeatherUI';
+import SwapCryptoUI from './generativeUi/SwapCryptoUI';
+import ArbitrageScanUI from './generativeUi/ArbitrageScanUI';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { ThreadMessage } from '@/types/thread.types';
-import { SwapCryptoMetadata } from '@/types/tools.types';
-import { CheckWeatherMetadata } from '@/types/tools.types';
+import { 
+  SwapCryptoMetadata, 
+  CheckWeatherMetadata,
+  ArbitrageScanMetadata 
+} from '@/types/tools.types';
 
 type AIMessageProps = {
   message: ThreadMessage;
@@ -31,17 +35,19 @@ const AIMessage: React.FC<AIMessageProps> = ({ message }) => {
         return <CheckWeatherUI toolData={metadata as CheckWeatherMetadata} />;
       case "swapCryptoToken":
         return <SwapCryptoUI toolData={metadata as SwapCryptoMetadata} />;
+      case "arbitrage-scan":
+        return <ArbitrageScanUI toolData={metadata as ArbitrageScanMetadata} />;
     }
   };
 
   return (
-    <div className="message-component bg-background-overlay rounded-lg p-6 border border-border w-full max-w-xl">
+    <div className="message-component bg-background-overlay rounded-lg p-6  w-full max-w-xl">
       <div className="flex items-center mb-4">
         <div className="h-8 w-8 rounded-full bg-primary flex items-center justify-center text-black font-bold">A</div>
         <span className="ml-3 text-white font-medium">AI Agent</span>
       </div>
 
-      <p className="text-secondary mb-4">
+      {/* <p className="text-secondary mb-4">
 
         <ReactMarkdown
           remarkPlugins={[remarkGfm]}
@@ -103,18 +109,18 @@ const AIMessage: React.FC<AIMessageProps> = ({ message }) => {
           {content}
         </ReactMarkdown>
 
-      </p>
+      </p> */}
 
       {toolJson?.isUi && (
         <div className="ai-agent-tool-ui mt-2">
           {renderAgentUi()}
         </div>
       )}
-      {toolJson?.metadata?.content && !toolJson.isUi && (
+      {/* {toolJson?.metadata?.content && !toolJson.isUi && (
         <div className="ai-agent-tool-ui mt-2 p-3 bg-slate-800 rounded text-gray-400 text-sm">
           <p>{toolJson.metadata.content}</p>
         </div>
-      )}
+      )} */}
     </div>
   );
 };

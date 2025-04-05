@@ -35,4 +35,37 @@ export type SwapCryptoMetadata = {
 export type SwapCryptoTool = ToolJson<SwapCryptoMetadata>;
 
 
-export type PossibleToolJson = CheckWeatherTool | SwapCryptoTool;
+export type ExchangePriceInfo = {
+    exchange: string;
+    price: number;
+    marketPair: string;
+};
+
+// Represents an opportunity identified by deviation from the average
+export type ArbitrageOpportunity = {
+    exchange: string;
+    price: number;
+    marketPair: string;
+    differenceFromAveragePercentage: number;
+};
+
+// Represents the scan results for a single cryptocurrency
+export type CryptoArbitrageResult = {
+    cryptoSymbol: string;
+    // cryptoName: string; // Name isn't directly available from this endpoint
+    averagePrice: number | null;
+    opportunities: ArbitrageOpportunity[];
+    checkedExchangesCount: number;
+    error?: string;
+};
+
+// Top-level metadata structure
+export type ArbitrageScanMetadata = {
+    type: "arbitrage-scan";
+    results: CryptoArbitrageResult[];
+};
+
+export type ArbitrageScanTool = ToolJson<ArbitrageScanMetadata>;
+
+
+export type PossibleToolJson = CheckWeatherTool | SwapCryptoTool | ArbitrageScanTool;

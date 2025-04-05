@@ -9,8 +9,13 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@binance-chain/bsc-connector": "^1.0.0",
     "@privy-io/react-auth": "^2.6.0",
+    "@project-serum/anchor": "^0.26.0",
+    "@solana/spl-token": "^0.4.13",
+    "@solana/wallet-adapter-react": "^0.15.36",
     "animate.css": "^4.1.1",
+    "ethers": "^6.9.2",
     "framer-motion": "^12.5.0",
     "next": "15.1.7",
     "react": "^19.0.0",
