@@ -31,8 +31,12 @@ const WhitelistForm = () => {
     setIsSubmitting(true);
 
     try {
-      await addEmailToWhitelist(email);
-
+      const response = await addEmailToWhitelist(email);
+      if (response.status === "exists") {
+        setError("Email is already whitelisted");
+        setIsSubmitting(false);
+        return;
+      }
       setSuccess(true);
       setEmail("");
 
