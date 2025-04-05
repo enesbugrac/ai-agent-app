@@ -26,6 +26,7 @@ function ThreadStarter({ agent }: Props) {
   const [welcomeMessageDisappear, setWelcomeMessageDisappear] = useState(false);
   const router = useRouter();
   const inputContainerRef = useRef<HTMLDivElement>(null);
+  const { openModal } = useModalStore();
 
   const addNewThread = async (messageContent: string) => {
     if (!user) {

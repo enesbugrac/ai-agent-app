@@ -19,12 +19,10 @@ const WhitelistForm = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
-
     if (!email) {
       setError("Email is required");
       return;
     }
-
     if (!validateEmail(email)) {
       setError("Please enter a valid email address");
       return;
@@ -93,7 +91,6 @@ const WhitelistForm = () => {
               />
               {error && <p className="mt-1 text-red-400 text-xs">{error}</p>}
             </div>
-
             <button
               type="submit"
               disabled={isSubmitting}
