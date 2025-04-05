@@ -7,43 +7,13 @@ import TokenCarousel from "@/components/TokenCarousel";
 import { agents } from "@/data/agents";
 import { tokens } from "@/data/tokens";
 import AgentCard from "@/components/AgentCard";
-import AIMessage from "@/components/ai/AIMessage";
-import { useState } from "react";
-import { useModalStore } from "@/store/modalStore";
-
-
 
 export default function Home() {
   const { login, authenticated } = usePrivy();
   const featuredAgents = agents.slice(0, 3); // Show first 2 agents on home page
-  const [currentResponseIndex, setCurrentResponseIndex] = useState(0);
-
-  const { openModal } = useModalStore();
-
-  // Example usage:
-  const handleOpenModal = () => {
-    openModal(
-      <div className="space-y-4">
-        <p className="text-secondary">
-          This is a sample modal content. You can put any React components here.
-        </p>
-        <button
-          onClick={() => {
-            // Do something
-            useModalStore.getState().closeModal();
-          }}
-          className="bg-primary text-black px-4 py-2 rounded-lg"
-        >
-          Close Modal
-        </button>
-      </div>,
-    );
-  };
-
 
   return (
     <div className="h-screen bg-background">
-
       <div className="h-16 bg-background-overlay border-b border-border backdrop-blur-sm px-6 flex items-center justify-between">
         <div className="flex items-center gap-6 flex-1  max-w-screen-xl overflow-hidden">
           <h1 className="text-primary font-medium text-sm shrink-0">Overview</h1>
@@ -121,7 +91,5 @@ export default function Home() {
         </div>
       </div>
     </div>
-
-
   );
 }

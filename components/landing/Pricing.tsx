@@ -1,14 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useInView } from "react-intersection-observer";
 import "animate.css";
 
 const Pricing = () => {
-
   const { ref: pricingTitleRef, inView: pricingTitleInView } = useInView({
     triggerOnce: true,
     threshold: 0.3,
   });
-
 
   const { ref: pricingCardsRef, inView: pricingCardsInView } = useInView({
     triggerOnce: true,
@@ -31,13 +29,10 @@ const Pricing = () => {
         </h1>
 
         <div ref={pricingCardsRef} className="w-full flex flex-wrap justify-between">
-
           <div
             id="free-credits"
             className={`group bg-primary rounded-xl p-6 w-[calc(25%-0.5rem)] min-h-[350px] flex flex-col justify-between font-syne cursor-pointer transition-opacity duration-500 ${
-              pricingCardsInView
-                ? "animate__animated animate__bounceInLeft"
-                : "opacity-0"
+              pricingCardsInView ? "animate__animated animate__bounceInLeft" : "opacity-0"
             }`}
           >
             <span className="text-black/70 group-hover:text-black transition-colors duration-300 text-4xl font-medium">

@@ -184,7 +184,7 @@ export function useTokenBalances(
 
     async function fetchSolanaBalances() {
       try {
-        if (!walletAddress) return;
+        if (!walletAddress || !connection) return;
 
         const publicKey = new PublicKey(walletAddress);
 

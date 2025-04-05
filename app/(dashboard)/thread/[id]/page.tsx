@@ -13,6 +13,7 @@ export default function ChatPage() {
 
   // TODO: agents and assitances should be fetched from BE and stored on zuztang
   // Find from zuztang
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const agent = useMemo(() => agents.find((a) => a.displayId === params.id), [paramsId]);
 
   if (agent) {

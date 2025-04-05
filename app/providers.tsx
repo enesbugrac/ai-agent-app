@@ -1,7 +1,6 @@
 "use client";
 
 import { PrivyProvider } from "@privy-io/react-auth";
-import { usePrivy } from "@privy-io/react-auth";
 import { toSolanaWalletConnectors } from "@privy-io/react-auth/solana";
 const solanaConnectors = toSolanaWalletConnectors();
 const PRIVY_APP_ID = process.env.NEXT_PUBLIC_PRIVY_APP_ID || "";
@@ -28,4 +27,3 @@ export function Providers({ children }: { children: React.ReactNode }) {
     </PrivyProvider>
   );
 }
-

@@ -1,100 +1,110 @@
 import { usePrivy } from "@privy-io/react-auth";
 import { useCallback } from "react";
-import { useAuth, useAuthMutations } from "./auth.hooks";
-
-
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 /**
-* A React hook that provides a memoized function ('authFetch') to easily make
-* authenticated API calls using Privy. It handles fetching the token
-* and adding the Authorization header.
-*
-* This hook does NOT manage loading, error, or data states internally.
-* The caller receives the raw `Promise<Response>` and must handle it.
-*/
+ * A React hook that provides a memoized function ('authFetch') to easily make
+ * authenticated API calls using Privy. It handles fetching the token
+ * and adding the Authorization header.
+ *
+ * This hook does NOT manage loading, error, or data states internally.
+ * The caller receives the raw `Promise<Response>` and must handle it.
+ */
 export function usePrivateFetch() {
-    const { logout } = useAuthMutations();
+  // Get the token retrieval function from the Privy context
+  const { getAccessToken } = usePrivy();
 
-    // Get the token retrieval function from the Privy context
-    const { getAccessToken } = usePrivy();
+  // Create the memoized authFetch function
+  const privateFetch = useCallback(
+    async (
+      endpoint: string,
+      options: RequestInit = {} // Default to empty object
+    ): Promise<Response> => {
+      // This function now returns Promise<Response>
 
-    // Create the memoized authFetch function
-    const privateFetch = useCallback(async (
-        endpoint: string,
-        options: RequestInit = {} // Default to empty object
-    ): Promise<Response> => { // This function now returns Promise<Response>
+      let token: string | null = null;
+      try {
+        // 1. Get the JWT token from Privy
+        token = await getAccessToken();
+      } catch (tokenError: unknown) {
+        // Catch potential errors during the token retrieval process itself
+        console.error("Error retrieving Privy token:", tokenError);
+        throw new Error(
+          `Failed to retrieve authentication token: ${
+            tokenError instanceof Error ? tokenError.message : String(tokenError)
+          }`
+        );
+      }
 
+      if (!token) {
+        // Handle the case where getToken() resolves successfully but returns null
+        throw new Error("Authentication token could not be retrieved (returned null).");
+      }
 
-        let token: string | null = null;
+      // 2. Prepare Headers
+      const headers = new Headers(options.headers || {}); // Preserve existing headers provided by the caller
+      headers.set("Authorization", `Bearer ${token}`); // Add/overwrite the Authorization header
+
+      // Automatically set Content-Type for object bodies if not specified (common use case)
+      let body = options.body;
+      if (
+        body &&
+        typeof body === "object" &&
+        !(body instanceof Blob) &&
+        !(body instanceof FormData) &&
+        !(body instanceof URLSearchParams)
+      ) {
+        // Check if Content-Type is already set or if it's application/json
+        if (
+          !headers.has("Content-Type") ||
+          headers.get("Content-Type")?.includes("application/json")
+        ) {
+          // Set default Content-Type if not present
+          if (!headers.has("Content-Type")) {
+            headers.set("Content-Type", "application/json");
+          }
+          try {
+            // Convert the body object to a JSON string
+            body = JSON.stringify(body);
+          } catch (e) {
+            // Handle potential errors during stringification
+            console.error("Failed to stringify request body:", e);
+            throw new Error("Failed to stringify request body to JSON.");
+          }
+        }
+      }
+
+      // 3. Prepare final fetch options
+      const fetchOptions: RequestInit = {
+        ...options, // Include user-provided options (method, signal, cache, etc.)
+        headers: headers, // Use the prepared headers object
+        body: body, // Use the potentially stringified body
+      };
+
+      // 4. Perform the fetch call and return the promise
+      // The promise will reject on network errors.
+      // For HTTP errors (4xx, 5xx), the promise will resolve, but response.ok will be false.
+      // The CALLER is responsible for checking response.ok.
+      const fullUrl = `${API_BASE_URL}${endpoint}`;
+      const response = await fetch(fullUrl, fetchOptions);
+
+      // 5. Check for 401 Unauthorized and attempt logout
+      if (response.status === 401) {
+        console.warn("Unauthorized access. Attempting logout.");
         try {
-            // 1. Get the JWT token from Privy
-            token = await getAccessToken();
-        } catch (tokenError: any) {
-            // Catch potential errors during the token retrieval process itself
-            console.error('Error retrieving Privy token:', tokenError);
-            throw new Error(`Failed to retrieve authentication token: ${tokenError.message}`);
+          // await logout();
+        } catch (logoutError) {
+          console.error("Logout failed after unauthorized access:", logoutError);
+          // Optionally re-throw or handle logout failure as needed
         }
+      }
 
-        if (!token) {
-            // Handle the case where getToken() resolves successfully but returns null
-            throw new Error('Authentication token could not be retrieved (returned null).');
-        }
+      return response;
+    },
+    [getAccessToken]
+  ); // The function depends on getToken and logout, so it's memoized based on it
 
-        // 2. Prepare Headers
-        const headers = new Headers(options.headers || {}); // Preserve existing headers provided by the caller
-        headers.set('Authorization', `Bearer ${token}`); // Add/overwrite the Authorization header
-
-        // Automatically set Content-Type for object bodies if not specified (common use case)
-        let body = options.body;
-        if (body && typeof body === 'object' && !(body instanceof Blob) && !(body instanceof FormData) && !(body instanceof URLSearchParams)) {
-            // Check if Content-Type is already set or if it's application/json
-            if (!headers.has('Content-Type') || headers.get('Content-Type')?.includes('application/json')) {
-                // Set default Content-Type if not present
-                if (!headers.has('Content-Type')) {
-                    headers.set('Content-Type', 'application/json');
-                }
-                try {
-                    // Convert the body object to a JSON string
-                    body = JSON.stringify(body);
-                } catch (e) {
-                    // Handle potential errors during stringification
-                    console.error("Failed to stringify request body:", e);
-                    throw new Error("Failed to stringify request body to JSON.");
-                }
-            }
-        }
-
-        // 3. Prepare final fetch options
-        const fetchOptions: RequestInit = {
-            ...options, // Include user-provided options (method, signal, cache, etc.)
-            headers: headers, // Use the prepared headers object
-            body: body, // Use the potentially stringified body
-        };
-
-        // 4. Perform the fetch call and return the promise
-        // The promise will reject on network errors.
-        // For HTTP errors (4xx, 5xx), the promise will resolve, but response.ok will be false.
-        // The CALLER is responsible for checking response.ok.
-        const fullUrl = `${API_BASE_URL}${endpoint}`;
-        const response = await fetch(fullUrl, fetchOptions);
-
-        // 5. Check for 401 Unauthorized and attempt logout
-        if (response.status === 401) {
-            console.warn('Unauthorized access. Attempting logout.');
-            try {
-                // await logout();
-            } catch (logoutError) {
-                console.error('Logout failed after unauthorized access:', logoutError);
-                // Optionally re-throw or handle logout failure as needed
-            }
-        }
-
-        return response;
-
-    }, [getAccessToken]); // The function depends on getToken and logout, so it's memoized based on it
-
-    // Return only the authFetch function, wrapped in an object structure
-    return { privateFetch };
+  // Return only the authFetch function, wrapped in an object structure
+  return { privateFetch };
 }

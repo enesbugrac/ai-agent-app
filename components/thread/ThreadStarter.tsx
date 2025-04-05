@@ -9,7 +9,6 @@ import React, { useRef, useState } from "react";
 import { FaCog, FaEllipsisH } from "react-icons/fa";
 import { IoSend } from "react-icons/io5";
 import ThreadView from "@/app/(dashboard)/thread/components/ThreadView";
-import { useModalStore } from "@/store/modalStore";
 import { useAuth } from "@/hooks/auth.hooks";
 import { usePrivy } from "@privy-io/react-auth";
 
@@ -21,12 +20,10 @@ function ThreadStarter({ agent }: Props) {
   const { input, setInput } = useInput();
   const { login } = usePrivy();
   const { user } = useAuth();
-  const { createThreadAsync, isThreadCreating, initialMessage } =
-    useThreadMutation();
+  const { createThreadAsync, isThreadCreating, initialMessage } = useThreadMutation();
   const [welcomeMessageDisappear, setWelcomeMessageDisappear] = useState(false);
   const router = useRouter();
   const inputContainerRef = useRef<HTMLDivElement>(null);
-  const { openModal } = useModalStore();
 
   const addNewThread = async (messageContent: string) => {
     if (!user) {

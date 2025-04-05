@@ -60,20 +60,18 @@ const WhitelistForm = () => {
         <div className="text-center p-4">
           <div className="text-green-400 text-xl mb-2">✓</div>
           <h3 className="text-white text-lg font-medium mb-2">
-            You're on the list!
+            You&apos;re on the list!
           </h3>
           <p className="text-secondary text-sm">
-            Thank you for joining. We'll notify you when access is available.
+            Thank you for joining. We&apos;ll notify you when access is available.
           </p>
         </div>
       ) : (
         <>
-          <h3 className="text-white text-lg font-medium mb-2">
-            Join the Whitelist
-          </h3>
+          <h3 className="text-white text-lg font-medium mb-2">Join the Whitelist</h3>
           <p className="text-secondary text-sm mb-6">
-            Get early access to AIGEN and be the first to experience our
-            AI-powered agents.
+            Get early access to AIGEN and be the first to experience our AI-powered
+            agents.
           </p>
 
           <form onSubmit={handleSubmit} className="space-y-4">

@@ -11,23 +11,23 @@ const navigationLinks = [
   {
     href: "/",
     icon: FaFileAlt,
-    label: "Whitepaper"
+    label: "Whitepaper",
   },
   {
     href: "/",
     icon: FaRoad,
-    label: "Roadmap"
+    label: "Roadmap",
   },
   {
     href: "/",
     icon: FaUsers,
-    label: "Team"
+    label: "Team",
   },
   {
     href: "/",
     icon: FaQuestionCircle,
-    label: "FAQ"
-  }
+    label: "FAQ",
+  },
 ];
 
 const AnimatedLayout = () => {
@@ -103,6 +103,7 @@ const AnimatedLayout = () => {
             <motion.div
               key={agent.id}
               style={{
+                // eslint-disable-next-line react-hooks/rules-of-hooks
                 transform: useTransform(
                   scrollYProgress,
                   [0, 0.5, 0.75],
@@ -112,16 +113,10 @@ const AnimatedLayout = () => {
                     "translate3d(0, 0, 0)",
                   ]
                 ),
-                opacity: useTransform(
-                  scrollYProgress,
-                  [0, 0.5],
-                  [agent.opacity, 1]
-                ),
-                scale: useTransform(
-                  scrollYProgress,
-                  [0, 0.5],
-                  [agent.scale, 1]
-                ),
+                // eslint-disable-next-line react-hooks/rules-of-hooks
+                opacity: useTransform(scrollYProgress, [0, 0.5], [agent.opacity, 1]),
+                // eslint-disable-next-line react-hooks/rules-of-hooks
+                scale: useTransform(scrollYProgress, [0, 0.5], [agent.scale, 1]),
               }}
               className="group"
             >

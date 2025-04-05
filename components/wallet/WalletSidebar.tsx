@@ -4,7 +4,13 @@ import React, { useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { FaWallet, FaTimes, FaEthereum } from "react-icons/fa";
 import { SiSolana } from "react-icons/si";
-import { useFundWallet, useSolanaWallets, useWallets } from "@privy-io/react-auth";
+import {
+  useFundWallet,
+  useSolanaWallets,
+  useWallets,
+  usePrivy,
+  useDelegatedActions,
+} from "@privy-io/react-auth";
 import TokenList from "./TokenList";
 import { useTokenBalances } from "../../hooks/useTokenBalances";
 
@@ -18,6 +24,8 @@ export default function WalletSidebar({ isOpen, onClose }: WalletSidebarProps) {
   const { wallets } = useWallets();
   const { fundWallet } = useFundWallet();
   const { wallets: solanaWallets } = useSolanaWallets();
+  const { user: privyUser } = usePrivy();
+  const { delegateWallet } = useDelegatedActions();
 
   const evmEmbeddedWallet = useMemo(
     () => wallets.find((wallet) => wallet.connectorType === "embedded"),
@@ -28,6 +36,34 @@ export default function WalletSidebar({ isOpen, onClose }: WalletSidebarProps) {
     () => solanaWallets.find((wallet) => wallet.connectorType === "embedded"),
     [solanaWallets]
   );
+
+  const isDelegated = useMemo(() => {
+    if (!privyUser) return false;
+
+    const currentWallet =
+      activeTab === "solana" ? solanaEmbeddedWallet : evmEmbeddedWallet;
+    if (!currentWallet) return false;
+    console.log(privyUser.linkedAccounts);
+
+    return privyUser.linkedAccounts.some(
+      (account) =>
+        account.type === "wallet" &&
+        account.connectorType === "embedded" &&
+        account.address === currentWallet.address &&
+        account.delegated
+    );
+  }, [activeTab, privyUser, solanaEmbeddedWallet, evmEmbeddedWallet]);
+
+  const handleDelegate = async () => {
+    const currentWallet =
+      activeTab === "solana" ? solanaEmbeddedWallet : evmEmbeddedWallet;
+    if (!currentWallet) return;
+
+    await delegateWallet({
+      address: currentWallet.address,
+      chainType: activeTab === "solana" ? "solana" : "ethereum",
+    });
+  };
 
   const { balances, loading: isLoading } = useTokenBalances(
     activeTab === "solana"
@@ -108,6 +144,19 @@ export default function WalletSidebar({ isOpen, onClose }: WalletSidebarProps) {
               </div>
 
               <div className="flex-1 overflow-y-auto p-4">
+                {!isDelegated ? (
+                  <div className="mb-4">
+                    <motion.button
+                      onClick={handleDelegate}
+                      className="w-full py-2 bg-primary/20 hover:bg-primary/30 text-primary rounded-lg transition-colors font-medium"
+                      whileHover={{ scale: 1.01 }}
+                      whileTap={{ scale: 0.99 }}
+                      transition={{ duration: 0.03 }}
+                    >
+                      Delegate {activeTab === "solana" ? "Solana" : "BNB"} Wallet
+                    </motion.button>
+                  </div>
+                ) : null}
                 <TokenList
                   tokens={formattedBalances}
                   isLoading={isLoading}

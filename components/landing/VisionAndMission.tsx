@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { useInView } from "react-intersection-observer";
 import "animate.css";
 
@@ -9,7 +9,7 @@ const VisionAndMission = () => {
   });
 
   const { ref: cardsRef, inView: cardsInView } = useInView({
-    triggerOnce: true, 
+    triggerOnce: true,
     threshold: 0.1,
   });
 
@@ -44,10 +44,7 @@ const VisionAndMission = () => {
           Vision and Mission
         </h1>
 
-        <div
-          ref={cardsRef}
-          className="w-full grid grid-cols-1 md:grid-cols-2 gap-6"
-        >
+        <div ref={cardsRef} className="w-full grid grid-cols-1 md:grid-cols-2 gap-6">
           {items.map((item, index) => (
             <div
               key={index}
@@ -56,9 +53,7 @@ const VisionAndMission = () => {
               }`}
             >
               <div>
-                <h2 className="text-white text-4xl font-semibold mb-4">
-                  {item.title}
-                </h2>
+                <h2 className="text-white text-4xl font-semibold mb-4">{item.title}</h2>
                 <p className="text-gray-300 text-lg leading-relaxed">
                   {item.description}
                 </p>

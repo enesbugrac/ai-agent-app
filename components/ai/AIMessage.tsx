@@ -1,30 +1,26 @@
-import React from 'react';
-import CheckWeatherUI from './generativeUi/CheckWeatherUI';
-import SwapCryptoUI from './generativeUi/SwapCryptoUI';
-import ArbitrageScanUI from './generativeUi/ArbitrageScanUI';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
-import { ThreadMessage } from '@/types/thread.types';
-import { 
-  SwapCryptoMetadata, 
+import React from "react";
+import CheckWeatherUI from "./generativeUi/CheckWeatherUI";
+import SwapCryptoUI from "./generativeUi/SwapCryptoUI";
+import ArbitrageScanUI from "./generativeUi/ArbitrageScanUI";
+import { ThreadMessage } from "@/types/thread.types";
+import {
+  SwapCryptoMetadata,
   CheckWeatherMetadata,
-  ArbitrageScanMetadata 
-} from '@/types/tools.types';
+  ArbitrageScanMetadata,
+} from "@/types/tools.types";
 
 type AIMessageProps = {
   message: ThreadMessage;
-}
+};
 
 const AIMessage: React.FC<AIMessageProps> = ({ message }) => {
-  const { content, toolJson } = message;
+  const { toolJson } = message;
 
   console.log("toolJson", toolJson);
   const renderAgentUi = () => {
     if (!toolJson) return null;
 
-    const metadata = toolJson.metadata
+    const metadata = toolJson.metadata;
     const toolType = metadata.type;
 
     console.log(metadata);
@@ -43,7 +39,9 @@ const AIMessage: React.FC<AIMessageProps> = ({ message }) => {
   return (
     <div className="message-component bg-background-overlay rounded-lg p-6  w-full max-w-xl">
       <div className="flex items-center mb-4">
-        <div className="h-8 w-8 rounded-full bg-primary flex items-center justify-center text-black font-bold">A</div>
+        <div className="h-8 w-8 rounded-full bg-primary flex items-center justify-center text-black font-bold">
+          A
+        </div>
         <span className="ml-3 text-white font-medium">AI Agent</span>
       </div>
 
@@ -111,11 +109,7 @@ const AIMessage: React.FC<AIMessageProps> = ({ message }) => {
 
       </p> */}
 
-      {toolJson?.isUi && (
-        <div className="ai-agent-tool-ui mt-2">
-          {renderAgentUi()}
-        </div>
-      )}
+      {toolJson?.isUi && <div className="ai-agent-tool-ui mt-2">{renderAgentUi()}</div>}
       {/* {toolJson?.metadata?.content && !toolJson.isUi && (
         <div className="ai-agent-tool-ui mt-2 p-3 bg-slate-800 rounded text-gray-400 text-sm">
           <p>{toolJson.metadata.content}</p>

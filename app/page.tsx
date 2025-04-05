@@ -7,9 +7,7 @@ import { useEffect } from "react";
 
 import Logo from "../components/Logo";
 
-import {
-  motion,
-} from "framer-motion";
+import { motion } from "framer-motion";
 
 import { AnimatePresence } from "framer-motion";
 
@@ -17,7 +15,6 @@ import "animate.css/animate.min.css";
 import Footer from "@/components/landing/Footer";
 import Pricing from "@/components/landing/Pricing";
 import Navbar from "@/components/landing/Navbar";
-import Header from "@/components/landing/Header";
 import AnimatedLayout from "@/components/landing/AnimatedLayout";
 import DescriptionSection from "@/components/landing/DescriptionSection";
 import VisionAndMission from "@/components/landing/VisionAndMission";
@@ -39,7 +36,6 @@ export default function LoginPage() {
   useEffect(() => {
     setIsLoading(true);
   }, []);
-
 
   return (
     <div className="min-h-screen bg-background z-50">
@@ -104,11 +100,11 @@ export default function LoginPage() {
       </AnimatePresence>
 
       <div
-        className={`transition-opacity duration-500 ${isLoading ? "opacity-0" : "opacity-100"
-          } relative z-50 bg-[#13151a]`}
+        className={`transition-opacity duration-500 ${
+          isLoading ? "opacity-0" : "opacity-100"
+        } relative z-50 bg-[#13151a]`}
       >
         <Navbar login={login} />
-        <Header login={login} />
         <DescriptionSection />
         <AnimatedLayout />
         <FeaturesSection />
@@ -119,4 +115,3 @@ export default function LoginPage() {
     </div>
   );
 }
-
