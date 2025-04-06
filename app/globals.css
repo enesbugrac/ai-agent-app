@@ -412,3 +412,18 @@ button:focus {
 .markdown-content th {
   @apply bg-background-overlay;
 }
+
+/* Rsuite tooltip overrides */
+.rs-tooltip {
+  background-color: #ef4444 !important;
+  color: white !important;
+  border-radius: 4px !important;
+  padding: 8px 12px !important;
+  font-size: 14px !important;
+  z-index: 10000 !important;
+  opacity: 1 !important;
+}
+
+.rs-tooltip-arrow {
+  border-top-color: #ef4444 !important;
+}
