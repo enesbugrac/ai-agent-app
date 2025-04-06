@@ -33,13 +33,13 @@ function Thread({ }) {
     addMessageToThreadAsync(messageContent);
   };
 
-  if (!thread && isLoading) {
-    return <div>Loading...</div>;
-  }
+
 
   if (!isLoading && !thread) {
-    return <div>Thread not found</div>;
+    return <div className="flex flex-col h-screen bg-background">Thread not found</div>;
   }
+
+  const showLoading = thread?.messages.length === 0 && isLoading
 
   return (
     <div className="flex flex-col h-screen bg-background">
@@ -69,7 +69,13 @@ function Thread({ }) {
       <div
         className={`flex-1 flex flex-col w-[70%] mx-auto justify-between py-4 gap-4 h-[calc(100vh-4rem)] overflow-hidden`}
       >
-        <ThreadView messages={messages ?? []} isMessageWaiting={isMessageWaiting} />
+        {showLoading ? (
+          <div className="flex flex-col h-full items-center justify-center">
+            <div className="w-10 h-10 rounded-full bg-primary animate-spin"></div>
+          </div>
+        ) : (
+          <ThreadView messages={messages ?? []} isMessageWaiting={isMessageWaiting} />
+        )}
 
         <div className="flex flex-col bg-[#1A1D23] rounded-2xl shadow-sm w-full transition-transform duration-300">
           <textarea
