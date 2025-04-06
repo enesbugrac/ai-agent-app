@@ -45,41 +45,14 @@ export function usePrivateFetch() {
       // 2. Prepare Headers
       const headers = new Headers(options.headers || {}); // Preserve existing headers provided by the caller
       headers.set("Authorization", `Bearer ${token}`); // Add/overwrite the Authorization header
+      headers.set("Content-Type", "application/json");
 
-      // Automatically set Content-Type for object bodies if not specified (common use case)
-      let body = options.body;
-      if (
-        body &&
-        typeof body === "object" &&
-        !(body instanceof Blob) &&
-        !(body instanceof FormData) &&
-        !(body instanceof URLSearchParams)
-      ) {
-        // Check if Content-Type is already set or if it's application/json
-        if (
-          !headers.has("Content-Type") ||
-          headers.get("Content-Type")?.includes("application/json")
-        ) {
-          // Set default Content-Type if not present
-          if (!headers.has("Content-Type")) {
-            headers.set("Content-Type", "application/json");
-          }
-          try {
-            // Convert the body object to a JSON string
-            body = JSON.stringify(body);
-          } catch (e) {
-            // Handle potential errors during stringification
-            console.error("Failed to stringify request body:", e);
-            throw new Error("Failed to stringify request body to JSON.");
-          }
-        }
-      }
 
       // 3. Prepare final fetch options
       const fetchOptions: RequestInit = {
         ...options, // Include user-provided options (method, signal, cache, etc.)
         headers: headers, // Use the prepared headers object
-        body: body, // Use the potentially stringified body
+        //  // Use the potentially stringified body
       };
 
       // 4. Perform the fetch call and return the promise

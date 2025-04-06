@@ -19,6 +19,7 @@ function Thread({ }) {
 
   const messages = thread?.messages;
 
+
   // TODO: agents and assitances should be fetched from BE and stored on zuztang
   // Find from zuztang
   const agent = useMemo(() => {
@@ -31,6 +32,10 @@ function Thread({ }) {
     setInput("");
     addMessageToThreadAsync(messageContent);
   };
+
+  if (!thread && isLoading) {
+    return <div>Loading...</div>;
+  }
 
   if (!isLoading && !thread) {
     return <div>Thread not found</div>;

@@ -3,7 +3,7 @@ import { MessageRole, Thread, ThreadMessage } from "@/types/thread.types";
 import { useParams } from "next/navigation";
 import { useMemo, useEffect, useState, useRef } from "react";
 import { usePrivateFetch } from "../fetch.hooks";
-
+import { agents } from "@/data/agents";
 export const useThreadQuery = () => {
   const { id: threadId } = useParams();
   const [isLoading, setIsLoading] = useState(false);
@@ -17,14 +17,21 @@ export const useThreadQuery = () => {
 
   const fetchThreadAsync = async () => {
     try {
+
       if (!threadId) {
         console.error("Thread ID is required");
         return;
       }
 
+      const isAgentId = agents.find((agent) => agent.displayId === threadId);
+      if (!!isAgentId) {
+        console.log("This is starter page");
+        return;
+      }
+
       setIsLoading(true);
       const data = await privateFetch<Thread>(`/threads/${threadId}`);
-      console.log("data", data);
+
       upsertThread(threadId as string, {
         ...data,
         messages: data.messages,

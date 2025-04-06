@@ -16,6 +16,8 @@ export default function ChatPage() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const agent = useMemo(() => agents.find((a) => a.displayId === params.id), [paramsId]);
 
+  console.log("agent", agent)
+
   if (agent) {
     return <ThreadStarter agent={agent} />;
   }
