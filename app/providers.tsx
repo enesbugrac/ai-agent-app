@@ -1,5 +1,7 @@
 "use client";
 
+import LoadingAnimation from "@/components/loading/LoadingAnimation";
+import { useAuthAsync } from "@/hooks/auth.hooks";
 import { PrivyProvider } from "@privy-io/react-auth";
 import { toSolanaWalletConnectors } from "@privy-io/react-auth/solana";
 const solanaConnectors = toSolanaWalletConnectors();
@@ -23,7 +25,22 @@ export function Providers({ children }: { children: React.ReactNode }) {
         },
       }}
     >
-      {children}
+      <AuthQueryProvider children={children} />
+
     </PrivyProvider>
+  );
+}
+
+
+
+function AuthQueryProvider({ children }: { children: React.ReactNode }) {
+  const { isLoading } = useAuthAsync()
+
+  if (isLoading) {
+    return <LoadingAnimation />
+  }
+
+  return (
+    <>{children}</>
   );
 }

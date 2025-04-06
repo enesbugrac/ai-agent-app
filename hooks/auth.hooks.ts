@@ -7,8 +7,16 @@ import { useRouter } from 'next/navigation';
 import { usePrivateFetch } from './fetch.hooks';
 
 
+export function useAuthCache() {
+    const { user } = useAuthStore();
+    return {
+        user
+    }
+}
 
-export function useAuth() {
+
+// Use this hook to fetch user data from the database at the top level of the app
+export function useAuthAsync() {
     const { ready, authenticated, user: privyUser } = usePrivy();
     const { user, setUser } = useAuthStore();
     const { updateThreadsWithoutMessages, clearThreads } = useThreadsStore();
@@ -28,7 +36,7 @@ export function useAuth() {
         }
 
         // If user already fetched, do not fetch again
-        if (user !== null || isFetching) return;
+        if (isFetching) return;
 
         // Fetch User Profile
         setIsFetching(true);
@@ -72,7 +80,12 @@ export function useAuth() {
         updateThreadsWithoutMessages,
     ]);
 
-    const isLoading = !ready || isFetching;
+
+    // If user is not ready (privy is loading) or user is null and fetching from the database (Be is loading)
+    // If there is a user in the cache, it will fetch the user from the database but not show loading animation
+    // So it will be in the background fetching the user
+
+    const isLoading = !ready || (!user && isFetching)
 
     return { isLoading, user, isAuthenticated: !!user };
 }

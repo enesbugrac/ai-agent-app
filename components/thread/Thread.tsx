@@ -8,11 +8,11 @@ import { FaCog, FaEllipsisH } from "react-icons/fa";
 import { IoSend } from "react-icons/io5";
 import { useInput } from "@/hooks/input.hooks";
 import ThreadView from "@/app/(dashboard)/thread/components/ThreadView";
-import { useAuth } from "@/hooks/auth.hooks";
+import { useAuthCache } from "@/hooks/auth.hooks";
 
-function Thread({}) {
+function Thread({ }) {
   const { input, setInput } = useInput();
-  const { user } = useAuth();
+  const { user } = useAuthCache();
   const { thread, isLoading } = useThreadQuery();
 
   const { addMessageToThreadAsync, isMessageWaiting } = useThreadMutation();
@@ -94,9 +94,8 @@ function Thread({}) {
             <button
               disabled={isMessageWaiting}
               onClick={() => handleSend(input)}
-              className={`w-8 h-8 rounded-lg bg-primary text-background hover:bg-primary/90 transition-all flex items-center justify-center ${
-                isMessageWaiting ? "opacity-50 cursor-not-allowed" : ""
-              }`}
+              className={`w-8 h-8 rounded-lg bg-primary text-background hover:bg-primary/90 transition-all flex items-center justify-center ${isMessageWaiting ? "opacity-50 cursor-not-allowed" : ""
+                }`}
             >
               <IoSend className="text-lg" />
             </button>

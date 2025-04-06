@@ -9,7 +9,7 @@ import React, { useRef, useState } from "react";
 import { FaCog, FaEllipsisH } from "react-icons/fa";
 import { IoSend } from "react-icons/io5";
 import ThreadView from "@/app/(dashboard)/thread/components/ThreadView";
-import { useAuth } from "@/hooks/auth.hooks";
+import { useAuthCache } from "@/hooks/auth.hooks";
 import { usePrivy } from "@privy-io/react-auth";
 
 type Props = {
@@ -19,7 +19,7 @@ type Props = {
 function ThreadStarter({ agent }: Props) {
   const { input, setInput } = useInput();
   const { login } = usePrivy();
-  const { user } = useAuth();
+  const { user } = useAuthCache();
   const { createThreadAsync, isThreadCreating, initialMessage } = useThreadMutation();
   const [welcomeMessageDisappear, setWelcomeMessageDisappear] = useState(false);
   const router = useRouter();
