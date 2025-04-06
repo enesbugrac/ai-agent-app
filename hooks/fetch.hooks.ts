@@ -1,4 +1,4 @@
-import { usePrivy } from "@privy-io/react-auth";
+import { usePrivy, useLogout } from "@privy-io/react-auth";
 import { useCallback } from "react";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
@@ -14,13 +14,14 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 export function usePrivateFetch() {
   // Get the token retrieval function from the Privy context
   const { getAccessToken } = usePrivy();
+  const { logout } = useLogout()
 
   // Create the memoized authFetch function
   const privateFetch = useCallback(
-    async (
+    async <T>(
       endpoint: string,
       options: RequestInit = {} // Default to empty object
-    ): Promise<Response> => {
+    ): Promise<T> => {
       // This function now returns Promise<Response>
 
       let token: string | null = null;
@@ -31,8 +32,7 @@ export function usePrivateFetch() {
         // Catch potential errors during the token retrieval process itself
         console.error("Error retrieving Privy token:", tokenError);
         throw new Error(
-          `Failed to retrieve authentication token: ${
-            tokenError instanceof Error ? tokenError.message : String(tokenError)
+          `Failed to retrieve authentication token: ${tokenError instanceof Error ? tokenError.message : String(tokenError)
           }`
         );
       }
@@ -93,14 +93,14 @@ export function usePrivateFetch() {
       if (response.status === 401) {
         console.warn("Unauthorized access. Attempting logout.");
         try {
-          // await logout();
+          await logout();
         } catch (logoutError) {
           console.error("Logout failed after unauthorized access:", logoutError);
           // Optionally re-throw or handle logout failure as needed
         }
       }
 
-      return response;
+      return response.json() as Promise<T>;
     },
     [getAccessToken]
   ); // The function depends on getToken and logout, so it's memoized based on it

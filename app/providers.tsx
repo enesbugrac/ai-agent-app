@@ -26,7 +26,6 @@ export function Providers({ children }: { children: React.ReactNode }) {
       }}
     >
       <AuthQueryProvider children={children} />
-
     </PrivyProvider>
   );
 }
@@ -36,6 +35,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
 function AuthQueryProvider({ children }: { children: React.ReactNode }) {
   const { isLoading } = useAuthAsync()
 
+  console.log("isLoading", isLoading)
   if (isLoading) {
     return <LoadingAnimation />
   }

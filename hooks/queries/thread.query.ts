@@ -2,13 +2,14 @@ import { useThreadsStore } from "@/store/useThreadsStore";
 import { MessageRole, Thread, ThreadMessage } from "@/types/thread.types";
 import { useParams } from "next/navigation";
 import { useMemo, useEffect, useState, useRef } from "react";
-import { api } from "@/utils/fetch.utils";
+import { usePrivateFetch } from "../fetch.hooks";
 
 export const useThreadQuery = () => {
   const { id: threadId } = useParams();
   const [isLoading, setIsLoading] = useState(false);
   const { threads, upsertThread } = useThreadsStore();
   const isMounted = useRef(false);
+  const { privateFetch } = usePrivateFetch();
 
   const currentThread = useMemo(() => {
     return threads.find((thread) => thread._id === threadId);
@@ -22,7 +23,7 @@ export const useThreadQuery = () => {
       }
 
       setIsLoading(true);
-      const data = await api.fetch<Thread>(`/threads/${threadId}`);
+      const data = await privateFetch<Thread>(`/threads/${threadId}`);
       console.log("data", data);
       upsertThread(threadId as string, {
         ...data,
@@ -58,6 +59,8 @@ export const useThreadMutation = () => {
   const [isThreadCreating, setIsThreadCreating] = useState(false);
   const [initialMessage, setInitialMessage] = useState<ThreadMessage | null>(null);
 
+  const { privateFetch } = usePrivateFetch();
+
   const createThreadAsync = async (message: string, assistantId: string) => {
     try {
       setIsThreadCreating(true);
@@ -70,7 +73,7 @@ export const useThreadMutation = () => {
       };
       setInitialMessage(userMessage);
 
-      const data = await api.fetch<{ threadId: string; content: string }>("/threads", {
+      const data = await privateFetch<{ threadId: string; content: string }>("/threads", {
         method: "POST",
         body: JSON.stringify({ message, assistantId }),
       });
@@ -119,7 +122,7 @@ export const useThreadMutation = () => {
         content: message.content,
       }));
       messageHistory?.push(userMessage);
-      const data = await api.fetch<{ content: string }>(`/threads/${threadId}/messages`, {
+      const data = await privateFetch<{ content: string }>(`/threads/${threadId}/messages`, {
         method: "POST",
         body: JSON.stringify({
           content,

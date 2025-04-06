@@ -23,6 +23,8 @@ export function useAuthAsync() {
     const { privateFetch } = usePrivateFetch();
     const [isFetching, setIsFetching] = useState(false);
 
+    console.log("is authenticated", authenticated)
+
     useEffect(() => {
         if (!ready) return;
 
@@ -40,14 +42,8 @@ export function useAuthAsync() {
 
         // Fetch User Profile
         setIsFetching(true);
-        privateFetch('/user/auth')
-            .then(async (res) => {
-                if (!res.ok) {
-                    console.error('Failed to fetch user:', res.statusText);
-                    return null; // explicitly return null to avoid loops
-                }
-
-                const profile: UserProfile = await res.json();
+        privateFetch<UserProfile>('/user/auth')
+            .then(async (profile: UserProfile) => {
                 if (!profile) {
                     console.error('User profile not found');
                     return null;
