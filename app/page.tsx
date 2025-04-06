@@ -23,16 +23,14 @@ import { useAuthCache } from "@/hooks/auth.hooks";
 import Header from "@/components/landing/Header";
 export default function Home() {
 
-
-  const { login } = usePrivy();
-  const { user } = useAuthCache();
+  const { login, authenticated } = usePrivy();
   const router = useRouter();
 
   useEffect(() => {
-    if (user) {
+    if (authenticated) {
       router.push("/terminal");
     }
-  }, [user, router]);
+  }, [authenticated, router]);
 
 
 
