@@ -30,8 +30,8 @@ const ArbitrageScanUI: React.FC<ArbitrageScanUIProps> = ({ toolData }) => {
   };
 
   return (
-    <div className="w-full max-w-md">
-      <div className="bg-[#1A1D23] backdrop-blur-sm p-4 rounded-lg border border-border mb-4">
+
+      <div className="w-full  bg-[#1A1D23] backdrop-blur-sm p-4 rounded-lg border border-border mb-4">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-lg font-medium text-white flex items-center gap-2">
             <FaChartLine className="text-primary" />
@@ -109,7 +109,7 @@ const ArbitrageScanUI: React.FC<ArbitrageScanUIProps> = ({ toolData }) => {
           </div>
         )}
       </div>
-    </div>
+
   );
 };
 

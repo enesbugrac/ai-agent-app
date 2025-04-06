@@ -22,15 +22,8 @@ import FeaturesSection from "@/components/landing/FeatureSection";
 import { useAuthCache } from "@/hooks/auth.hooks";
 import Header from "@/components/landing/Header";
 export default function Home() {
-  const { login, authenticated } = usePrivy();
-  const router = useRouter();
-
-  useEffect(() => {
-    if (authenticated) {
-      router.push("/terminal");
-    }
-  }, [authenticated, router]);
-
+  const { login } = usePrivy();
+  
   return (
     <div className="min-h-screen bg-background z-50">
       <div

@@ -3,12 +3,27 @@
 import { useState } from "react";
 import { useModalStore } from "@/store/modalStore";
 import { useWhitelistQuery } from "@/hooks/queries/whitelist.query";
+import { ReactNode } from "react";
+import SuccessMessage from "@/components/common/SuccessMessage";
 
-const WhitelistForm = () => {
+
+interface WhitelistFormProps {
+  description?: string;
+  successContent?: ReactNode;
+  existingEmailSuccessContent?: ReactNode;
+}
+
+const WhitelistForm: React.FC<WhitelistFormProps> = ({
+  description = "Get early access to AIGEN and be the first to experience our AI-powered agents.", // Default description
+  successContent,
+  existingEmailSuccessContent,
+}) => {
   const [email, setEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
+  const [isExistingEmail, setIsExistingEmail] = useState(false);
+
   const { closeModal } = useModalStore();
   const { addEmailToWhitelist } = useWhitelistQuery();
   const validateEmail = (email: string) => {
@@ -33,16 +48,16 @@ const WhitelistForm = () => {
     try {
       const response = await addEmailToWhitelist(email);
       if (response.status === "exists") {
-        setError("Email is already whitelisted");
-        setIsSubmitting(false);
-        return;
-      }
-      setSuccess(true);
-      setEmail("");
 
-      setTimeout(() => {
-        closeModal();
-      }, 2000);
+        setIsExistingEmail(true);
+        setSuccess(true);
+        setEmail("");
+      } else {
+  
+        setSuccess(true);
+        setEmail("");
+      }
+
     } catch (err) {
       const errorMessage =
         err instanceof Error
@@ -57,21 +72,30 @@ const WhitelistForm = () => {
   return (
     <div className="w-full">
       {success ? (
-        <div className="text-center p-4">
-          <div className="text-green-400 text-xl mb-2">✓</div>
-          <h3 className="text-white text-lg font-medium mb-2">
-            You&apos;re on the list!
-          </h3>
-          <p className="text-secondary text-sm">
-            Thank you for joining. We&apos;ll notify you when access is available.
-          </p>
-        </div>
+        <>
+          {isExistingEmail ? (
+            <>{existingEmailSuccessContent || 
+              <SuccessMessage
+                title="You're already on the list!"
+                message="Thank you for joining. We'll notify you for the upcoming features."
+              />
+            }</>
+          ) : (
+            <>{successContent || 
+              <SuccessMessage
+                title="You're on the list!"
+                message="Thank you for joining. We'll notify you for the upcoming features."
+              />
+            }</>
+          )}
+        </>
       ) : (
         <>
-          <h3 className="text-white text-lg font-medium mb-2">Join the Whitelist</h3>
+          <h3 className="text-white text-lg font-medium mb-2">
+            Join the Whitelist
+          </h3>
           <p className="text-secondary text-sm mb-6">
-            Get early access to AIGEN and be the first to experience our AI-powered
-            agents.
+            {description} {/* Use description prop */}
           </p>
 
           <form onSubmit={handleSubmit} className="space-y-4">

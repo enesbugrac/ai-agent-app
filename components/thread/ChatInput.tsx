@@ -1,7 +1,10 @@
 import React from 'react';
 import TextareaAutosize from 'react-textarea-autosize';
 import { IoSend } from 'react-icons/io5';
-import { useAuthStore } from '@/store/useStore';
+import { useAuthStore } from '@/store/useStore'; 
+import { useModalStore } from '@/store/modalStore'; 
+import WhitelistForm from '@/components/whitelist/WhitelistForm';
+import SuccessMessage from '@/components/common/SuccessMessage';
 
 type ChatInputProps = {
   value: string;
@@ -25,14 +28,40 @@ const ChatInput: React.FC<ChatInputProps> = ({
   maxRows = 10,
 }) => {
 
-  const {user} = useAuthStore();
-  const handleKeyPress = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === 'Enter' && !e.shiftKey && !isSending) {
-      e.preventDefault();
-      onSend();
+  const { user } = useAuthStore();
+  const { openModal } = useModalStore(); // Get openModal function
+
+  const handleSend = () => {
+    if (user?.credits === 0) {
+      openModal(
+        <WhitelistForm 
+          description="You've run out of credits. Join the whitelist to get more!" 
+          successContent={
+            <SuccessMessage
+              title="You're successfully joined the whitelist to get more credits!"
+              message="Thank you for joining. We'll notify you when you have more credits."
+            />
+          }
+          existingEmailSuccessContent={
+            <SuccessMessage
+              title="You're already on the list!"
+              message="Thank you for joining. We'll notify you when you have more credits."
+            />
+          }
+        />
+      ); 
+    } else {
+      onSend(); 
     }
   };
-
+   
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === 'Enter' && !e.shiftKey && !isSending && value.trim()) {
+      e.preventDefault();
+      handleSend(); 
+    }
+  };
+  
   return (
     <div
       ref={inputContainerRef}
@@ -54,7 +83,7 @@ const ChatInput: React.FC<ChatInputProps> = ({
 
       <button
           disabled={isSending || !value.trim()} 
-          onClick={onSend}
+          onClick={handleSend}
           className={`w-8 h-8 rounded-lg bg-primary text-background hover:bg-primary/90 transition-all flex items-center justify-center ${
             (isSending || !value.trim()) ? "opacity-50 cursor-not-allowed" : ""
           }`}

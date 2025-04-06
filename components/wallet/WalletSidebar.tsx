@@ -99,10 +99,10 @@ export default function WalletSidebar({ isOpen, onClose }: WalletSidebarProps) {
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ duration: 0.15, ease: [0.25, 0.1, 0.25, 1] }}
-            className="fixed top-0 right-0 h-full w-80 bg-background-overlay border-l border-border z-50 shadow-xl overflow-hidden"
+            className="fixed top-0 right-0 h-full w-80 bg-background border-l border-border z-50 shadow-xl overflow-hidden"
           >
             <div className="flex flex-col h-full">
-              <div className="flex items-center justify-between p-4 border-b border-border">
+              <div className="h-16 flex items-center justify-between p-4 border-b border-border">
                 <h2 className="text-primary font-medium flex items-center gap-2">
                   <FaWallet className="text-primary" /> Wallet
                 </h2>
@@ -148,7 +148,7 @@ export default function WalletSidebar({ isOpen, onClose }: WalletSidebarProps) {
                   <div className="mb-4">
                     <motion.button
                       onClick={handleDelegate}
-                      className="w-full py-2 bg-primary/20 hover:bg-primary/30 text-primary rounded-lg transition-colors font-medium"
+                      className="w-full py-2 text-primary bg-primary/10 border border-primary/20 hover:bg-primary/30  rounded-lg transition-colors font-medium"
                       whileHover={{ scale: 1.01 }}
                       whileTap={{ scale: 0.99 }}
                       transition={{ duration: 0.03 }}
@@ -164,7 +164,7 @@ export default function WalletSidebar({ isOpen, onClose }: WalletSidebarProps) {
                 />
               </div>
 
-              <div className="p-4 border-t border-border">
+              <div className="h-16 flex items-center justify-center px-4 border-t border-border">
                 <motion.button
                   onClick={() => {
                     if (solanaEmbeddedWallet && evmEmbeddedWallet)

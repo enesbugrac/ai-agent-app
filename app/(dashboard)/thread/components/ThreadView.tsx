@@ -44,10 +44,10 @@ export default function ThreadView({ messages, isMessageWaiting }: ThreadViewPro
             }`}
           >
             <div
-              className={`mb-4 rounded-lg max-w-2xl ${
+              className={`mb-4 rounded-lg ${
                 message.role === "user"
-                  ? "bg-[#1A1D23] text-white ml-auto py-3 px-4"
-                  : "bg-[#1A1D23]/50 text-white mr-auto p-4"
+                  ? "max-w-2xl bg-[#1A1D23] text-white ml-auto py-3 px-4"
+                  : "w-full text-white mr-auto"
               }`}
             >
               {message.role === "user" ? (
