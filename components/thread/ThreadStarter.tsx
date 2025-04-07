@@ -1,15 +1,16 @@
+import React, { useState } from "react";
+import { motion } from "framer-motion";
 import AgentView from "@/app/(dashboard)/thread/components/AgentView";
 import { useInput } from "@/hooks/input.hooks";
 import { useThreadMutation } from "@/hooks/queries/thread.query";
 import { Agent } from "@/types/agent.types";
 import { useRouter } from "next/navigation";
-import React, { useRef, useState } from "react";
 import ThreadView from "@/app/(dashboard)/thread/components/ThreadView";
 import { useAuthCache } from "@/hooks/auth.hooks";
 import { usePrivy } from "@privy-io/react-auth";
 import ThreadHeader from "./ThreadHeader";
 import ChatInput from "./ChatInput";
-import { useAuthStore } from "@/store/useStore"; // Import the store
+import { useAuthStore } from "@/store/useStore";
 
 type Props = {
   agent: Agent;
@@ -19,30 +20,23 @@ function ThreadStarter({ agent }: Props) {
   const { input, setInput } = useInput();
   const { login } = usePrivy();
   const { user } = useAuthCache();
-  const { decreaseCredit } = useAuthStore(); // Get decreaseCredit from store
+  const { decreaseCredit } = useAuthStore();
   const { createThreadAsync, isThreadCreating, initialMessage } =
     useThreadMutation();
   const [welcomeMessageDisappear, setWelcomeMessageDisappear] = useState(false);
+  const [animateChatInputDown, setAnimateChatInputDown] = useState(false);
   const router = useRouter();
-  const inputContainerRef = useRef<HTMLDivElement>(null);
 
   const addNewThread = async (messageContent: string) => {
     if (!user) {
       login();
       return;
     }
-    // Check credits before proceeding
     if (!messageContent.trim() || !(user?.credits ?? 0 > 0)) return;
 
     setWelcomeMessageDisappear(true);
+    setAnimateChatInputDown(true);
 
-    if (inputContainerRef.current) {
-      inputContainerRef.current.style.transform = "translateY(100%)";
-
-    }
-
-
-    // Decrease credit before creating thread
     decreaseCredit();
 
     try {
@@ -58,14 +52,18 @@ function ThreadStarter({ agent }: Props) {
       <ThreadHeader agent={agent} />
 
       <div
-        className={`flex-1 flex flex-col w-[70%] mx-auto  justify-center
+        className={`flex-1 flex flex-col w-[70%] mx-auto justify-between
                      py-4 gap-4 h-[calc(100vh-4rem)] overflow-hidden`}
       >
+
+
+
         <AgentView
           agent={agent!}
           onPromptClick={addNewThread}
           welcomeMessageDissapear={welcomeMessageDisappear}
         />
+
 
         {isThreadCreating && (
           <ThreadView
@@ -73,14 +71,24 @@ function ThreadStarter({ agent }: Props) {
             isMessageWaiting={true}
           />
         )}
-        <ChatInput
-          inputContainerRef={inputContainerRef}
-          value={input}
-          onChange={setInput}
-          onSend={() => addNewThread(input)}
-          isSending={isThreadCreating}
-          placeholder="Ask whatever you want..."
-        />
+
+        <motion.div
+          className="w-full"
+          initial={{ y: "-18vh", opacity: 1 }}
+          animate={{
+            y: animateChatInputDown ? 0 : "-18vh",
+            opacity: 1
+          }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
+        >
+          <ChatInput
+            value={input}
+            onChange={setInput}
+            onSend={() => addNewThread(input)}
+            isSending={isThreadCreating}
+            placeholder="Ask whatever you want..."
+          />
+        </motion.div>
       </div>
     </div>
   );

@@ -56,22 +56,22 @@ function Thread({ }) {
       <div
         className={`flex-1 flex flex-col w-[70%] mx-auto justify-between py-4 gap-4 h-[calc(100vh-4rem)] overflow-hidden`}
       >
-        {showLoading ? <div className="flex justify-center items-center h-full">Loading...</div> :
-          <>
-            <ThreadView
-              messages={messages ?? []}
-              isMessageWaiting={isMessageWaiting}
-            />
 
-            <ChatInput
-              value={input}
-              onChange={setInput}
-              onSend={() => handleSend(input)}
-              isSending={isMessageWaiting}
-              placeholder="Ask whatever you want..."
-            />
-          </>
-        }
+        <>
+          <ThreadView
+            messages={messages ?? []}
+            isMessageWaiting={isMessageWaiting}
+          />
+
+          <ChatInput
+            value={input}
+            onChange={setInput}
+            onSend={() => handleSend(input)}
+            isSending={isMessageWaiting}
+            placeholder="Ask whatever you want..."
+          />
+        </>
+
 
       </div>
     </div>
