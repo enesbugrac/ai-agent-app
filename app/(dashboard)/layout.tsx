@@ -7,7 +7,6 @@ import { useAuthCache } from "@/hooks/auth.hooks";
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const { user } = useAuthCache();
 
-
   return (
     <div className="flex h-screen">
       <Sidebar />

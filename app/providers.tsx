@@ -35,14 +35,13 @@ export function Providers({ children }: { children: React.ReactNode }) {
 function AuthQueryProvider({ children }: { children: React.ReactNode }) {
   const { isLoading } = useAuthAsync()
 
-  console.log("isLoading", isLoading)
-  if (isLoading) {
-    return <LoadingAnimation />
-  }
-
 
 
   return (
-    <>{children}</>
+    <>
+      {isLoading && <LoadingAnimation />}
+      {
+        children
+      }</>
   );
 }

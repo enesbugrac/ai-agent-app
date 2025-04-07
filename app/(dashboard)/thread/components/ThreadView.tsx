@@ -1,3 +1,5 @@
+'use client'
+
 import AIMessage from "@/components/ai/AIMessage";
 import { ThreadMessage } from "@/types/thread.types";
 import { useEffect, useRef } from "react";

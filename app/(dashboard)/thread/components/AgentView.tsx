@@ -1,3 +1,5 @@
+'use client'
+
 import PromptCard from "@/components/PromptCard";
 import { prompts } from "@/data/prompts";
 import { Agent } from "@/types/agent.types";

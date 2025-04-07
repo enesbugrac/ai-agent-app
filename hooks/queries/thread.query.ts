@@ -42,6 +42,10 @@ export const useThreadQueryAsync = () => {
   useEffect(() => {
     console.log("fetching thread");
     fetchThreadAsync();
+
+    return () => {
+      console.log("unmounting thread");
+    }
   }, [threadId]);
 
   return { thread: currentThread, fetchThreadAsync, isLoading };
