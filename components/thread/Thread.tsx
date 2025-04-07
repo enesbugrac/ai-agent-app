@@ -1,7 +1,7 @@
 import { agents } from "@/data/agents";
 import {
   useThreadMutation,
-  useThreadQuery,
+  useThreadQueryAsync,
 } from "@/hooks/queries/thread.query";
 
 import React, { useMemo } from "react";
@@ -17,7 +17,7 @@ function Thread({ }) {
   const { input, setInput } = useInput();
   const { user } = useAuthCache();
   const { decreaseCredit } = useAuthStore(); // Get the decreaseCredit function from the store
-  const { thread, isLoading } = useThreadQuery();
+  const { thread, isLoading } = useThreadQueryAsync();
 
   const { addMessageToThreadAsync, isMessageWaiting } = useThreadMutation();
 
@@ -56,18 +56,23 @@ function Thread({ }) {
       <div
         className={`flex-1 flex flex-col w-[70%] mx-auto justify-between py-4 gap-4 h-[calc(100vh-4rem)] overflow-hidden`}
       >
-        <ThreadView
-          messages={messages ?? []}
-          isMessageWaiting={isMessageWaiting}
-        />
+        {showLoading ? <div className="flex justify-center items-center h-full">Loading...</div> :
+          <>
+            <ThreadView
+              messages={messages ?? []}
+              isMessageWaiting={isMessageWaiting}
+            />
 
-        <ChatInput
-          value={input}
-          onChange={setInput}
-          onSend={() => handleSend(input)}
-          isSending={isMessageWaiting}
-          placeholder="Ask whatever you want..."
-        />
+            <ChatInput
+              value={input}
+              onChange={setInput}
+              onSend={() => handleSend(input)}
+              isSending={isMessageWaiting}
+              placeholder="Ask whatever you want..."
+            />
+          </>
+        }
+
       </div>
     </div>
   );

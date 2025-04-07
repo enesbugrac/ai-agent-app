@@ -1,14 +1,15 @@
 import { useThreadsStore } from "@/store/useThreadsStore";
 import { MessageRole, Thread, ThreadMessage } from "@/types/thread.types";
 import { useParams } from "next/navigation";
-import { useMemo, useEffect, useState, useRef } from "react";
+import { useMemo, useEffect, useState, useRef, useCallback } from "react";
 import { usePrivateFetch } from "../fetch.hooks";
 import { agents } from "@/data/agents";
-export const useThreadQuery = () => {
+export const useThreadQueryAsync = () => {
+
   const { id: threadId } = useParams();
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const { threads, upsertThread } = useThreadsStore();
-  const isMounted = useRef(false);
+
   const { privateFetch } = usePrivateFetch();
 
   const currentThread = useMemo(() => {
@@ -17,21 +18,14 @@ export const useThreadQuery = () => {
 
   const fetchThreadAsync = async () => {
     try {
-
+      console.log("fetching thread id", threadId);
       if (!threadId) {
         console.error("Thread ID is required");
         return;
       }
 
-      const isAgentId = agents.find((agent) => agent.displayId === threadId);
-      if (!!isAgentId) {
-        console.log("This is starter page");
-        return;
-      }
-
       setIsLoading(true);
       const data = await privateFetch<Thread>(`/threads/${threadId}`);
-
       upsertThread(threadId as string, {
         ...data,
         messages: data.messages,
@@ -42,27 +36,36 @@ export const useThreadQuery = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }
+
 
   useEffect(() => {
-    if (!isMounted.current) {
-      isMounted.current = true;
-      return;
-    }
-
-    if (threadId) {
-      fetchThreadAsync();
-    }
+    console.log("fetching thread");
+    fetchThreadAsync();
   }, [threadId]);
 
   return { thread: currentThread, fetchThreadAsync, isLoading };
 };
 
+
+export const useCurrentThreadCache = () => {
+  const { id: threadId } = useParams();
+
+  const { threads } = useThreadsStore();
+
+
+  const currentThread = useMemo(() => {
+    return threads.find((thread) => thread._id === threadId);
+  }, [threads, threadId]);
+
+  return { thread: currentThread };
+};
+
 export const useThreadMutation = () => {
   const { id: threadId } = useParams();
-  const { addMessageToThread, addThread } = useThreadsStore();
+  const { addMessageToThread, addThread, } = useThreadsStore();
   const [isMessageWaiting, setIsMessageWaiting] = useState(false);
-  const { thread: currentThread } = useThreadQuery();
+  const { thread: currentThread } = useCurrentThreadCache();
   const [isThreadCreating, setIsThreadCreating] = useState(false);
   const [initialMessage, setInitialMessage] = useState<ThreadMessage | null>(null);
 

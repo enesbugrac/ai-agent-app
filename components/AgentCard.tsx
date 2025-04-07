@@ -18,7 +18,7 @@ export default function AgentCard({
   icon: Icon,
 }: AgentCardProps) {
   return (
-    <Link href={`/thread/${id}`} className="block group h-[200px]">
+    <Link href={`/agent/${id}`} className="block group h-[200px]">
       <div className="bg-background-overlay rounded-lg overflow-hidden border border-border shadow-lg backdrop-blur-sm h-full hover:border-primary/20 transition-[border-color]">
         {/* Ubuntu Window Header */}
         <div className="bg-background-card px-3 py-2 flex items-center justify-between border-b border-border">

@@ -40,6 +40,8 @@ function AuthQueryProvider({ children }: { children: React.ReactNode }) {
     return <LoadingAnimation />
   }
 
+
+
   return (
     <>{children}</>
   );

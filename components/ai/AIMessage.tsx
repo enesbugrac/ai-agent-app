@@ -11,7 +11,7 @@ import {
 
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';  
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 type AIMessageProps = {
@@ -51,7 +51,7 @@ const AIMessage: React.FC<AIMessageProps> = ({ message }) => {
       </div>
       {toolJson?.isUi && <div className="ai-agent-tool-ui mt-2">{renderAgentUi()}</div>}
 
-      <p className="text-secondary mb-4">
+      <div className="text-secondary mb-4">
 
         <ReactMarkdown
           remarkPlugins={[remarkGfm]}
@@ -113,7 +113,7 @@ const AIMessage: React.FC<AIMessageProps> = ({ message }) => {
           {content}
         </ReactMarkdown>
 
-      </p>
+      </div>
 
       {/* {toolJson?.metadata?.content && !toolJson.isUi && (
         <div className="ai-agent-tool-ui mt-2 p-3 bg-slate-800 rounded text-gray-400 text-sm">

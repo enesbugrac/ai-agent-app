@@ -9,7 +9,6 @@ interface AgentViewProps {
 }
 
 export default function AgentView({
-
   agent,
   onPromptClick,
   welcomeMessageDissapear,

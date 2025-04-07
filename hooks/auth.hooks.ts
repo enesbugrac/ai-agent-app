@@ -23,7 +23,6 @@ export function useAuthAsync() {
     const { privateFetch } = usePrivateFetch();
     const [isFetching, setIsFetching] = useState(false);
 
-    console.log("is authenticated", authenticated)
 
     useEffect(() => {
         if (!ready) return;
