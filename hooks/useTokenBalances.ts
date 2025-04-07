@@ -5,17 +5,9 @@ import { TOKEN_PROGRAM_ID } from "@solana/spl-token";
 import { tokenCache } from "../utils/cache";
 import { processBatch, processBatchWithFallback } from "../utils/batch";
 import { priceFeed } from "../services/priceFeed";
-import { JsonRpcProvider, formatUnits } from "ethers";
-
-interface TokenBalance {
-  address: string;
-  symbol: string;
-  name: string;
-  balance: number;
-  decimals: number;
-  iconUrl?: string;
-  usdValue?: number;
-}
+import { Alchemy, Network, Utils } from "alchemy-sdk";
+import { NATIVE_TOKENS } from "../config/tokens";
+import { TokenBalance } from "../types/token.types";
 
 interface TokenMetadata {
   name: string;
@@ -53,50 +45,12 @@ interface ParsedTokenAccount {
   };
 }
 
-const NATIVE_TOKENS = {
-  SOL: {
-    symbol: "SOL",
-    name: "Solana",
-    decimals: 9,
-    iconUrl:
-      "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/So11111111111111111111111111111111111111112/logo.png",
-  },
-  BNB: {
-    symbol: "BNB",
-    name: "Binance Coin",
-    decimals: 18,
-    iconUrl:
-      "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/smartchain/info/logo.png",
-  },
+const config = {
+  apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY,
+  network: Network.BNB_MAINNET,
 };
 
-const BNB_RPC = "https://bsc-dataseed.binance.org";
-const BSCSCAN_API_KEY = process.env.NEXT_PUBLIC_BSCSCAN_API_KEY;
-
-interface BscTokenInfo {
-  tokenAddress: string;
-  tokenSymbol: string;
-  tokenName: string;
-  tokenDecimal: string;
-  balance: string;
-}
-
-interface BscTransaction {
-  contractAddress: string;
-  tokenSymbol: string;
-  tokenName: string;
-  tokenDecimal: string;
-}
-
-interface BscTransactionResponse {
-  status: string;
-  result: BscTransaction[];
-}
-
-interface BscBalanceResponse {
-  status: string;
-  result: string;
-}
+const alchemy = new Alchemy(config);
 
 async function getTokenMetadata(address: string): Promise<TokenMetadata | null> {
   const cachedData = tokenCache.get(`metadata:${address}`);
@@ -267,129 +221,57 @@ export function useTokenBalances(
       try {
         if (!walletAddress) return;
 
-        const provider = new JsonRpcProvider(BNB_RPC);
+        // Get native BNB balance and token balances
+        const [nativeBalance, tokenBalances] = await Promise.all([
+          alchemy.core.getBalance(walletAddress),
+          alchemy.core.getTokenBalances(walletAddress),
+        ]);
 
-        // Fetch native BNB balance
-        const bnbBalance = await provider.getBalance(walletAddress);
+        // Process native BNB balance
         const bnbBalanceData: TokenBalance = {
           address: "BNB",
           ...NATIVE_TOKENS.BNB,
-          balance: Number(formatUnits(bnbBalance, 18)),
+          balance: Number(Utils.formatUnits(nativeBalance.toString(), 18)),
         };
 
-        // Fetch BEP-20 token balances from BSCScan API
-        const response = await fetch(
-          `https://api.bscscan.com/api?module=account&action=tokentx&address=${walletAddress}&startblock=0&endblock=999999999&sort=desc&apikey=${BSCSCAN_API_KEY}`
-        );
+        // Process token balances
+        const tokenBalancePromises = tokenBalances.tokenBalances
+          .filter((token) => token.tokenBalance !== "0") // Filter out zero balances
+          .map(async (token) => {
+            try {
+              const metadata = await alchemy.core.getTokenMetadata(token.contractAddress);
 
-        if (!response.ok) {
-          throw new Error("Failed to fetch BSC token transactions");
-        }
-
-        const data = (await response.json()) as BscTransactionResponse;
-        if (data.status !== "1" || !data.result) {
-          throw new Error("Invalid response from BSCScan API");
-        }
-
-        // Get unique token addresses from transactions
-        const uniqueTokens = new Set(
-          data.result.map((tx) => tx.contractAddress.toLowerCase())
-        );
-        const tokenInfoPromises: Promise<BscTokenInfo | null>[] = Array.from(
-          uniqueTokens
-        ).map(async (tokenAddress) => {
-          try {
-            // Get token balance
-            const balanceResponse = await fetch(
-              `https://api.bscscan.com/api?module=account&action=tokenbalance&contractaddress=${tokenAddress}&address=${walletAddress}&tag=latest&apikey=${BSCSCAN_API_KEY}`
-            );
-
-            if (!balanceResponse.ok) return null;
-
-            const balanceData = (await balanceResponse.json()) as BscBalanceResponse;
-            if (balanceData.status !== "1" || Number(balanceData.result) === 0)
+              return {
+                address: token.contractAddress,
+                symbol: metadata.symbol || "Unknown",
+                name: metadata.name || "Unknown Token",
+                decimals: metadata.decimals || 18,
+                iconUrl: metadata.logo || "",
+                balance: Number(
+                  Utils.formatUnits(token.tokenBalance || "0", metadata.decimals || 18)
+                ),
+              } as TokenBalance;
+            } catch (error) {
+              console.error(
+                `Error fetching metadata for token ${token.contractAddress}:`,
+                error
+              );
               return null;
+            }
+          });
 
-            // Find token info from transactions
-            const tokenTx = data.result.find(
-              (tx) => tx.contractAddress.toLowerCase() === tokenAddress
-            );
-
-            if (!tokenTx) return null;
-
-            return {
-              tokenAddress,
-              tokenSymbol: tokenTx.tokenSymbol,
-              tokenName: tokenTx.tokenName,
-              tokenDecimal: tokenTx.tokenDecimal,
-              balance: balanceData.result,
-            };
-          } catch (error) {
-            console.warn(`Failed to fetch balance for token ${tokenAddress}:`, error);
-            return null;
-          }
-        });
-
-        // Process token balances in batches
-        const tokenInfos = await processBatch<
-          Promise<BscTokenInfo | null>,
-          BscTokenInfo | null
-        >(tokenInfoPromises, async (promise) => await promise, {
-          batchSize: 3,
-          delayBetweenBatches: 500,
-        });
-
-        // Convert token infos to TokenBalance format
-        const tokenBalances = await processBatch<
-          BscTokenInfo | null,
-          TokenBalance | null
-        >(
-          tokenInfos,
-          async (info) => {
-            if (!info) return null;
-
-            const balance =
-              Number(info.balance) / Math.pow(10, Number(info.tokenDecimal));
-            if (balance === 0) return null;
-
-            const metadata = await getTokenMetadata(info.tokenAddress);
-            return {
-              address: info.tokenAddress,
-              symbol: info.tokenSymbol,
-              name: info.tokenName,
-              balance,
-              decimals: Number(info.tokenDecimal),
-              iconUrl: metadata?.iconUrl,
-              usdValue: metadata?.price_usd ? balance * metadata.price_usd : undefined,
-            };
-          },
-          { batchSize: 3, delayBetweenBatches: 200 }
-        );
-
-        // Filter out null values and add BNB balance
-        const validBalances = [
+        const tokens = await Promise.all(tokenBalancePromises);
+        const validTokens = [
           bnbBalanceData,
-          ...tokenBalances.filter((balance): balance is TokenBalance => balance !== null),
+          ...tokens.filter((token): token is TokenBalance => token !== null),
         ];
 
-        // Fetch prices in batch
-        const priceUpdatedBalances = await processBatchWithFallback(
-          validBalances,
-          async (token) => {
-            const price = await priceFeed.getTokenPrice(token.symbol);
-            return {
-              ...token,
-              usdValue: price ? token.balance * Number(price) : token.usdValue,
-            };
-          },
-          async (token) => token,
-          { batchSize: 5, delayBetweenBatches: 100 }
-        );
-
-        setBalances(priceUpdatedBalances);
+        setBalances(validTokens);
+        setLoading(false);
       } catch (err) {
         console.error("Error fetching BNB balances:", err);
         setError(err as Error);
+        setLoading(false);
       }
     }
 
@@ -397,9 +279,9 @@ export function useTokenBalances(
     setError(null);
 
     if (network === "solana") {
-      fetchSolanaBalances().finally(() => setLoading(false));
+      fetchSolanaBalances();
     } else {
-      fetchBNBBalances().finally(() => setLoading(false));
+      fetchBNBBalances();
     }
   }, [walletAddress, network, connection]);
 
