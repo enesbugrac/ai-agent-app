@@ -171,7 +171,12 @@ export default function WalletSidebar({ isOpen, onClose }: WalletSidebarProps) {
                       fundWallet(
                         activeTab === "solana"
                           ? solanaEmbeddedWallet?.address
-                          : evmEmbeddedWallet?.address
+                          : evmEmbeddedWallet?.address,
+                        {
+                          chain: {
+                            id: 56,
+                          },
+                        }
                       );
                   }}
                   className="w-full py-2 bg-primary hover:bg-primary/90 text-black rounded-lg transition-colors font-medium"
