@@ -3,9 +3,16 @@
 import Sidebar from "@/components/Sidebar";
 import WalletButton from "@/components/wallet/WalletButton";
 import { useAuthCache } from "@/hooks/auth.hooks";
+import { useEffect } from "react";
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const { user } = useAuthCache();
+
+  useEffect(() => {
+    return () => {
+      console.log("unmounting")
+    }
+  }, [])
 
   return (
     <div className="flex h-screen">
