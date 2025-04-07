@@ -38,16 +38,9 @@ function ThreadStarter({ agent }: Props) {
 
     if (inputContainerRef.current) {
       inputContainerRef.current.style.transform = "translateY(100%)";
-      setTimeout(() => {
-        if (inputContainerRef.current) {
-          inputContainerRef.current.classList.add(
-            "animate__animated",
-            "animate__slideInUp"
-          );
-          inputContainerRef.current.style.transform = "";
-        }
-      }, 100);
+
     }
+
 
     // Decrease credit before creating thread
     decreaseCredit();
