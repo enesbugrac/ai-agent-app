@@ -14,13 +14,13 @@ export default function ChatPage() {
   // TODO: agents and assitances should be fetched from BE and stored on zuztang
   // Find from zuztang
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const agent = useMemo(() => agents.find((a) => a.displayId === params.id), [paramsId]);
+  const agentData = useMemo(() => agents.find((a) => a.id === params.id), [paramsId]);
 
-  if (!agent) {
+  if (!agentData) {
     return <div>Agent not found</div>;
   }
 
-  return <ThreadStarter agent={agent} />
+  return <ThreadStarter agentData={agentData} />
 }
 
 /**

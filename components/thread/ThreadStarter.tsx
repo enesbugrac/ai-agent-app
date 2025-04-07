@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import AgentView from "@/app/(dashboard)/thread/components/AgentView";
 import { useInput } from "@/hooks/input.hooks";
 import { useThreadMutation } from "@/hooks/queries/thread.query";
-import { Agent } from "@/types/agent.types";
+import { Agent, AgentData } from "@/types/agent.types";
 import { useRouter } from "next/navigation";
 import ThreadView from "@/app/(dashboard)/thread/components/ThreadView";
 import { useAuthCache } from "@/hooks/auth.hooks";
@@ -13,10 +13,10 @@ import ChatInput from "./ChatInput";
 import { useAuthStore } from "@/store/useStore";
 
 type Props = {
-  agent: Agent;
+  agentData: AgentData;
 };
 
-function ThreadStarter({ agent }: Props) {
+function ThreadStarter({ agentData }: Props) {
   const { input, setInput } = useInput();
   const { login } = usePrivy();
   const { user } = useAuthCache();
@@ -40,7 +40,7 @@ function ThreadStarter({ agent }: Props) {
     decreaseCredit();
 
     try {
-      const thread = await createThreadAsync(messageContent, agent.id);
+      const thread = await createThreadAsync(messageContent, agentData.id);
       router.replace(`/thread/${thread._id}`);
     } catch (error) {
       console.error("Failed to create thread:", error);
@@ -49,7 +49,7 @@ function ThreadStarter({ agent }: Props) {
 
   return (
     <div className="flex flex-col h-screen bg-background">
-      <ThreadHeader agent={agent} />
+      <ThreadHeader agent={agentData} />
 
       <div
         className={`flex-1 flex flex-col w-[70%] mx-auto justify-between
@@ -59,7 +59,7 @@ function ThreadStarter({ agent }: Props) {
 
 
         <AgentView
-          agent={agent!}
+          agent={agentData}
           onPromptClick={addNewThread}
           welcomeMessageDissapear={welcomeMessageDisappear}
         />

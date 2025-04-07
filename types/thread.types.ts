@@ -1,3 +1,4 @@
+import { Agent } from "./agent.types";
 import { ToolJson, PossibleToolJson } from "./tools.types";
 
 
@@ -20,7 +21,7 @@ export type Thread = {
     _id: string;
     userId: string;
     name: string
-    assistantId: string;
+    agent: Agent;
     openAiThreadId: string;
     messages: ThreadMessage[];
     updatedAt?: string;

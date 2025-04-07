@@ -27,7 +27,7 @@ function Thread({ }) {
   // TODO: agents and assitances should be fetched from BE and stored on zuztang
   // Find from zuztang
   const agent = useMemo(() => {
-    return agents.find((a) => a.id === thread?.assistantId);
+    return agents.find((a) => a.id === thread?.agent);
   }, [thread]);
 
   const handleSend = async (messageContent: string) => {

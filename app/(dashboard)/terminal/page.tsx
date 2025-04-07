@@ -80,7 +80,7 @@ export default function Home() {
             {featuredAgents.map((agent) => (
               <AgentCard
                 key={agent.displayId}
-                id={agent.displayId}
+                id={agent.id}
                 name={agent.name}
                 description={agent.description}
                 type={agent.type}

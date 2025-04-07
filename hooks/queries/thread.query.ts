@@ -4,6 +4,7 @@ import { useParams } from "next/navigation";
 import { useMemo, useEffect, useState, useRef, useCallback } from "react";
 import { usePrivateFetch } from "../fetch.hooks";
 import { agents } from "@/data/agents";
+import { Agent } from "@/types/agent.types";
 export const useThreadQueryAsync = () => {
 
   const { id: threadId } = useParams();
@@ -75,7 +76,7 @@ export const useThreadMutation = () => {
 
   const { privateFetch } = usePrivateFetch();
 
-  const createThreadAsync = async (message: string, assistantId: string) => {
+  const createThreadAsync = async (message: string, agent: Agent) => {
     try {
       setIsThreadCreating(true);
 
@@ -89,7 +90,7 @@ export const useThreadMutation = () => {
 
       const data = await privateFetch<{ threadId: string; content: string }>("/threads", {
         method: "POST",
-        body: JSON.stringify({ message, assistantId }),
+        body: JSON.stringify({ message, agent }),
       });
 
       const newThread: Thread = {
@@ -103,7 +104,7 @@ export const useThreadMutation = () => {
             content: data.content,
           },
         ],
-        assistantId,
+        agent: agent as Agent,
         userId: "temp",
         name: message.slice(0, 30) + "...",
         openAiThreadId: "temp",

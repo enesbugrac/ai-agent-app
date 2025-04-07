@@ -1,12 +1,12 @@
 import React from 'react';
-import { Agent } from '@/types/agent.types'; 
+import { Agent, AgentData } from '@/types/agent.types';
 import { useAuthStore } from '@/store/useStore';
 
 type ThreadHeaderProps = {
-  agent: Agent | undefined;
+  agent: AgentData | undefined;
 };
 
-const ThreadHeader: React.FC<ThreadHeaderProps> = ({ agent}) => {
+const ThreadHeader: React.FC<ThreadHeaderProps> = ({ agent }) => {
   if (!agent) {
 
     return (

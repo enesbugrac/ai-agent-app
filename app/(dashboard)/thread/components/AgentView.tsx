@@ -2,11 +2,11 @@
 
 import PromptCard from "@/components/PromptCard";
 import { prompts } from "@/data/prompts";
-import { Agent } from "@/types/agent.types";
+import { Agent, AgentData } from "@/types/agent.types";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface AgentViewProps {
-  agent: Agent;
+  agent: AgentData;
   onPromptClick: (text: string) => void;
   welcomeMessageDissapear: boolean;
 }

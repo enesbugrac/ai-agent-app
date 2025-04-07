@@ -1,24 +1,11 @@
 import { FaChartLine } from "react-icons/fa";
 import { IconType } from "react-icons";
+import { AgentData, Agent } from "@/types/agent.types";
 
-export interface Agent {
-  displayId: string;
-  id: string;
-  name: string;
-  description: string;
-  type: string;
-  icon: IconType;
-}
 
-export enum AssistantId {
-  ARBITRAGE_ASSISTANT = "arbitrage-assistant",
-  JUPITER_SWAP_ASSISTANT = "jupiter-swap-assistant",
-  ODO_SWAP_ASSISTANT = "odos-swap-assistant",
-}
-
-export const agents: Agent[] = [
+export const agents: AgentData[] = [
   {
-    id: AssistantId.ARBITRAGE_ASSISTANT,
+    id: Agent.ARBITRAGE_ASSISTANT,
     displayId: "Arbitrage Assistant",
     name: "Arbitrage Assistant",
     description: "Arbitrage between exchanges",
@@ -26,7 +13,7 @@ export const agents: Agent[] = [
     icon: FaChartLine,
   },
   {
-    id: AssistantId.JUPITER_SWAP_ASSISTANT,
+    id: Agent.JUPITER_SWAP_ASSISTANT,
     displayId: "Jupiter Swap Assistant",
     name: "Jupiter Swap Assistant",
     description: "Swap tokens on Solana Network",
@@ -34,53 +21,29 @@ export const agents: Agent[] = [
     icon: FaChartLine,
   },
   {
-    id: AssistantId.ODO_SWAP_ASSISTANT,
+    id: Agent.ODO_SWAP_ASSISTANT,
     displayId: "Odos Swap Assistant",
     name: "Odos Swap Assistant",
     description: "Swap tokens on BSC Network",
-    type: "Swap", 
+    type: "Swap",
     icon: FaChartLine,
   },
-  {
-    id: "asst_ZRt83nxVKUmP5wFjC4gBhQ9A",
-    displayId: "whale-watcher",
-    name: "Whale Watcher",
-    description: "Monitor large wallet movements and whale activity",
-    type: "Wallet Tracker",
-    icon: FaChartLine,
-  },
-  {
-    id: "asst_WMs15byXNRkQ7vLpD2nFtH6C",
-    displayId: "pattern-finder",
-    name: "Pattern Finder",
-    description: "Identify recurring chart patterns and setups",
-    type: "Technical Analysis",
-    icon: FaChartLine,
-  },
-  {
-    id: "asst_VLk64mzYPSnT8wHxJ1rCqG5B",
-    displayId: "liquidity-hunter",
-    name: "Liquidity Hunter",
-    description: "Find tokens with strong liquidity profiles",
-    type: "Liquidity Analyzer",
-    icon: FaChartLine,
-  }
 ];
 
-export interface LandingAgents extends Agent {
-   translate:{
+export interface LandingAgents extends AgentData {
+  translate: {
     x: number;
     y: number;
     z: number;
-   }
-   rotate:{
+  }
+  rotate: {
     x: number;
     y: number;
     z: number;
-   }
-   opacity: number;
-   scale: number;
-   img: string;
+  }
+  opacity: number;
+  scale: number;
+  img: string;
 }
 
 export const landingAgents: LandingAgents[] = [
