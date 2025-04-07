@@ -22,7 +22,6 @@ const AIMessage: React.FC<AIMessageProps> = ({ message }) => {
   const { toolJson } = message;
   const { content } = message;
 
-  console.log("message", message);
 
   const renderAgentUi = () => {
     if (!toolJson) return null;
