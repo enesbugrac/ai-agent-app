@@ -54,14 +54,14 @@ export default function SpecialAgents() {
 
           {/* Agent Cards Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {agents.map((agent) => (
+          {agents.map((agent) => (
               <AgentCard
-                key={agent.displayId}
-                id={agent.displayId}
+                key={agent.name}
+                id={agent.id}
                 name={agent.name}
                 description={agent.description}
                 type={agent.type}
-                icon={agent.icon}
+                logo={agent.logo}
               />
             ))}
           </div>

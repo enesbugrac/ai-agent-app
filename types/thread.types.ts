@@ -1,5 +1,5 @@
-import { Agent } from "./agent.types";
-import { ToolJson, PossibleToolJson } from "./tools.types";
+import { Agent } from "@/data/agents";
+import { PossibleToolJson } from "./tools.types";
 
 
 export enum MessageRole {

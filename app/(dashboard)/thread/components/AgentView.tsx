@@ -1,9 +1,8 @@
 'use client'
 
 import PromptCard from "@/components/PromptCard";
+import { AgentData } from "@/data/agents";
 import { prompts } from "@/data/prompts";
-import { Agent, AgentData } from "@/types/agent.types";
-import { motion, AnimatePresence } from "framer-motion";
 
 interface AgentViewProps {
   agent: AgentData;

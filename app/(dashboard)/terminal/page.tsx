@@ -34,7 +34,7 @@ export default function Home() {
       </div>
 
       <div className="h-[calc(100vh-4rem)] overflow-y-auto overflow-x-hidden">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
           <div className="flex flex-col items-center gap-8 pt-12 lg:pt-28 w-full">
             <div className="text-4xl font-medium text-white text-center">
               Welcome to <span className="text-tertiary font-markpro">AIGEN</span>
@@ -79,12 +79,14 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-8 w-full">
             {featuredAgents.map((agent) => (
               <AgentCard
-                key={agent.displayId}
+                key={agent.name}
                 id={agent.id}
                 name={agent.name}
+                subTitle={agent.subTitle}
                 description={agent.description}
                 type={agent.type}
-                icon={agent.icon}
+                logo={agent.logo}
+                actions={agent.actions}
               />
             ))}
           </div>

@@ -1,10 +1,9 @@
 import { useThreadsStore } from "@/store/useThreadsStore";
 import { MessageRole, Thread, ThreadMessage } from "@/types/thread.types";
 import { useParams } from "next/navigation";
-import { useMemo, useEffect, useState, useRef, useCallback } from "react";
+import { useMemo, useEffect, useState } from "react";
 import { usePrivateFetch } from "../fetch.hooks";
-import { agents } from "@/data/agents";
-import { Agent } from "@/types/agent.types";
+import { Agent } from "@/data/agents";
 export const useThreadQueryAsync = () => {
 
   const { id: threadId } = useParams();

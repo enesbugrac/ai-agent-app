@@ -1,34 +1,26 @@
-import { FaChartLine } from "react-icons/fa";
-import { IconType } from "react-icons";
-import { AgentData, Agent } from "@/types/agent.types";
 
+export enum Agent {
+  ARBITRAGE_ASSISTANT = "arbitrage-assistant",
+  JUPITER_SWAP_ASSISTANT = "jupiter-swap-assistant",
+  ODO_SWAP_ASSISTANT = "odos-swap-assistant",
+}
+export type AgentActionsMap = {
+  [key in Agent]?: Action[];
+};
 
-export const agents: AgentData[] = [
-  {
-    id: Agent.ARBITRAGE_ASSISTANT,
-    displayId: "Arbitrage Assistant",
-    name: "Arbitrage Assistant",
-    description: "Arbitrage between exchanges",
-    type: "Arbitrage",
-    icon: FaChartLine,
-  },
-  {
-    id: Agent.JUPITER_SWAP_ASSISTANT,
-    displayId: "Jupiter Swap Assistant",
-    name: "Jupiter Swap Assistant",
-    description: "Swap tokens on Solana Network",
-    type: "Swap",
-    icon: FaChartLine,
-  },
-  {
-    id: Agent.ODO_SWAP_ASSISTANT,
-    displayId: "Odos Swap Assistant",
-    name: "Odos Swap Assistant",
-    description: "Swap tokens on BSC Network",
-    type: "Swap",
-    icon: FaChartLine,
-  },
-];
+export interface Action {
+  title: string;
+  description: string;
+}
+export interface AgentData {
+  id: Agent;
+  name: string;
+  subTitle?: string;
+  description?: string;
+  type?: string;
+  logo?: string;
+  actions?: Action[];
+}
 
 export interface LandingAgents extends AgentData {
   translate: {
@@ -45,6 +37,89 @@ export interface LandingAgents extends AgentData {
   scale: number;
   img: string;
 }
+
+export const agentActions: AgentActionsMap = {
+  [Agent.ARBITRAGE_ASSISTANT]: [
+    {
+      title: 'Get Token Balances',
+      description:
+        'Get token balances for a wallet, including amount, price, and metadata...',
+    },
+    {
+      title: 'Get Token Holders',
+      description:
+        'Retrieve a paginated list of the top holders of a specified token...',
+    },
+    {
+      title: 'Get Nfts',
+      description:
+        'Retrieve NFTs with optional filters. You can get all NFTs, NFTs owned...',
+    },
+    {
+      title: 'Transfer Token',
+      description: 'Transfer specified amount of tokens to a recipient\'s address.',
+    },
+  ],
+  [Agent.JUPITER_SWAP_ASSISTANT]: [
+    {
+      title: 'Swap Token',
+      description: 'Swap specified amount of tokens to a recipient\'s address.',
+    },
+    {
+      title: 'Get Token Price',
+      description: 'Get the price of a token in USD.',
+    },
+    {
+      title: 'Get Token Holders',
+      description: 'Get the holders of a token.',
+    },
+  ],
+  [Agent.ODO_SWAP_ASSISTANT]: [
+    {
+      title: 'Swap Token',
+      description: 'Swap specified amount of tokens to a recipient\'s address.',
+    },
+    {
+      title: 'Get Token Price',
+      description: 'Get the price of a token in USD.',
+    },
+    {
+      title: 'Get Token Holders',
+      description: 'Get the holders of a token.',
+    },
+  ],
+};
+
+export const agents: AgentData[] = [
+  {
+    id: Agent.ARBITRAGE_ASSISTANT,
+    name: "Arbitra",
+    subTitle: "Arbitrage Assistant",
+    description: "Finds price differences for a selected token across platforms and helps you execute profitable trades with speed and precision.",
+    type: "Arbitrage",
+    logo: "/agentLogos/arbitrage.jpeg",
+    actions: agentActions[Agent.ARBITRAGE_ASSISTANT] || []
+  },
+  {
+    id: Agent.JUPITER_SWAP_ASSISTANT,
+    name: "Juvex",
+    subTitle: "Jupiter Swap Assistant",
+    description: "Performs optimized swaps on the Solana Network using Jupiter protocol.",
+    type: "Swap",
+    logo: "/agentLogos/jupiter-logo.webp",
+    actions: agentActions[Agent.JUPITER_SWAP_ASSISTANT] || []
+  },
+  {
+    id: Agent.ODO_SWAP_ASSISTANT,
+    name: "Oden",
+    subTitle: "Odos Swap Assistant",
+    description: "Executes efficient swaps on the BSC Network via the Odos protocol.",
+    type: "Swap",
+    logo: "/agentLogos/odos-logo.png",
+    actions: agentActions[Agent.ODO_SWAP_ASSISTANT] || []
+  },
+];
+
 
 export const landingAgents: LandingAgents[] = [
   {
@@ -71,27 +146,4 @@ export const landingAgents: LandingAgents[] = [
     opacity: 0,
     img: "agent"
   },
-  {
-    ...agents[3],
-    translate: { x: 0, y: 0, z: 400 },
-    rotate: { x: 13, y: 0, z: 0 },
-    scale: 1,
-    opacity: 1,
-    img: "https://framerusercontent.com/images/Iv9LnQg69wY97QUjeRr8Rim2MFs.png?scale-down-to=512"
-  },
-  // {
-  //   ...agents[4],
-  //   translate: { x: 0, y: 0, z: 400 },
-  //   rotate: { x: 13, y: 0, z: 0 },
-  //   scale: 1,
-  //   opacity: 1,
-  // },
-  // {
-  //   ...agents[5],
-  //   translate: { x: 0, y: 0, z: 400 },
-  //   rotate: { x: 13, y: 0, z: 0 },
-  //   scale: 1,
-  //   opacity: 1,
-  // },
 ];
-

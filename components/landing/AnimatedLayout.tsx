@@ -99,11 +99,11 @@ const AnimatedLayout = () => {
           className="w-3/4 grid grid-cols-3 gap-2 items-start justify-start"
           style={{ perspective: "1000px" }}
         >
-          {landingAgents.map((agent) => (
+          {landingAgents.map((agent, index) => (
             <motion.div
-              key={agent.id}
+              key={index}
               style={{
-                // eslint-disable-next-line react-hooks/rules-of-hooks
+                 // eslint-disable-next-line react-hooks/rules-of-hooks
                 transform: useTransform(
                   scrollYProgress,
                   [0, 0.5, 0.75],
@@ -113,9 +113,9 @@ const AnimatedLayout = () => {
                     "translate3d(0, 0, 0)",
                   ]
                 ),
-                // eslint-disable-next-line react-hooks/rules-of-hooks
+ // eslint-disable-next-line react-hooks/rules-of-hooks
                 opacity: useTransform(scrollYProgress, [0, 0.5], [agent.opacity, 1]),
-                // eslint-disable-next-line react-hooks/rules-of-hooks
+ // eslint-disable-next-line react-hooks/rules-of-hooks
                 scale: useTransform(scrollYProgress, [0, 0.5], [agent.scale, 1]),
               }}
               className="group"
@@ -125,7 +125,7 @@ const AnimatedLayout = () => {
                 id={agent.id}
                 name={agent.name}
                 type={agent.type}
-                icon={agent.icon}
+                logo={agent.logo}
               />
             </motion.div>
           ))}

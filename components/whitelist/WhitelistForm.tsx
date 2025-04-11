@@ -1,11 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { useModalStore } from "@/store/modalStore";
 import { useWhitelistQuery } from "@/hooks/queries/whitelist.query";
 import { ReactNode } from "react";
 import SuccessMessage from "@/components/common/SuccessMessage";
-
 
 interface WhitelistFormProps {
   description?: string;
@@ -24,7 +22,6 @@ const WhitelistForm: React.FC<WhitelistFormProps> = ({
   const [success, setSuccess] = useState(false);
   const [isExistingEmail, setIsExistingEmail] = useState(false);
 
-  const { closeModal } = useModalStore();
   const { addEmailToWhitelist } = useWhitelistQuery();
   const validateEmail = (email: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

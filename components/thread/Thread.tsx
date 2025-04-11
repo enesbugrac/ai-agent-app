@@ -47,7 +47,7 @@ function Thread({ }) {
     return <div className="flex flex-col h-screen bg-background">Thread not found</div>;
   }
 
-  const showLoading = thread?.messages.length === 0 && isLoading
+
 
   return (
     <div className="flex flex-col h-screen bg-background">
