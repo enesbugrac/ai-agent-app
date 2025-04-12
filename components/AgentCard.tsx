@@ -37,7 +37,7 @@ export default function AgentCard({
               placement="right"
               arrow={false}
               title={
-                <AgentDescription // Use renamed component
+                <AgentDescription 
                   logo={logo}
                   name={name}
                   subTitle={subTitle}

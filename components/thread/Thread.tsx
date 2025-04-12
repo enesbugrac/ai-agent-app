@@ -6,7 +6,7 @@ import {
 
 import React, { useMemo } from "react";
 import { useInput } from "@/hooks/input.hooks";
-import ThreadView from "@/app/(dashboard)/thread/components/ThreadView";
+import ThreadView from "@/components/thread/ThreadView";
 import { useAuthCache } from "@/hooks/auth.hooks";
 
 import ThreadHeader from "./ThreadHeader";

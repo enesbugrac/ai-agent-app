@@ -12,6 +12,7 @@ import {
 
   FaSignOutAlt,
   FaUser,
+  FaTasks,
 } from "react-icons/fa";
 import { IoSparkles } from "react-icons/io5";
 import { BsChatDots } from "react-icons/bs";
@@ -80,12 +81,17 @@ const Sidebar = () => {
   const mainMenu: MenuItem[] = [
     { name: "Terminal", icon: FaHome, path: "/terminal" },
     {
+      name: "Tasks",
+      icon: FaTasks,
+      path: "/tasks",
+    },
+    {
       name: "Special Agents",
       icon: IoSparkles,
-      badge: "New",
+      badge: "Coming Soon",
       path: "/special-agents",
     },
-    { name: "Chat", icon: BsChatDots, path: "/chat/2" },
+
   ];
 
   const bottomMenu: MenuItem[] = [
@@ -114,9 +120,7 @@ const Sidebar = () => {
       </div>
       {item.badge && (
         <span
-          className={`text-[10px] px-1.5 py-0.5 rounded-full font-medium transition-all duration-200 ${pathname === item.path
-            ? "bg-primary/20 text-primary"
-            : "bg-primary/10 text-primary/80"
+          className={`text-[10px] px-1.5 py-0.5 rounded-full bg-primary  text-black font-medium transition-all duration-200 ${pathname === item.path
             }`}
         >
           {item.badge}
@@ -152,7 +156,7 @@ const Sidebar = () => {
       {/* Main Menu */}
       <div className="flex flex-col h-full bg-background-overlay">
         {/* Fixed Main Nav */}
-        <nav className="flex-none px-2 py-2 space-y-0.5">
+        <nav className="flex-none px-2 py-2 space-y-2">
           {mainMenu.map(renderMenuItem)}
         </nav>
 

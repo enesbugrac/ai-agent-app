@@ -15,6 +15,7 @@ const colors = {
   },
   background: {
     DEFAULT: "#13151A",
+    secondary: "#1A1D23",
     card: "rgba(19, 21, 26, 0.95)",
     overlay: "rgba(19, 21, 26, 0.5)",
     highlight: "rgba(255, 219, 72, 0.05)",

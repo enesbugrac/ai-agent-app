@@ -1,17 +1,18 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import AgentView from "@/app/(dashboard)/thread/components/AgentView";
+
 import { useInput } from "@/hooks/input.hooks";
 import { useThreadMutation } from "@/hooks/queries/thread.query";
 
 import { useRouter } from "next/navigation";
-import ThreadView from "@/app/(dashboard)/thread/components/ThreadView";
+import ThreadView from "@/components/thread/ThreadView";
 import { useAuthCache } from "@/hooks/auth.hooks";
 import { usePrivy } from "@privy-io/react-auth";
 import ThreadHeader from "./ThreadHeader";
 import ChatInput from "./ChatInput";
 import { useAuthStore } from "@/store/useStore";
 import { AgentData } from "@/data/agents";
+import AgentView from "../AgentView";
 
 type Props = {
   agentData: AgentData;
