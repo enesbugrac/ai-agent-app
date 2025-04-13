@@ -26,7 +26,7 @@ function LoadingAnimation() {
                         transition={{ duration: 0.5 }}
                         className="logo flex items-center gap-2"
                     >
-                        <h1 className="text-primary font-syne text-6xl font-bold">AIGEN</h1>
+                        <h1 className="text-primary font-syne text-6xl font-bold line-clamp-1">AIGEN</h1>
                         <Logo withText={false} width={100} height={100} />
                     </motion.div>
                     <motion.span

@@ -7,6 +7,7 @@ import React, { useState } from "react";
 import PrimaryButton from "@/components/PrimaryButton";
 import { MdOutlineDone } from "react-icons/md";
 import { useTasksStore, TaskType } from "@/store/tasksStore";
+import { FaTasks } from "react-icons/fa";
 
 const TasksPage = () => {
   const [earned, setEarned] = useState<number>(0);
@@ -62,10 +63,10 @@ const TasksPage = () => {
 
   return (
     <Page>
-      <PageHeader title="Community Missions" />
+      <PageHeader title="Tasks" icon={<FaTasks className="text-primary text-lg" />}/>
       <PageBody>
-        <div className="flex flex-col gap-4">
-          <div className="flex items-center justify-between">
+        <div className="w-full flex flex-col gap-4">
+          <div className="w-full flex items-center justify-between">
           <div>
           <h2 className="text-2xl font-medium text-white mb-2">
               Community Missions
@@ -82,7 +83,7 @@ const TasksPage = () => {
             </div>
 
           </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="w-full grid grid-cols-2 gap-4">
             {tasks.map((task) => (
               <div
                 key={task.id}
@@ -113,6 +114,7 @@ const TasksPage = () => {
                 </div>
               </div>
             ))}
+
           </div>
         </div>
       </PageBody>

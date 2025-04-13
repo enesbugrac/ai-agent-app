@@ -14,8 +14,8 @@ export default function SpecialAgents() {
       />
 
       {/* Main Content */}
-      <PageBody>
-        <div className="flex items-center justify-between">
+      <PageBody className="gap-4">
+        <div className="w-full flex items-center justify-between">
           <div>
             <h2 className="text-2xl font-medium text-white mb-2">
               Discover Special Agents
@@ -36,7 +36,7 @@ export default function SpecialAgents() {
         </div>
 
         {/* Filter Bar */}
-        <div className="flex items-center gap-4 p-4 bg-[#1A1D23] rounded-xl border border-border">
+        <div className="w-full flex items-center gap-4 p-4 bg-[#1A1D23] rounded-xl border border-border">
           <input
             type="text"
             placeholder="Search agents..."
@@ -51,7 +51,7 @@ export default function SpecialAgents() {
         </div>
 
         {/* Agent Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {agents.map((agent) => (
             <AgentCard
               key={agent.name}

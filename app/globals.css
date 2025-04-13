@@ -53,6 +53,13 @@
   }
 }
 
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
 body {
   color: var(--color-text-secondary);
   background: var(--color-background);
@@ -427,3 +434,23 @@ button:focus {
 .rs-tooltip-arrow {
   border-top-color: #ef4444 !important;
 }
+
+/* Scrollbar customization */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-primary);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-primary);
+}
+

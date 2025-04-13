@@ -15,12 +15,11 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   }, [])
 
   return (
-    <div className="flex h-screen">
+    <div className="flex w-[100vw] items-end justify-end">
       <Sidebar />
-      <main className="flex-1 w-[calc(100%-16rem)] overflow-hidden relative">
-        {/* Header */}
+      <main className="w-[80%] relative ">
         {user && (
-          <div className="z-50 absolute top-0 right-0 h-16 flex items-center pr-6 ">
+          <div className="z-50 fixed top-0 right-0 h-16 flex items-center pr-6 ">
             <WalletButton />
           </div>
         )}

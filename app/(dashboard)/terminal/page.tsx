@@ -17,9 +17,9 @@ export default function Home() {
       <div className="h-16 bg-background-overlay border-b border-border backdrop-blur-sm px-6 flex items-center justify-between">
         <div className="flex items-center gap-6 flex-1  max-w-screen-xl overflow-hidden">
           <h1 className="text-primary font-medium text-sm shrink-0">Overview</h1>
-          <div className="overflow-hidden">
+          {/* <div className="overflow-hidden">
             <TokenCarousel tokens={tokens} />
-          </div>
+          </div> */}
         </div>
         <div className="shrink-0">
           {!authenticated && (
@@ -36,7 +36,7 @@ export default function Home() {
       <div className="h-[calc(100vh-4rem)] overflow-y-auto overflow-x-hidden">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
           <div className="flex flex-col items-center gap-8 pt-12 lg:pt-28 w-full">
-            <div className="text-4xl font-medium text-white text-center">
+            <div className="text-4xl font-medium text-white text-center line-clamp-1">
               Welcome to <span className="text-tertiary font-markpro">AIGEN</span>
             </div>
 

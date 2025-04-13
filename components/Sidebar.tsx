@@ -131,7 +131,7 @@ const Sidebar = () => {
 
   return (
     <aside
-      className="z-10 bg-background flex flex-col h-screen transition-all duration-200 ease-in-out backdrop-blur-sm border-r border-border w-64"
+      className="w-[20%] z-10 fixed top-0 left-0 bg-background flex flex-col h-screen transition-all duration-200 ease-in-out backdrop-blur-sm border-r border-border"
     >
       {/* Logo */}
       <div className="flex-none">
@@ -148,7 +148,6 @@ const Sidebar = () => {
                 </span>
               </div>
             </div>
-            <div className="flex-1" />
           </div>
         </Link>
       </div>

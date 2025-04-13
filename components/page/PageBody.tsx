@@ -1,13 +1,17 @@
-import React from 'react'
+import React from "react";
 
-const PageBody = ({children}: {children: React.ReactNode}) => {
-  return (
-    <div className="flex-1 p-8 overflow-y-auto">
-       <div className="max-w-6xl mx-auto space-y-8">
-        {children}
-       </div>
-    </div>
-  )
+interface PageBodyProps {
+  children: React.ReactNode;
+  className?: string;
 }
 
-export default PageBody
+
+const PageBody = ({ children, className }: PageBodyProps) => {
+  return (
+    <div className={`flex flex-col w-[75%] items-center  pt-32 pb-16 min-h-screen  overflow-y-auto ${className}`}>
+      {children}
+    </div>
+  );
+};
+
+export default PageBody;
