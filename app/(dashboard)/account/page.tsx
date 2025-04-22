@@ -1,6 +1,6 @@
 "use client";
 
-import { usePrivy } from "@privy-io/react-auth";
+import { usePrivy, useLinkAccount } from "@privy-io/react-auth";
 import { useState } from "react";
 import {
   FaTwitter,
@@ -81,6 +81,9 @@ export default function AccountPage() {
     linkGoogle,
     linkGithub,
   } = usePrivy();
+
+
+  console.log("linkGithub", linkGithub);
   const [loading, setLoading] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
 
@@ -153,7 +156,7 @@ export default function AccountPage() {
       {/* Header */}
       <div className="h-16 bg-background-overlay/50 border-b border-border/50 backdrop-blur-sm px-6 flex items-center justify-between">
         <h1 className="text-primary font-medium text-sm">Account Settings</h1>
-        {user?.wallet && (
+        {/* {user?.wallet && (
           <a
             href={`https://solscan.io/account/${user.wallet.address}`}
             target="_blank"
@@ -163,7 +166,7 @@ export default function AccountPage() {
             View on Explorer
             <FaExternalLinkAlt className="text-[10px]" />
           </a>
-        )}
+        )} */}
       </div>
 
       {/* Main Content */}

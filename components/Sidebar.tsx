@@ -56,7 +56,7 @@ const Sidebar = () => {
   const previousThreads = useMemo(
     () =>
       threads
-        ?.filter((thread) => isLastWeek(thread.updatedAt || ""))
+        ?.filter((thread) => !isToday(thread.updatedAt || ""))
         .map((thread) => ({
           name:
             thread?.name && thread?.name?.length > 20
@@ -128,6 +128,8 @@ const Sidebar = () => {
       )}
     </Link>
   );
+
+
 
   return (
     <aside

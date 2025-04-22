@@ -15,16 +15,16 @@ export default function Home() {
   const { login } = usePrivy();
 
   return (
-    <div className="min-h-screen bg-background z-50">
+    <div className="min-h-screen bg-background z-50 ">
       <div className={`transition-opacity duration-500  relative z-50 bg-[#13151a]`}>
         <Navbar login={login} />
         <Header />
         <DescriptionSection />
-        <AnimatedLayout />
-        <FeaturesSection />
-        <Pricing />
-        <VisionAndMission />
-        <Footer />
+        {/* <AnimatedLayout /> */}
+        {/* <FeaturesSection /> */}
+        {/* <Pricing /> */}
+        {/* <VisionAndMission /> */}
+        {/* <Footer /> */}
       </div>
     </div>
   );

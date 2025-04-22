@@ -21,7 +21,7 @@ const Pricing = () => {
       <div className="w-full max-w-7xl flex flex-col gap-16">
         <h1
           ref={pricingTitleRef}
-          className={`text-white text-9xl font-syne tracking-wide font-bold ${
+          className={`text-white text-9xl font-syne tracking-wide font-bold line-clamp-1 ${
             pricingTitleInView ? "animate__animated animate__fadeInLeft" : "opacity-0"
           }`}
         >
@@ -57,7 +57,7 @@ const Pricing = () => {
                 : "opacity-0"
             }`}
           >
-            <span className="text-white/70 group-hover:text-black transition-colors duration-300 text-4xl font-medium">
+            <span className="text-white/70 group-hover:text-black transition-colors duration-300 text-4xl font-medium line-clamp-1">
               Fixed price
             </span>
 

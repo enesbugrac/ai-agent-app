@@ -29,7 +29,7 @@ export default function RootLayout({
       <body className={`${geist.variable} w-screen h-screen`}>
         <Providers>
           <div className="flex h-full">
-            <main className="flex-1">{children}</main>
+            <main className="flex-1 overflow-x-hidden">{children}</main>
           </div>
           <ToastContainer
             position="top-right"

@@ -27,7 +27,7 @@ const FeaturesSection = () => {
   return (
     <section className="w-full h-[100vh] flex flex-col items-center justify-center gap-10 relative gradient-background mt-[6rem]">
       <div className="w-full max-w-7xl flex  gap-16">
-        <h2 className="text-4xl md:text-9xl font-bold text-white font-syne">
+        <h2 className="text-4xl md:text-9xl font-bold text-white font-syne line-clamp-1">
           Use Agents To
         </h2>
 
