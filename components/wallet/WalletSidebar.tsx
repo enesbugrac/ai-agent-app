@@ -13,6 +13,7 @@ import {
 } from "@privy-io/react-auth";
 import TokenList from "./TokenList";
 import { useTokenBalances } from "../../hooks/useTokenBalances";
+import { useFundWallet as useSolanaFundWallet } from "@privy-io/react-auth/solana";
 
 interface WalletSidebarProps {
   isOpen: boolean;
@@ -26,6 +27,7 @@ export default function WalletSidebar({ isOpen, onClose }: WalletSidebarProps) {
   const { wallets: solanaWallets } = useSolanaWallets();
   const { user: privyUser } = usePrivy();
   const { delegateWallet } = useDelegatedActions();
+  const { fundWallet: solanaFundWallet } = useSolanaFundWallet();
 
   const evmEmbeddedWallet = useMemo(
     () => wallets.find((wallet) => wallet.connectorType === "embedded"),
@@ -167,17 +169,19 @@ export default function WalletSidebar({ isOpen, onClose }: WalletSidebarProps) {
               <div className="h-16 flex items-center justify-center px-4 border-t border-border">
                 <motion.button
                   onClick={() => {
-                    if (solanaEmbeddedWallet && evmEmbeddedWallet)
-                      fundWallet(
-                        activeTab === "solana"
-                          ? solanaEmbeddedWallet?.address
-                          : evmEmbeddedWallet?.address,
-                        {
+                    if (activeTab === "solana") {
+                      if (solanaEmbeddedWallet) {
+                        solanaFundWallet(solanaEmbeddedWallet.address);
+                      }
+                    } else {
+                      if (evmEmbeddedWallet) {
+                        fundWallet(evmEmbeddedWallet.address, {
                           chain: {
                             id: 56,
                           },
-                        }
-                      );
+                        });
+                      }
+                    }
                   }}
                   className="w-full py-2 bg-primary hover:bg-primary/90 text-black rounded-lg transition-colors font-medium"
                   whileHover={{ scale: 1.01 }}

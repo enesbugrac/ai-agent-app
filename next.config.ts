@@ -12,6 +12,18 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "assets.coingecko.com",
       },
+      {
+        protocol: "https",
+        hostname: "cdn.moralis.io",
+      },
+      {
+        protocol: "https",
+        hostname: "logo.moralis.io",
+      },
+      {
+        protocol: "https",
+        hostname: "**",
+      },
     ],
   },
 };
