@@ -8,6 +8,7 @@ export type UserProfile = {
     role: string;
     credits: number;
     threads: Thread[];
+    tasks: any[];
 }
 
 export type User = UserProfile & {
