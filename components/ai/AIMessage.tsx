@@ -2,11 +2,13 @@ import React from "react";
 import CheckWeatherUI from "./generativeUi/CheckWeatherUI";
 import SwapCryptoUI from "./generativeUi/SwapCryptoUI";
 import ArbitrageScanUI from "./generativeUi/ArbitrageScanUI";
+import OdosSwapUI from "./generativeUi/OdosSwapUI";
 import { ThreadMessage } from "@/types/thread.types";
 import {
   SwapCryptoMetadata,
   CheckWeatherMetadata,
   ArbitrageScanMetadata,
+  OdosSwapMetadata,
 } from "@/types/tools.types";
 
 import ReactMarkdown from 'react-markdown';
@@ -37,6 +39,8 @@ const AIMessage: React.FC<AIMessageProps> = ({ message }) => {
         return <SwapCryptoUI toolData={metadata as SwapCryptoMetadata} />;
       case "arbitrage-scan":
         return <ArbitrageScanUI toolData={metadata as ArbitrageScanMetadata} />;
+      case "odos-swap":
+        return <OdosSwapUI toolData={metadata as OdosSwapMetadata} />;
     }
   };
 
