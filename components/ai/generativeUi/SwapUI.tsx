@@ -6,6 +6,8 @@ import { useState } from "react";
 import { useRef } from "react";
 import { useEffect } from "react";
 import { SwapMetadata } from "@/types/tools.types";
+import { IoCopyOutline } from "react-icons/io5";
+
 
 interface SwapUIProps {
   toolData: SwapMetadata;
@@ -31,6 +33,24 @@ const SwapUI: React.FC<SwapUIProps> = ({ toolData }) => {
     return () => observer.disconnect();
   }, []);
 
+  const TokenAmount = ({type,  amount, logo, symbol }: { type: "input" | "output", amount: string, logo: string, symbol: string }) => {
+    return (
+      <div className={`flex flex-1 items-center ${type === "input" ? "justify-start" : "justify-end"}`}>
+      <img
+        src={logo}
+        alt={symbol}
+        className="w-6 h-6 rounded-full mr-1"
+      />
+      <div className=" flex items-center gap-2">
+        <p className="text-white font-medium">
+          {symbol}
+        </p>
+        <p className="text-lg font-bold">{amount.substring(0, 4)}</p>
+      </div>
+    </div>
+    );
+  };
+  
   return (
     <div
       ref={containerRef}
@@ -44,8 +64,8 @@ const SwapUI: React.FC<SwapUIProps> = ({ toolData }) => {
           recycle={false}
         />
       </div>
-      <div className="pt-10 pb-6 px-8">
-        <div className="mx-auto mb-6 flex justify-center">
+      <div className="py-6 px-8">
+        <div className="w-full mb-4 flex items-center justify-center">
           <div className="w-20 h-20 rounded-full bg-background-highlight p-1.5">
             <div className="w-full h-full rounded-full bg-primary flex items-center justify-center">
               <FaCheckCircle className="text-black text-3xl" />
@@ -59,45 +79,19 @@ const SwapUI: React.FC<SwapUIProps> = ({ toolData }) => {
           Congratulations! Your coin swap was completed successfully.
         </p>
 
-        <div className="mb-8">
-          <p className="text-secondary mb-1">Transaction ID:</p>
-          <p className="font-semibold text-secondary">{transactionId}</p>
-        </div>
 
-        <div className="h-px w-full border-t border-border border-dashed mb-8" />
+        <div className="h-px w-full border-t border-border border-dashed mb-6" />
 
-        <div className="flex justify-between items-center max-w-xs mx-auto mb-8 gap-4">
-          <div className="flex  items-center">
-            <img
-              src={toolData.inputTokenMetadata.logo}
-              alt={toolData.inputTokenMetadata.symbol}
-              className="w-6 h-6"
-            />
-            <div className="flex items-center gap-2">
-              <p className="text-white font-medium">
-                {toolData.inputTokenMetadata.symbol}
-              </p>
-              <p className="text-lg font-bold">{toolData.inputAmount}</p>
+        <div className="w-full flex justify-between items-center mb-6">
+           <TokenAmount type="input" amount={toolData.inputAmount} logo={toolData.inputTokenMetadata.logo!} symbol={toolData.inputTokenMetadata.symbol} />
+
+          <div className="flex flex-2 items-center justify-center">
+            <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center">
+              <BiTransferAlt className="text-black text-xl " />
             </div>
           </div>
 
-          <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center">
-            <BiTransferAlt className="text-black text-xl" />
-          </div>
-
-          <div className="flex items-center">
-            <img
-              src={toolData.outputTokenMetadata.logo}
-              alt={toolData.outputTokenMetadata.symbol}
-              className="w-6 h-6"
-            />
-            <div className=" flex items-center gap-2">
-              <p className="text-white font-medium">
-                {toolData.outputTokenMetadata.symbol}
-              </p>
-              <p className="text-lg font-bold">{toolData.outputAmount}</p>
-            </div>
-          </div>
+          <TokenAmount type="output" amount={toolData.outputAmount} logo={toolData.outputTokenMetadata.logo!} symbol={toolData.outputTokenMetadata.symbol} />
         </div>
 
         <div className="space-y-3">

@@ -37,7 +37,7 @@ export type ArbitrageScanMetadata = {
 export type ArbitrageScanTool = ToolJson<ArbitrageScanMetadata>;
 
 export type SwapMetadata = {
-  type: "swap"; // Type identifier for the tool
+  type: "jupiter-swap" | "odos-swap"; // Type identifier for the tool
   status: "success"; // Indicates successful execution
   signature: string; // Solana transaction signature
   explorerUrl: string; // Link to the transaction on an explorer

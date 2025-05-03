@@ -26,7 +26,9 @@ const AIMessage: React.FC<AIMessageProps> = ({ message }) => {
     switch (toolType) {
       case "arbitrage-scan":
         return <ArbitrageScanUI toolData={metadata as ArbitrageScanMetadata} />;
-      case "swap":
+      case "jupiter-swap":
+        return <SwapUI toolData={metadata as SwapMetadata} />;
+      case "odos-swap":
         return <SwapUI toolData={metadata as SwapMetadata} />;
     }
   };

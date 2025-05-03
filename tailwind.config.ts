@@ -10,7 +10,6 @@ const colors = {
     cyan: "#00D4FF",
     neonCyan: "#00FFFF",
     yellow: "#FFDB48",
-    // DEFAULT: "#FFDB48",
 
   },
   background: {

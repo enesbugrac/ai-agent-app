@@ -17,10 +17,10 @@ export function Providers({ children }: { children: React.ReactNode }) {
       config={{
         appearance: {
           theme: "dark",
-          accentColor: "#FFDB48",
           logo: "https://i.imgur.com/oCSydNJ.png",
           walletChainType: "ethereum-and-solana",
         },
+        
 
         loginMethods: ["email", "wallet"],
         supportedChains: [bsc],
