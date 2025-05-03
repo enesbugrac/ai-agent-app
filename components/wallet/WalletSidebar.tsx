@@ -24,8 +24,8 @@ export default function WalletSidebar({ isOpen, onClose }: WalletSidebarProps) {
   const [activeTab, setActiveTab] = useState<"solana" | "bsc">("solana");
   const { wallets } = useWallets();
   const { fundWallet } = useFundWallet();
-  const { wallets: solanaWallets } = useSolanaWallets();
-  const { user: privyUser } = usePrivy();
+  const { wallets: solanaWallets, exportWallet: solanaExportWallet } = useSolanaWallets();
+  const { user: privyUser, exportWallet } = usePrivy();
   const { delegateWallet } = useDelegatedActions();
   const { fundWallet: solanaFundWallet } = useSolanaFundWallet();
 
@@ -166,7 +166,7 @@ export default function WalletSidebar({ isOpen, onClose }: WalletSidebarProps) {
                 />
               </div>
 
-              <div className="h-16 flex items-center justify-center px-4 border-t border-border">
+              <div className="h-16 flex gap-4 items-center justify-center px-4 border-t border-border">
                 <motion.button
                   onClick={() => {
                     if (activeTab === "solana") {
@@ -189,6 +189,25 @@ export default function WalletSidebar({ isOpen, onClose }: WalletSidebarProps) {
                   transition={{ duration: 0.03 }}
                 >
                   Deposit
+                </motion.button>
+                <motion.button
+                  onClick={() => {
+                    if (activeTab === "solana") {
+                      if (solanaEmbeddedWallet) {
+                        solanaExportWallet();
+                      }
+                    } else {
+                      if (evmEmbeddedWallet) {
+                        exportWallet();
+                      }
+                    }
+                  }}
+                  className="w-full py-2 bg-primary hover:bg-primary/90 text-black rounded-lg transition-colors font-medium"
+                  whileHover={{ scale: 1.01 }}
+                  whileTap={{ scale: 0.99 }}
+                  transition={{ duration: 0.03 }}
+                >
+                  Export
                 </motion.button>
               </div>
             </div>

@@ -4,33 +4,6 @@ export type ToolJson<T> = {
   metadata: T; // Tool-specific data
 };
 
-export type CheckWeatherMetadata = {
-  type: "check-weather";
-  weatherInfo: {
-    temperature: number;
-    condition: string;
-    humidity: number;
-  };
-  location: string;
-  content?: string;
-};
-
-export type CheckWeatherTool = ToolJson<CheckWeatherMetadata>;
-
-export type SwapCryptoMetadata = {
-  type: "swapCryptoToken";
-  swapDetails: {
-    amount: number;
-    rate: number;
-    fee: number;
-  };
-  fromToken: string;
-  toToken: string;
-  content?: string;
-};
-
-export type SwapCryptoTool = ToolJson<SwapCryptoMetadata>;
-
 export type ExchangePriceInfo = {
   exchange: string;
   price: number;
@@ -63,8 +36,8 @@ export type ArbitrageScanMetadata = {
 
 export type ArbitrageScanTool = ToolJson<ArbitrageScanMetadata>;
 
-export type OdosSwapMetadata = {
-  type: "jupiter-swap"; // Type identifier for the tool
+export type SwapMetadata = {
+  type: "swap"; // Type identifier for the tool
   status: "success"; // Indicates successful execution
   signature: string; // Solana transaction signature
   explorerUrl: string; // Link to the transaction on an explorer
@@ -91,10 +64,6 @@ type CoinMetadataType = {
   lastUpdated?: Date; // Optional based on @Prop() without required: true (though it has a default)
 };
 
-export type OdosSwapTool = ToolJson<OdosSwapMetadata>;
+export type SwapTool = ToolJson<SwapMetadata>;
 
-export type PossibleToolJson =
-  | CheckWeatherTool
-  | SwapCryptoTool
-  | ArbitrageScanTool
-  | OdosSwapTool;
+export type PossibleToolJson = ArbitrageScanTool | SwapTool;

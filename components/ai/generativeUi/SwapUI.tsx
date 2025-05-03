@@ -1,37 +1,22 @@
-import React from 'react';
-import { FaCheckCircle, FaEthereum, FaBitcoin } from 'react-icons/fa';
-import { BiTransferAlt } from 'react-icons/bi';
-import Confetti from 'react-confetti';
-import { useWindowSize } from '@react-hook/window-size';
-import { useState } from 'react';
-import { useRef } from 'react';
-import { useEffect } from 'react';
-import { OdosSwapMetadata } from '@/types/tools.types';
+import React from "react";
+import { FaCheckCircle } from "react-icons/fa";
+import { BiTransferAlt } from "react-icons/bi";
+import Confetti from "react-confetti";
+import { useState } from "react";
+import { useRef } from "react";
+import { useEffect } from "react";
+import { SwapMetadata } from "@/types/tools.types";
 
-
-
-interface OdosSwapUIProps {
-  toolData: OdosSwapMetadata;
+interface SwapUIProps {
+  toolData: SwapMetadata;
 }
 
-const OdosSwapUI: React.FC<OdosSwapUIProps> = ({ toolData }) => {
+const SwapUI: React.FC<SwapUIProps> = ({ toolData }) => {
   const transactionId = `TXN-${Date.now().toString().slice(-7)}`;
-  
-  const getTokenIcon = (token: string) => {
-    switch (token.toUpperCase()) {
-      case 'ETH':
-        return <FaEthereum className="text-[#627EEA] text-2xl" />;
-      case 'BTC':
-        return <FaBitcoin className="text-[#F7931A] text-2xl" />;
-      default:
-        return null;
-    }
-  };
 
   const containerRef = useRef<HTMLDivElement>(null);
 
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
-  const [showConfetti, setShowConfetti] = useState(true);
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -47,17 +32,18 @@ const OdosSwapUI: React.FC<OdosSwapUIProps> = ({ toolData }) => {
   }, []);
 
   return (
-    <div ref={containerRef} className="w-[50%] bg-[#1A1D23] rounded-xl overflow-hidden  text-center relative">
-       {showConfetti && (
-        <div className="absolute top-0 left-0 pointer-events-none z-10">
-          <Confetti
-            width={dimensions.width}
-            height={dimensions.height}
-            numberOfPieces={200}
-            recycle={false}
-          />
-        </div>
-      )}
+    <div
+      ref={containerRef}
+      className="w-[50%] bg-[#1A1D23] rounded-xl overflow-hidden  text-center relative"
+    >
+      <div className="absolute top-0 left-0 pointer-events-none z-10">
+        <Confetti
+          width={dimensions.width}
+          height={dimensions.height}
+          numberOfPieces={200}
+          recycle={false}
+        />
+      </div>
       <div className="pt-10 pb-6 px-8">
         <div className="mx-auto mb-6 flex justify-center">
           <div className="w-20 h-20 rounded-full bg-background-highlight p-1.5">
@@ -66,7 +52,7 @@ const OdosSwapUI: React.FC<OdosSwapUIProps> = ({ toolData }) => {
             </div>
           </div>
         </div>
-        
+
         <h2 className="text-3xl font-bold text-white mb-2">Swap success!</h2>
 
         <p className="text-secondary mb-6 max-w-sm mx-auto">
@@ -77,35 +63,45 @@ const OdosSwapUI: React.FC<OdosSwapUIProps> = ({ toolData }) => {
           <p className="text-secondary mb-1">Transaction ID:</p>
           <p className="font-semibold text-secondary">{transactionId}</p>
         </div>
-        
+
         <div className="h-px w-full border-t border-border border-dashed mb-8" />
-        
+
         <div className="flex justify-between items-center max-w-xs mx-auto mb-8 gap-4">
           <div className="flex  items-center">
-            <img src={toolData.inputTokenMetadata.logo} alt={toolData.inputTokenMetadata.symbol} className="w-6 h-6" />
+            <img
+              src={toolData.inputTokenMetadata.logo}
+              alt={toolData.inputTokenMetadata.symbol}
+              className="w-6 h-6"
+            />
             <div className="flex items-center gap-2">
-              <p className="text-white font-medium">{toolData.inputTokenMetadata.symbol}</p>
+              <p className="text-white font-medium">
+                {toolData.inputTokenMetadata.symbol}
+              </p>
               <p className="text-lg font-bold">{toolData.inputAmount}</p>
             </div>
           </div>
-          
+
           <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center">
             <BiTransferAlt className="text-black text-xl" />
           </div>
-          
+
           <div className="flex items-center">
-             <img src={toolData.outputTokenMetadata.logo} alt={toolData.outputTokenMetadata.symbol} className="w-6 h-6" />
+            <img
+              src={toolData.outputTokenMetadata.logo}
+              alt={toolData.outputTokenMetadata.symbol}
+              className="w-6 h-6"
+            />
             <div className=" flex items-center gap-2">
-              <p className="text-white font-medium">{toolData.outputTokenMetadata.symbol}</p>
-              <p className="text-lg font-bold">
-                {toolData.outputAmount}
+              <p className="text-white font-medium">
+                {toolData.outputTokenMetadata.symbol}
               </p>
+              <p className="text-lg font-bold">{toolData.outputAmount}</p>
             </div>
           </div>
         </div>
-        
+
         <div className="space-y-3">
-          <a 
+          <a
             href={toolData.explorerUrl}
             target="_blank"
             rel="noopener noreferrer"
@@ -119,4 +115,4 @@ const OdosSwapUI: React.FC<OdosSwapUIProps> = ({ toolData }) => {
   );
 };
 
-export default OdosSwapUI; 
+export default SwapUI;

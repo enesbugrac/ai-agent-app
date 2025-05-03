@@ -1,20 +1,13 @@
 import React from "react";
-import CheckWeatherUI from "./generativeUi/CheckWeatherUI";
-import SwapCryptoUI from "./generativeUi/SwapCryptoUI";
 import ArbitrageScanUI from "./generativeUi/ArbitrageScanUI";
-import OdosSwapUI from "./generativeUi/OdosSwapUI";
+import SwapUI from "./generativeUi/SwapUI";
 import { ThreadMessage } from "@/types/thread.types";
-import {
-  SwapCryptoMetadata,
-  CheckWeatherMetadata,
-  ArbitrageScanMetadata,
-  OdosSwapMetadata,
-} from "@/types/tools.types";
+import { ArbitrageScanMetadata, SwapMetadata } from "@/types/tools.types";
 
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
 
 type AIMessageProps = {
   message: ThreadMessage;
@@ -24,23 +17,17 @@ const AIMessage: React.FC<AIMessageProps> = ({ message }) => {
   const { toolJson } = message;
   const { content } = message;
 
-
   const renderAgentUi = () => {
     if (!toolJson) return null;
 
     const metadata = toolJson.metadata;
     const toolType = metadata.type;
 
-
     switch (toolType) {
-      case "check-weather":
-        return <CheckWeatherUI toolData={metadata as CheckWeatherMetadata} />;
-      case "swapCryptoToken":
-        return <SwapCryptoUI toolData={metadata as SwapCryptoMetadata} />;
       case "arbitrage-scan":
         return <ArbitrageScanUI toolData={metadata as ArbitrageScanMetadata} />;
-      case "odos-swap":
-        return <OdosSwapUI toolData={metadata as OdosSwapMetadata} />;
+      case "swap":
+        return <SwapUI toolData={metadata as SwapMetadata} />;
     }
   };
 
@@ -55,7 +42,6 @@ const AIMessage: React.FC<AIMessageProps> = ({ message }) => {
       {toolJson?.isUi && <div className="ai-agent-tool-ui mt-2">{renderAgentUi()}</div>}
 
       <div className="text-secondary mb-4">
-
         <ReactMarkdown
           remarkPlugins={[remarkGfm]}
           components={{
@@ -64,33 +50,19 @@ const AIMessage: React.FC<AIMessageProps> = ({ message }) => {
               <p className="mb-4 last:mb-0 leading-relaxed">{children}</p>
             ),
             // Başlık stilleri
-            h1: ({ children }) => (
-              <h1 className="text-2xl font-bold mb-4">{children}</h1>
-            ),
-            h2: ({ children }) => (
-              <h2 className="text-xl font-bold mb-3">{children}</h2>
-            ),
-            h3: ({ children }) => (
-              <h3 className="text-lg font-bold mb-2">{children}</h3>
-            ),
+            h1: ({ children }) => <h1 className="text-2xl font-bold mb-4">{children}</h1>,
+            h2: ({ children }) => <h2 className="text-xl font-bold mb-3">{children}</h2>,
+            h3: ({ children }) => <h3 className="text-lg font-bold mb-2">{children}</h3>,
             // Liste stilleri
-            ul: ({ children }) => (
-              <ul className="list-disc pl-5 mb-4">{children}</ul>
-            ),
-            ol: ({ children }) => (
-              <ol className="list-decimal pl-5 mb-4">{children}</ol>
-            ),
+            ul: ({ children }) => <ul className="list-disc pl-5 mb-4">{children}</ul>,
+            ol: ({ children }) => <ol className="list-decimal pl-5 mb-4">{children}</ol>,
             li: ({ children }) => <li className="mb-1">{children}</li>,
             // Kod bloğu stili
             code(props) {
               const { className, children } = props;
               const match = /language-(\w+)/.exec(className || "");
               return match ? (
-                <SyntaxHighlighter
-                  style={vscDarkPlus}
-                  language={match[1]}
-                  PreTag="div"
-                >
+                <SyntaxHighlighter style={vscDarkPlus} language={match[1]} PreTag="div">
                   {String(children).replace(/\n$/, "")}
                 </SyntaxHighlighter>
               ) : (
@@ -115,7 +87,6 @@ const AIMessage: React.FC<AIMessageProps> = ({ message }) => {
         >
           {content}
         </ReactMarkdown>
-
       </div>
 
       {/* {toolJson?.metadata?.content && !toolJson.isUi && (
