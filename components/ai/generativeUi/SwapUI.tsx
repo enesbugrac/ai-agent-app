@@ -6,16 +6,12 @@ import { useState } from "react";
 import { useRef } from "react";
 import { useEffect } from "react";
 import { SwapMetadata } from "@/types/tools.types";
-import { IoCopyOutline } from "react-icons/io5";
-
 
 interface SwapUIProps {
   toolData: SwapMetadata;
 }
 
 const SwapUI: React.FC<SwapUIProps> = ({ toolData }) => {
-  const transactionId = `TXN-${Date.now().toString().slice(-7)}`;
-
   const containerRef = useRef<HTMLDivElement>(null);
 
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
@@ -33,24 +29,62 @@ const SwapUI: React.FC<SwapUIProps> = ({ toolData }) => {
     return () => observer.disconnect();
   }, []);
 
-  const TokenAmount = ({type,  amount, logo, symbol }: { type: "input" | "output", amount: string, logo: string, symbol: string }) => {
+  const formatAmount = (amount: string) => {
+    const numAmount = parseFloat(amount);
+
+    // Handle small decimals
+    if (numAmount < 0.001) {
+      return <span className="text-sm font-bold">{numAmount}</span>;
+    }
+
+    // Handle regular numbers with K/M suffixes
+    if (numAmount >= 1000 && numAmount < 10000) {
+      return `${(numAmount / 1000).toFixed(1)}K`;
+    }
+    if (numAmount >= 10000 && numAmount < 100000) {
+      return `${(numAmount / 1000).toFixed(0)}K`;
+    }
+    if (numAmount >= 100000 && numAmount < 1000000) {
+      return `${(numAmount / 1000).toFixed(0)}K`;
+    }
+    if (numAmount >= 1000000 && numAmount < 10000000) {
+      return `${(numAmount / 1000000).toFixed(1)}M`;
+    }
+
+    // For regular numbers less than 1000
+    if (numAmount < 1000) {
+      return numAmount.toFixed(1);
+    }
+
+    return amount.substring(0, 4);
+  };
+
+  const TokenAmount = ({
+    type,
+    amount,
+    logo,
+    symbol,
+  }: {
+    type: "input" | "output";
+    amount: string;
+    logo: string;
+    symbol: string;
+  }) => {
     return (
-      <div className={`flex flex-1 items-center ${type === "input" ? "justify-start" : "justify-end"}`}>
-      <img
-        src={logo}
-        alt={symbol}
-        className="w-6 h-6 rounded-full mr-1"
-      />
-      <div className=" flex items-center gap-2">
-        <p className="text-white font-medium">
-          {symbol}
-        </p>
-        <p className="text-lg font-bold">{amount.substring(0, 4)}</p>
+      <div
+        className={`flex flex-1 items-center ${
+          type === "input" ? "justify-start" : "justify-end"
+        }`}
+      >
+        <img src={logo} alt={symbol} className="w-6 h-6 rounded-full mr-1" />
+        <div className=" flex items-center gap-2">
+          <p className="text-white font-medium">{symbol}</p>
+          <p className="text-lg font-bold">{formatAmount(amount)}</p>
+        </div>
       </div>
-    </div>
     );
   };
-  
+
   return (
     <div
       ref={containerRef}
@@ -79,11 +113,15 @@ const SwapUI: React.FC<SwapUIProps> = ({ toolData }) => {
           Congratulations! Your coin swap was completed successfully.
         </p>
 
-
         <div className="h-px w-full border-t border-border border-dashed mb-6" />
 
         <div className="w-full flex justify-between items-center mb-6">
-           <TokenAmount type="input" amount={toolData.inputAmount} logo={toolData.inputTokenMetadata.logo!} symbol={toolData.inputTokenMetadata.symbol} />
+          <TokenAmount
+            type="input"
+            amount={toolData.inputAmount}
+            logo={toolData.inputTokenMetadata.logo!}
+            symbol={toolData.inputTokenMetadata.symbol}
+          />
 
           <div className="flex flex-2 items-center justify-center">
             <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center">
@@ -91,7 +129,12 @@ const SwapUI: React.FC<SwapUIProps> = ({ toolData }) => {
             </div>
           </div>
 
-          <TokenAmount type="output" amount={toolData.outputAmount} logo={toolData.outputTokenMetadata.logo!} symbol={toolData.outputTokenMetadata.symbol} />
+          <TokenAmount
+            type="output"
+            amount={toolData.outputAmount}
+            logo={toolData.outputTokenMetadata.logo!}
+            symbol={toolData.outputTokenMetadata.symbol}
+          />
         </div>
 
         <div className="space-y-3">
