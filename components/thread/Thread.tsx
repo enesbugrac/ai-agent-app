@@ -1,8 +1,5 @@
 import { agents } from "@/data/agents";
-import {
-  useThreadMutation,
-  useThreadQueryAsync,
-} from "@/hooks/queries/thread.query";
+import { useThreadMutation, useThreadQueryAsync } from "@/hooks/queries/thread.query";
 
 import React, { useMemo } from "react";
 import { useInput } from "@/hooks/input.hooks";
@@ -13,7 +10,7 @@ import ThreadHeader from "./ThreadHeader";
 import ChatInput from "./ChatInput";
 import { useAuthStore } from "@/store/useStore"; // Import the store
 
-function Thread({ }) {
+function Thread({}) {
   const { input, setInput } = useInput();
   const { user } = useAuthCache();
   const { decreaseCredit } = useAuthStore(); // Get the decreaseCredit function from the store
@@ -22,7 +19,6 @@ function Thread({ }) {
   const { addMessageToThreadAsync, isMessageWaiting } = useThreadMutation();
 
   const messages = thread?.messages;
-
 
   // TODO: agents and assitances should be fetched from BE and stored on zuztang
   // Find from zuztang
@@ -41,13 +37,9 @@ function Thread({ }) {
     addMessageToThreadAsync(messageContent);
   };
 
-
-
   if (!isLoading && !thread) {
     return <div className="flex flex-col h-screen bg-background">Thread not found</div>;
   }
-
-
 
   return (
     <div className="flex flex-col h-screen bg-background">
@@ -56,12 +48,8 @@ function Thread({ }) {
       <div
         className={`flex-1 flex flex-col w-[70%] mx-auto justify-between py-4 gap-4 h-[calc(100vh-4rem)] overflow-hidden`}
       >
-
         <>
-          <ThreadView
-            messages={messages ?? []}
-            isMessageWaiting={isMessageWaiting}
-          />
+          <ThreadView messages={messages ?? []} isMessageWaiting={isMessageWaiting} />
 
           <ChatInput
             value={input}
@@ -71,8 +59,6 @@ function Thread({ }) {
             placeholder="Ask whatever you want..."
           />
         </>
-
-
       </div>
     </div>
   );
