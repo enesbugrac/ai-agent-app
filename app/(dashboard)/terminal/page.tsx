@@ -3,9 +3,7 @@
 import { usePrivy } from "@privy-io/react-auth";
 import { FaUserFriends, FaMapMarkerAlt } from "react-icons/fa";
 import { IoAddCircleOutline } from "react-icons/io5";
-import TokenCarousel from "@/components/TokenCarousel";
 import { agents } from "@/data/agents";
-import { tokens } from "@/data/tokens";
 import AgentCard from "@/components/AgentCard";
 
 export default function Home() {

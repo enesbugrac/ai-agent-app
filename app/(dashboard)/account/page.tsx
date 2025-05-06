@@ -1,6 +1,6 @@
 "use client";
 
-import { usePrivy, useLinkAccount } from "@privy-io/react-auth";
+import { usePrivy } from "@privy-io/react-auth";
 import { useState } from "react";
 import {
   FaTwitter,
@@ -12,7 +12,6 @@ import {
   FaPlus,
   FaSpinner,
   FaCopy,
-  FaExternalLinkAlt,
 } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
 
@@ -81,7 +80,6 @@ export default function AccountPage() {
     linkGoogle,
     linkGithub,
   } = usePrivy();
-
 
   console.log("linkGithub", linkGithub);
   const [loading, setLoading] = useState<string | null>(null);

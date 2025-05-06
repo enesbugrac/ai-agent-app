@@ -1,12 +1,12 @@
 import React from "react";
 
-interface PrimaryButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {}
+type PrimaryButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement>;
 
 const PrimaryButton = ({
-    children,
-    className,
-    onClick,
-    ...props
+  children,
+  className,
+  onClick,
+  ...props
 }: PrimaryButtonProps) => {
   return (
     <button

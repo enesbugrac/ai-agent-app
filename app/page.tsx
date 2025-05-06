@@ -3,7 +3,6 @@
 import { usePrivy } from "@privy-io/react-auth";
 
 import "animate.css/animate.min.css";
-import Footer from "@/components/landing/Footer";
 import Pricing from "@/components/landing/Pricing";
 import Navbar from "@/components/landing/Navbar";
 import AnimatedLayout from "@/components/landing/AnimatedLayout";
@@ -11,6 +10,7 @@ import DescriptionSection from "@/components/landing/DescriptionSection";
 import VisionAndMission from "@/components/landing/VisionAndMission";
 import FeaturesSection from "@/components/landing/FeatureSection";
 import Header from "@/components/landing/Header";
+import Footer from "@/components/landing/Footer";
 export default function Home() {
   const { login } = usePrivy();
 
@@ -20,11 +20,11 @@ export default function Home() {
         <Navbar login={login} />
         <Header />
         <DescriptionSection />
-        {/* <AnimatedLayout /> */}
-        {/* <FeaturesSection /> */}
-        {/* <Pricing /> */}
-        {/* <VisionAndMission /> */}
-        {/* <Footer /> */}
+        <AnimatedLayout />
+        <FeaturesSection />
+        <Pricing />
+        <VisionAndMission />
+        <Footer />
       </div>
     </div>
   );

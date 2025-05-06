@@ -10,18 +10,16 @@ import { MdOutlineDone } from "react-icons/md";
 import { FaTasks } from "react-icons/fa";
 import { useTasksQuery } from "@/hooks/queries/tasks.query";
 import { useAuthStore } from "@/store/useStore";
-import { usePrivy } from "@privy-io/react-auth";
+import { usePrivy, User } from "@privy-io/react-auth";
 
 const TasksPage = () => {
-  const [earned, setEarned] = useState<number>(0); 
-
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [tasks, setTasks] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const { getTasks, completeTask } = useTasksQuery();
   const { user } = useAuthStore();
-  const { user: privyUser} = usePrivy();
-  
+  const { user: privyUser } = usePrivy();
+
   // Fetch tasks on component mount
 
   useEffect(() => {
@@ -32,31 +30,29 @@ const TasksPage = () => {
         console.log("response", response);
         setTasks(response.tasks);
         setIsLoading(false);
-      } catch (err) {
-        setError('Failed to load tasks. Please try again.');
-        setIsLoading(false);  
+      } catch {
+        setIsLoading(false);
       }
     };
 
     fetchTasks();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  
-  
-  const handleTaskAction = (type: any, id: string, points: number) => {
-
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleTaskAction = (type: any, id: string) => {
     switch (type) {
       case "FOLLOW":
         console.log("Following @AIGEN...");
         window.open("https://x.com/AIGEN_AI", "_blank");
-        completeTask(privyUser?.id!, id);
+        completeTask((privyUser as User).id, id);
         break;
-        
+
       case "LIKE":
         console.log("Liking tweet...");
-        window.open("https://x.com/AIGEN_AI/status/1234567890", "_blank"); 
-        completeTask(privyUser?.id!, id);
+        window.open("https://x.com/AIGEN_AI/status/1234567890", "_blank");
+        completeTask((privyUser as User).id!, id);
         break;
-        
+
       default:
         console.warn("Unknown task type:", type);
     }
@@ -65,7 +61,7 @@ const TasksPage = () => {
   if (isLoading) {
     return (
       <Page>
-        <PageHeader title="Tasks" icon={<FaTasks className="text-primary text-lg" />}/>
+        <PageHeader title="Tasks" icon={<FaTasks className="text-primary text-lg" />} />
         <PageBody>
           <div className="w-full flex justify-center items-center h-40">
             <p className="text-secondary">Loading tasks...</p>
@@ -75,29 +71,22 @@ const TasksPage = () => {
     );
   }
 
-
   return (
     <Page>
-      <PageHeader title="Tasks" icon={<FaTasks className="text-primary text-lg" />}/>
+      <PageHeader title="Tasks" icon={<FaTasks className="text-primary text-lg" />} />
       <PageBody>
         <div className="w-full flex flex-col gap-4">
           <div className="w-full flex items-center justify-between">
             <div>
-              <h2 className="text-2xl font-medium text-white mb-2">
-                Community Missions
-              </h2>
+              <h2 className="text-2xl font-medium text-white mb-2">Community Missions</h2>
               <p className="text-secondary">Complete missions to earn rewards</p>
             </div>
             <div className="flex items-center gap-2">
-              <span className="text-secondary">
-                Earned:
-              </span>
-              <span className="text-tertiary text-sm font-medium">
-                {earned} $AIGEN
-              </span>
+              <span className="text-secondary">Earned:</span>
+              <span className="text-tertiary text-sm font-medium">0 $AIGEN</span>
             </div>
           </div>
-          
+
           {tasks.length === 0 ? (
             <div className="w-full text-center p-10 border border-border rounded-lg">
               <p className="text-secondary">No tasks available at this time.</p>
@@ -122,13 +111,15 @@ const TasksPage = () => {
                   </p>
                   <div className="flex justify-end w-[30%]">
                     {!task.completed ? (
-                      <PrimaryButton 
-                        onClick={() => handleTaskAction(task.type, task._id, task.points)}
+                      <PrimaryButton
+                        onClick={() => handleTaskAction(task.type, task._id)}
                         className="min-w-[100px]"
                       >
-                        {user?.tasks.find((t) => t.taskId === task._id)?.status === "completed" && "Completed"}
-                        {user?.tasks.find((t) => t.taskId === task._id)?.status === "pending" && "Pending"}
-                        {!user?.tasks.find((t)=> t.taskId === task._id) && "Complete"}
+                        {user?.tasks.find((t) => t.taskId === task._id)?.status ===
+                          "completed" && "Completed"}
+                        {user?.tasks.find((t) => t.taskId === task._id)?.status ===
+                          "pending" && "Pending"}
+                        {!user?.tasks.find((t) => t.taskId === task._id) && "Complete"}
                       </PrimaryButton>
                     ) : (
                       <MdOutlineDone className="w-4 h-4 text-tertiary" />

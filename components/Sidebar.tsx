@@ -9,7 +9,6 @@ import {
   FaHistory,
   FaQuestionCircle,
   FaBook,
-
   FaSignOutAlt,
   FaUser,
   FaTasks,
@@ -17,7 +16,7 @@ import {
 import { IoSparkles } from "react-icons/io5";
 import { BsChatDots } from "react-icons/bs";
 import { useThreadsStore } from "@/store/useThreadsStore";
-import { isToday, isLastWeek } from "@/utils/date";
+import { isToday } from "@/utils/date";
 import { useAuthCache, useAuthMutations } from "@/hooks/auth.hooks";
 
 interface MenuItem {
@@ -91,7 +90,6 @@ const Sidebar = () => {
       badge: "Coming Soon",
       path: "/special-agents",
     },
-
   ];
 
   const bottomMenu: MenuItem[] = [
@@ -104,24 +102,24 @@ const Sidebar = () => {
     <Link
       key={index + item.name}
       href={item.path || "#"}
-      className={`flex items-center justify-between px-3 h-12 rounded transition-all duration-200 relative group ${pathname === item.path
-        ? "text-primary bg-primary/10 border border-primary/20"
-        : "text-white/80 hover:text-primary hover:bg-background-highlight"
-        }`}
+      className={`flex items-center justify-between px-3 h-12 rounded transition-all duration-200 relative group ${
+        pathname === item.path
+          ? "text-primary bg-primary/10 border border-primary/20"
+          : "text-white/80 hover:text-primary hover:bg-background-highlight"
+      }`}
       title={item.name}
     >
       <div className="flex items-center gap-3">
-        <item.icon
-          className={`text-lg transition-colors duration-200`}
-        />
+        <item.icon className={`text-lg transition-colors duration-200`} />
         <span className="text-sm overflow-hidden transition-all duration-200">
           {item.name}
         </span>
       </div>
       {item.badge && (
         <span
-          className={`text-[10px] px-1.5 py-0.5 rounded-full bg-primary  text-black font-medium transition-all duration-200 ${pathname === item.path
-            }`}
+          className={`text-[10px] px-1.5 py-0.5 rounded-full bg-primary  text-black font-medium transition-all duration-200 ${
+            pathname === item.path
+          }`}
         >
           {item.badge}
         </span>
@@ -129,12 +127,8 @@ const Sidebar = () => {
     </Link>
   );
 
-
-
   return (
-    <aside
-      className="w-[20%] z-10 fixed top-0 left-0 bg-background flex flex-col h-screen transition-all duration-200 ease-in-out backdrop-blur-sm border-r border-border"
-    >
+    <aside className="w-[20%] z-10 fixed top-0 left-0 bg-background flex flex-col h-screen transition-all duration-200 ease-in-out backdrop-blur-sm border-r border-border">
       {/* Logo */}
       <div className="flex-none">
         <Link href="/">
@@ -163,7 +157,6 @@ const Sidebar = () => {
 
         {/* Scrollable Threads */}
         <div className="flex-1 overflow-y-auto max-h-[300px] overflow-x-hidden scrollbar-thin">
-
           {todayThreads?.length > 0 && (
             <div className="px-2 space-y-0.5">
               <div className="px-3 py-2 text-[10px] font-medium text-white/60 uppercase tracking-wider">
@@ -181,9 +174,7 @@ const Sidebar = () => {
               {previousThreads.map(renderMenuItem)}
             </div>
           )}
-
         </div>
-
       </div>
 
       {/* Fixed Bottom Menu */}
@@ -192,8 +183,9 @@ const Sidebar = () => {
         {/* User Profile */}
         <div ref={menuRef} className="relative">
           <div
-            className={`mt-2 p-3 bg-background/50 hover:bg-background-overlay rounded-lg border border-border/50 transition-all duration-200 cursor-pointer group ${showUserMenu ? "border-primary/20" : "hover:border-primary/20"
-              }`}
+            className={`mt-2 p-3 bg-background/50 hover:bg-background-overlay rounded-lg border border-border/50 transition-all duration-200 cursor-pointer group ${
+              showUserMenu ? "border-primary/20" : "hover:border-primary/20"
+            }`}
             onClick={() => setShowUserMenu(!showUserMenu)}
           >
             <div className="flex items-center justify-center">
@@ -218,10 +210,11 @@ const Sidebar = () => {
 
             {/* User Menu Dropdown */}
             <div
-              className={`absolute bottom-full mb-2 w-full right-0 py-2 bg-background-card backdrop-blur-sm rounded-lg border border-border shadow-xl transform transition-all duration-200 origin-bottom ${showUserMenu
-                ? "opacity-100 scale-100 translate-y-0"
-                : "opacity-0 scale-95 translate-y-2 pointer-events-none"
-                }`}
+              className={`absolute bottom-full mb-2 w-full right-0 py-2 bg-background-card backdrop-blur-sm rounded-lg border border-border shadow-xl transform transition-all duration-200 origin-bottom ${
+                showUserMenu
+                  ? "opacity-100 scale-100 translate-y-0"
+                  : "opacity-0 scale-95 translate-y-2 pointer-events-none"
+              }`}
             >
               <div className="px-4 py-2 border-b border-border">
                 <div className="text-sm font-medium text-white truncate">
