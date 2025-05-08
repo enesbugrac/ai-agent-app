@@ -11,12 +11,13 @@ import VisionAndMission from "@/components/landing/VisionAndMission";
 import FeaturesSection from "@/components/landing/FeatureSection";
 import Header from "@/components/landing/Header";
 import Footer from "@/components/landing/Footer";
+
 export default function Home() {
   const { login } = usePrivy();
 
   return (
-    <div className="min-h-screen bg-background z-50 ">
-      <div className={`transition-opacity duration-500  relative z-50 bg-[#13151a]`}>
+    <div className="min-h-screen bg-background overflow-x-hidden w-full">
+      <div className="transition-opacity duration-500 relative bg-[#13151a] w-full">
         <Navbar login={login} />
         <Header />
         <DescriptionSection />
