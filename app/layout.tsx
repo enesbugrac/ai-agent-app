@@ -13,7 +13,7 @@ const geist = Geist({
 
 export const metadata: Metadata = {
   title: "Aigen",
-  description: "Windows 98 style crypto dashboard",
+  description: "AI powered crypto dashboard",
   icons: {
     icon: [{ url: "/logo.png", type: "image/png" }],
   },
