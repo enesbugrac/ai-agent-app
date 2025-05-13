@@ -18,6 +18,7 @@ import { BsChatDots } from "react-icons/bs";
 import { useThreadsStore } from "@/store/useThreadsStore";
 import { isToday } from "@/utils/date";
 import { useAuthCache, useAuthMutations } from "@/hooks/auth.hooks";
+import Logo from "./Logo";
 
 interface MenuItem {
   name: string;
@@ -131,18 +132,10 @@ const Sidebar = () => {
     <aside className="w-[20%] z-10 fixed top-0 left-0 bg-background flex flex-col h-screen transition-all duration-200 ease-in-out backdrop-blur-sm border-r border-border">
       {/* Logo */}
       <div className="flex-none">
-        <Link href="/">
+        <Link href="/terminal">
           <div className="h-16 flex items-center px-4 border-b border-border cursor-pointer">
             <div className="flex items-center gap-2 w-full h-full">
-              <div className="logo-background flex items-center justify-center w-8 h-8">
-                <span className="logo-content text-primary text-sm font-medium">A</span>
-              </div>
-
-              <div className="ml-3 transition-all duration-200 overflow-hidden">
-                <span className="text-primary text-2xl font-medium whitespace-nowrap">
-                  Aigen
-                </span>
-              </div>
+              <Logo/>
             </div>
           </div>
         </Link>
