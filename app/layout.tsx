@@ -12,10 +12,50 @@ const geist = Geist({
 });
 
 export const metadata: Metadata = {
-  title: "Aigen",
-  description: "AI powered crypto dashboard",
+  title: "Aigen | AI-Powered Crypto Dashboard",
+  description:
+    "Aigen is an innovative AI-powered crypto dashboard. Track your portfolio, analyze the market, and join immersive blockchain events, all in one place.",
+  keywords: [
+    "AI",
+    "crypto dashboard",
+    "blockchain",
+    "portfolio tracker",
+    "market analysis",
+    "Binance Smart Chain",
+    "Solana",
+    "Web3",
+    "NFT events",
+    "decentralized platform",
+  ],
   icons: {
-    icon: [{ url: "/logo.png", type: "image/png" }],
+    icon: [
+      { url: "/favicon.ico", type: "image/x-icon" },
+      { url: "/logo.png", type: "image/png" },
+    ],
+  },
+  openGraph: {
+    title: "Aigen | AI-Powered Crypto Dashboard",
+    description:
+      "Aigen is an innovative AI-powered crypto dashboard. Track your portfolio, analyze the market, and join immersive blockchain events, all in one place.",
+    url: "https://www.aigenlab.io/", // Update to your actual domain if different
+    siteName: "Aigen",
+    images: [
+      {
+        url: "/logo.png",
+        width: 512,
+        height: 512,
+        alt: "Aigen Logo",
+      },
+    ],
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Aigen | AI-Powered Crypto Dashboard",
+    description:
+      "Aigen is an innovative AI-powered crypto dashboard. Track your portfolio, analyze the market, and join immersive blockchain events, all in one place.",
+    images: ["/logo.png"],
+    site: "@@Aigenlabio",
   },
 };
 
