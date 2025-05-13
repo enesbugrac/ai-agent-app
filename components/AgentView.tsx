@@ -2,7 +2,7 @@
 
 import PromptCard from "@/components/PromptCard";
 import { AgentData } from "@/data/agents";
-import { prompts } from "@/data/prompts";
+import { agentPrompts, generalPrompts } from "@/data/prompts";
 
 interface AgentViewProps {
   agent: AgentData;
@@ -15,6 +15,8 @@ export default function AgentView({
   onPromptClick,
   welcomeMessageDissapear,
 }: AgentViewProps) {
+  // Get agent-specific prompts or fall back to general prompts if none exist
+  const currentPrompts = agent?.id ? agentPrompts[agent.id] || generalPrompts : generalPrompts;
 
   return (
 
@@ -32,12 +34,12 @@ export default function AgentView({
               </h1>
               <h1 className="text-4xl text-primary">How can I assist you today?</h1>
               <p className="text-secondary text-sm mt-2">
-                Use one of the most common prompts below or use your own to begin
+                Use one of the suggested prompts below or type your own question to begin
               </p>
             </div>
 
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
-              {prompts.map((prompt, index) => (
+              {currentPrompts.map((prompt, index) => (
                 <PromptCard
                   key={index}
                   icon={prompt.icon}

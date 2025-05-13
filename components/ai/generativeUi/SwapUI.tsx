@@ -33,7 +33,7 @@ const SwapUI: React.FC<SwapUIProps> = ({ toolData }) => {
     const numAmount = parseFloat(amount);
 
     // Handle small decimals
-    if (numAmount < 0.001) {
+    if (numAmount <= 0.001) {
       return <span className="text-sm font-bold">{numAmount}</span>;
     }
 
