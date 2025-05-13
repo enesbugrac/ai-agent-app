@@ -30,7 +30,7 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       { url: "/favicon.ico", type: "image/x-icon" },
-      { url: "/logo.png", type: "image/png" },
+      { url: "/logo.jpeg", type: "image/png" },
     ],
   },
   openGraph: {
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
     siteName: "Aigen",
     images: [
       {
-        url: "/logo.png",
+        url: "/logo.jpeg",
         width: 512,
         height: 512,
         alt: "Aigen Logo",
@@ -54,7 +54,7 @@ export const metadata: Metadata = {
     title: "Aigen | AI-Powered Crypto Dashboard",
     description:
       "Aigen is an innovative AI-powered crypto dashboard. Track your portfolio, analyze the market, and join immersive blockchain events, all in one place.",
-    images: ["/logo.png"],
+    images: ["/logo.jpeg"],
     site: "@@Aigenlabio",
   },
 };
