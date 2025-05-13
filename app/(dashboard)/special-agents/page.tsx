@@ -29,7 +29,7 @@ export default function SpecialAgents() {
               <span className="text-primary font-medium">{agents.length}</span>{" "}
               agents available
             </div>
-            <button className="bg-[#1A1D23] text-primary px-4 py-2 rounded-lg text-sm hover:bg-[#1A1D23]/80 transition-all border border-border">
+            <button disabled className="bg-[#1A1D23]  disabled:opacity-50 text-primary px-4 py-2 rounded-lg text-sm hover:bg-[#1A1D23]/80 transition-all border border-border">
               Create Agent
             </button>
           </div>
