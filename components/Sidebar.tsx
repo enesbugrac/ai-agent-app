@@ -12,6 +12,8 @@ import {
   FaSignOutAlt,
   FaUser,
   FaTasks,
+  FaBars,
+  FaTimes,
 } from "react-icons/fa";
 import { IoSparkles } from "react-icons/io5";
 import { BsChatDots } from "react-icons/bs";
@@ -99,6 +101,8 @@ const Sidebar = () => {
     { name: "Changelog", icon: FaHistory, badge: "1.0.0", path: "/changelog" },
   ];
 
+  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
+
   const renderMenuItem = (item: MenuItem, index: number) => (
     <Link
       key={index + item.name}
@@ -129,117 +133,153 @@ const Sidebar = () => {
   );
 
   return (
-    <aside className="w-[20%] z-10 fixed top-0 left-0 bg-background flex flex-col h-screen transition-all duration-200 ease-in-out backdrop-blur-sm border-r border-border">
-      {/* Logo */}
-      <div className="flex-none">
-        <Link href="/terminal">
-          <div className="h-16 flex items-center px-4 border-b border-border cursor-pointer">
-            <div className="flex items-center gap-2 w-full h-full">
-              <Logo/>
-            </div>
-          </div>
-        </Link>
-      </div>
-
-      {/* Main Menu */}
-      <div className="flex flex-col h-full bg-background-overlay">
-        {/* Fixed Main Nav */}
-        <nav className="flex-none px-2 py-2 space-y-2">
-          {mainMenu.map(renderMenuItem)}
-        </nav>
-
-        {/* Scrollable Threads */}
-        <div className="flex-1 overflow-y-auto max-h-[300px] overflow-x-hidden scrollbar-thin">
-          {todayThreads?.length > 0 && (
-            <div className="px-2 space-y-0.5">
-              <div className="px-3 py-2 text-[10px] font-medium text-white/60 uppercase tracking-wider">
-                Today ({todayThreads.length})
-              </div>
-              {todayThreads.map(renderMenuItem)}
-            </div>
-          )}
-
-          {previousThreads?.length > 0 && (
-            <div className="px-2 space-y-0.5">
-              <div className="px-3 py-2 text-[10px] font-medium text-white/60 uppercase tracking-wider">
-                Previous 7 days ({previousThreads.length})
-              </div>
-              {previousThreads.map(renderMenuItem)}
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* Fixed Bottom Menu */}
-      <div className="flex-none p-2 space-y-0.5 border-t border-border">
-        {bottomMenu.map(renderMenuItem)}
-        {/* User Profile */}
-        <div ref={menuRef} className="relative">
-          <div
-            className={`mt-2 p-3 bg-background/50 hover:bg-background-overlay rounded-lg border border-border/50 transition-all duration-200 cursor-pointer group ${
-              showUserMenu ? "border-primary/20" : "hover:border-primary/20"
-            }`}
-            onClick={() => setShowUserMenu(!showUserMenu)}
-          >
-            <div className="flex items-center justify-center">
-              <div className="w-8 h-8 rounded-lg bg-background-overlay flex items-center justify-center group-hover:scale-105 transition-transform">
-                <span className="text-primary/80 group-hover:text-primary text-sm font-medium text-center">
-                  {walletAddress?.slice(0, 2) || "A"}
-                </span>
-              </div>
-              <div className="flex items-center justify-between flex-1 overflow-hidden transition-all duration-200 ml-3">
-                <div className="ml-3 flex-1">
-                  <div className="text-white text-base font-medium truncate">
-                    {walletAddress
-                      ? `${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}`
-                      : "Anonymous"}
-                  </div>
-                  <div className="text-xs text-secondary hover:text-primary cursor-pointer">
-                    Upgrade to Pro
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* User Menu Dropdown */}
-            <div
-              className={`absolute bottom-full mb-2 w-full right-0 py-2 bg-background-card backdrop-blur-sm rounded-lg border border-border shadow-xl transform transition-all duration-200 origin-bottom ${
-                showUserMenu
-                  ? "opacity-100 scale-100 translate-y-0"
-                  : "opacity-0 scale-95 translate-y-2 pointer-events-none"
-              }`}
+    <>
+      {/* Hamburger for mobile (always top-left, above everything) */}
+      {!isMobileSidebarOpen && (
+        <button
+          className="fixed top-4 left-4 z-40 md:hidden bg-background p-2 rounded-lg border border-border text-primary focus:outline-none"
+          onClick={() => setIsMobileSidebarOpen(true)}
+          aria-label="Open sidebar"
+        >
+          <FaBars className="text-2xl" />
+        </button>
+      )}
+      {/* Close (X) button for mobile, always top-left above sidebar when open */}
+      {isMobileSidebarOpen && (
+        <button
+          className="fixed top-4 left-4 z-40 md:hidden bg-background p-2 rounded-lg border border-border text-primary focus:outline-none"
+          onClick={() => setIsMobileSidebarOpen(false)}
+          aria-label="Close sidebar"
+        >
+          <FaTimes className="text-2xl" />
+        </button>
+      )}
+      {/* Sidebar for desktop and mobile */}
+      <aside
+        className={`
+          z-30 fixed top-0 left-0 h-screen bg-background flex flex-col transition-all duration-300 border-r border-border
+          w-4/5 max-w-xs md:w-[20%] md:max-w-none
+          ${isMobileSidebarOpen ? "translate-x-0" : "-translate-x-full"} md:translate-x-0
+          md:static md:block
+        `}
+        style={{ minWidth: "220px" }}
+      >
+        {/* Sidebar scrollable content for mobile */}
+        <div className="flex flex-col h-full z-[100] relative overflow-y-auto">
+          {/* Logo */}
+          <div className="flex-none">
+            <Link
+              href="/terminal"
+              className="h-16 flex items-center px-4 border-b border-border cursor-pointer"
             >
-              <div className="px-4 py-2 border-b border-border">
-                <div className="text-sm font-medium text-white truncate">
-                  {walletAddress
-                    ? `${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}`
-                    : "Anonymous"}
+              <Logo />
+            </Link>
+          </div>
+          {/* Main Menu */}
+          <div className="flex flex-col h-full bg-background-overlay flex-1">
+            {/* Fixed Main Nav */}
+            <nav className="flex-none px-2 py-2 space-y-2">
+              {mainMenu.map(renderMenuItem)}
+            </nav>
+            {/* Scrollable Threads */}
+            <div className="flex-1 overflow-y-auto max-h-[300px] overflow-x-hidden scrollbar-thin">
+              {todayThreads?.length > 0 && (
+                <div className="px-2 space-y-0.5">
+                  <div className="px-3 py-2 text-[10px] font-medium text-white/60 uppercase tracking-wider">
+                    Today ({todayThreads.length})
+                  </div>
+                  {todayThreads.map(renderMenuItem)}
                 </div>
-                <div className="text-xs text-secondary mt-1">Connected Wallet</div>
-              </div>
+              )}
+              {previousThreads?.length > 0 && (
+                <div className="px-2 space-y-0.5">
+                  <div className="px-3 py-2 text-[10px] font-medium text-white/60 uppercase tracking-wider">
+                    Previous 7 days ({previousThreads.length})
+                  </div>
+                  {previousThreads.map(renderMenuItem)}
+                </div>
+              )}
+            </div>
+          </div>
+          {/* Fixed Bottom Menu */}
+          <div className="flex-none p-2 space-y-0.5 border-t border-border">
+            {bottomMenu.map(renderMenuItem)}
+            {/* User Profile */}
+            <div ref={menuRef} className="relative">
+              <div
+                className={`mt-2 p-3 bg-background/50 hover:bg-background-overlay rounded-lg border border-border/50 transition-all duration-200 cursor-pointer group ${
+                  showUserMenu ? "border-primary/20" : "hover:border-primary/20"
+                }`}
+                onClick={() => setShowUserMenu(!showUserMenu)}
+              >
+                <div className="flex items-center justify-center">
+                  <div className="w-8 h-8 rounded-lg bg-background-overlay flex items-center justify-center group-hover:scale-105 transition-transform">
+                    <span className="text-primary/80 group-hover:text-primary text-sm font-medium text-center">
+                      {walletAddress?.slice(0, 2) || "A"}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between flex-1 overflow-hidden transition-all duration-200 ml-3">
+                    <div className="ml-3 flex-1">
+                      <div className="text-white text-base font-medium truncate">
+                        {walletAddress
+                          ? `${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}`
+                          : "Anonymous"}
+                      </div>
+                      <div className="text-xs text-secondary hover:text-primary cursor-pointer">
+                        Upgrade to Pro
+                      </div>
+                    </div>
+                  </div>
+                </div>
 
-              <Link
-                href="/account"
-                className="w-full px-4 py-2.5 text-sm font-medium text-white hover:text-primary hover:bg-background-overlay transition-colors flex items-center gap-3"
-              >
-                <FaUser className="text-base" />
-                Account Settings
-              </Link>
-              <button
-                onClick={() => {
-                  logout();
-                  setShowUserMenu(false);
-                }}
-                className="w-full px-4 py-2.5 text-sm font-medium text-white hover:text-primary hover:bg-background-overlay transition-colors flex items-center gap-3"
-              >
-                <FaSignOutAlt className="text-base" />
-                Logout
-              </button>
+                {/* User Menu Dropdown */}
+                <div
+                  className={`absolute bottom-full mb-2 w-full right-0 py-2 bg-background-card backdrop-blur-sm rounded-lg border border-border shadow-xl transform transition-all duration-200 origin-bottom ${
+                    showUserMenu
+                      ? "opacity-100 scale-100 translate-y-0"
+                      : "opacity-0 scale-95 translate-y-2 pointer-events-none"
+                  }`}
+                >
+                  <div className="px-4 py-2 border-b border-border">
+                    <div className="text-sm font-medium text-white truncate">
+                      {walletAddress
+                        ? `${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}`
+                        : "Anonymous"}
+                    </div>
+                    <div className="text-xs text-secondary mt-1">Connected Wallet</div>
+                  </div>
+
+                  <Link
+                    href="/account"
+                    className="w-full px-4 py-2.5 text-sm font-medium text-white hover:text-primary hover:bg-background-overlay transition-colors flex items-center gap-3"
+                  >
+                    <FaUser className="text-base" />
+                    Account Settings
+                  </Link>
+                  <button
+                    onClick={() => {
+                      logout();
+                      setShowUserMenu(false);
+                    }}
+                    className="w-full px-4 py-2.5 text-sm font-medium text-white hover:text-primary hover:bg-background-overlay transition-colors flex items-center gap-3"
+                  >
+                    <FaSignOutAlt className="text-base" />
+                    Logout
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </aside>
+      </aside>
+      {/* Overlay for mobile when sidebar is open */}
+      {isMobileSidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black/40 z-20 md:hidden"
+          onClick={() => setIsMobileSidebarOpen(false)}
+        />
+      )}
+    </>
   );
 };
 
