@@ -1,6 +1,6 @@
 "use client";
 
-import { usePrivy } from "@privy-io/react-auth";
+import { useLinkAccount, usePrivy } from "@privy-io/react-auth";
 import { useState } from "react";
 import {
   FaTwitter,
@@ -71,17 +71,16 @@ const ConnectorButton = ({
 );
 
 export default function AccountPage() {
-  const {
-    user,
-    linkEmail,
-    linkWallet,
-    linkTwitter,
-    linkDiscord,
-    linkGoogle,
-    linkGithub,
-  } = usePrivy();
+  const { user, linkEmail, linkWallet, linkDiscord, linkGoogle, linkGithub } = usePrivy();
+  const { linkTwitter } = useLinkAccount({
+    onSuccess: ({ linkedAccount }) => {
+      console.log("Linked account to user ", linkedAccount);
+    },
+    onError: (error) => {
+      console.error("Failed to link account with error ", error);
+    },
+  });
 
-  console.log("linkGithub", linkGithub);
   const [loading, setLoading] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
 
@@ -168,7 +167,7 @@ export default function AccountPage() {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 p-6 overflow-y-auto">
+      <div className="flex-1 pt-3.5 overflow-y-auto">
         <div className="max-w-3xl mx-auto space-y-8">
           {/* Wallet Section */}
           {user?.wallet && (
