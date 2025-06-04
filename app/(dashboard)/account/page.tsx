@@ -75,10 +75,10 @@ export default function AccountPage() {
     user,
     linkEmail,
     linkWallet,
-    linkTwitter,
     linkDiscord,
     linkGoogle,
     linkGithub,
+    linkTwitter,
   } = usePrivy();
 
   const [loading, setLoading] = useState<string | null>(null);
