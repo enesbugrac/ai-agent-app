@@ -8,7 +8,7 @@ interface PageBodyProps {
 
 const PageBody = ({ children, className }: PageBodyProps) => {
   return (
-    <div className={`flex flex-col w-[75%] items-center  pt-32 pb-16 min-h-screen  overflow-y-auto ${className}`}>
+    <div className={`flex flex-col w-[80%] h-[calc(100vh-64px)] items-center  overflow-y-scroll ${className}`}>
       {children}
     </div>
   );

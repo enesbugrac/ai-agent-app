@@ -21,13 +21,8 @@ import { useThreadsStore } from "@/store/useThreadsStore";
 import { isToday } from "@/utils/date";
 import { useAuthCache, useAuthMutations } from "@/hooks/auth.hooks";
 import Logo from "./Logo";
+import { mainMenu, MenuItem } from "@/data/menuItems";
 
-interface MenuItem {
-  name: string;
-  icon: IconType;
-  badge?: string;
-  path?: string;
-}
 
 const Sidebar = () => {
   const [showUserMenu, setShowUserMenu] = useState(false);
@@ -80,87 +75,83 @@ const Sidebar = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const mainMenu: MenuItem[] = [
-    { name: "Terminal", icon: FaHome, path: "/terminal" },
-    {
-      name: "Tasks",
-      icon: FaTasks,
-      path: "/tasks",
-    },
-    {
-      name: "Special Agents",
-      icon: IoSparkles,
-      badge: "Coming Soon",
-      path: "/special-agents",
-    },
-  ];
-
   const bottomMenu: MenuItem[] = [
-    { name: "Support", icon: FaQuestionCircle, path: "/support" },
-    { name: "Documentation", icon: FaBook, path: "/documentation" },
-    { name: "Changelog", icon: FaHistory, badge: "1.0.0", path: "/changelog" },
+
+    { name: "Documentation", icon: FaBook, path: "https://aigen-3.gitbook.io/aigen-lab" },
+
   ];
 
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
-
-  const renderMenuItem = (item: MenuItem, index: number) => (
-    <Link
-      key={index + item.name}
-      href={item.path || "#"}
-      className={`flex items-center justify-between px-3 h-12 rounded transition-all duration-200 relative group ${
-        pathname === item.path
-          ? "text-primary bg-primary/10 border border-primary/20"
-          : "text-white/80 hover:text-primary hover:bg-background-highlight"
-      }`}
-      title={item.name}
-    >
-      <div className="flex items-center gap-3">
-        <item.icon className={`text-lg transition-colors duration-200`} />
-        <span className="text-sm overflow-hidden transition-all duration-200">
-          {item.name}
-        </span>
-      </div>
-      {item.badge && (
-        <span
-          className={`text-[10px] px-1.5 py-0.5 rounded-full bg-primary  text-black font-medium transition-all duration-200 ${
-            pathname === item.path
-          }`}
+  const renderMenuItem = (item: MenuItem, index: number) => {
+    const isActive = item.active !== false;
+    const isExternal = item.path?.startsWith("http");
+  
+    const commonClass = `flex items-center justify-between px-3 h-12 rounded transition-all duration-200 relative group ${
+      pathname === item.path
+        ? "text-primary bg-primary/10 border border-primary/20"
+        : "text-white/80 hover:text-primary hover:bg-background-highlight"
+    } ${isActive ? "cursor-pointer" : "cursor-default opacity-60"}`;
+  
+    const content = (
+      <>
+        <div className="flex items-center gap-3">
+          {item.icon && <item.icon className={`text-lg transition-colors duration-200`} />}
+          <span className="text-sm overflow-hidden transition-all duration-200">
+            {item.name}
+          </span>
+        </div>
+        {item.badge && (
+          <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-primary text-black font-medium transition-all duration-200">
+            {item.badge}
+          </span>
+        )}
+      </>
+    );
+  
+    if (!isActive) {
+      return (
+        <div key={index + item.name} className={commonClass} title={item.name}>
+          {content}
+        </div>
+      );
+    }
+  
+    if (isExternal) {
+      return (
+        <a
+          key={index + item.name}
+          href={item.path}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={commonClass}
+          title={item.name}
         >
-          {item.badge}
-        </span>
-      )}
-    </Link>
-  );
-
+          {content}
+        </a>
+      );
+    }
+  
+    return (
+      <Link
+        key={index + item.name}
+        href={item.path || "#"}
+        className={commonClass}
+        title={item.name}
+      >
+        {content}
+      </Link>
+    );
+  };
   return (
     <>
-      {/* Hamburger for mobile (always top-left, above everything) */}
-      {!isMobileSidebarOpen && (
-        <button
-          className="fixed top-4 left-4 z-40 md:hidden bg-background p-2 rounded-lg border border-border text-primary focus:outline-none"
-          onClick={() => setIsMobileSidebarOpen(true)}
-          aria-label="Open sidebar"
-        >
-          <FaBars className="text-2xl" />
-        </button>
-      )}
-      {/* Close (X) button for mobile, always top-left above sidebar when open */}
-      {isMobileSidebarOpen && (
-        <button
-          className="fixed top-4 left-4 z-40 md:hidden bg-background p-2 rounded-lg border border-border text-primary focus:outline-none"
-          onClick={() => setIsMobileSidebarOpen(false)}
-          aria-label="Close sidebar"
-        >
-          <FaTimes className="text-2xl" />
-        </button>
-      )}
+   
       {/* Sidebar for desktop and mobile */}
       <aside
         className={`
-          z-30 fixed top-0 left-0 h-screen bg-background flex flex-col transition-all duration-300 border-r border-border
-          w-4/5 max-w-xs md:w-[20%] md:max-w-none
+          z-30  h-full bg-background flex flex-col transition-all duration-300 border-r border-border
+          w-[20%] 
           ${isMobileSidebarOpen ? "translate-x-0" : "-translate-x-full"} md:translate-x-0
-          md:static md:block
+           md:block
         `}
         style={{ minWidth: "220px" }}
       >
@@ -205,70 +196,7 @@ const Sidebar = () => {
           <div className="flex-none p-2 space-y-0.5 border-t border-border">
             {bottomMenu.map(renderMenuItem)}
             {/* User Profile */}
-            <div ref={menuRef} className="relative">
-              <div
-                className={`mt-2 p-3 bg-background/50 hover:bg-background-overlay rounded-lg border border-border/50 transition-all duration-200 cursor-pointer group ${
-                  showUserMenu ? "border-primary/20" : "hover:border-primary/20"
-                }`}
-                onClick={() => setShowUserMenu(!showUserMenu)}
-              >
-                <div className="flex items-center justify-center">
-                  <div className="w-8 h-8 rounded-lg bg-background-overlay flex items-center justify-center group-hover:scale-105 transition-transform">
-                    <span className="text-primary/80 group-hover:text-primary text-sm font-medium text-center">
-                      {walletAddress?.slice(0, 2) || "A"}
-                    </span>
-                  </div>
-                  <div className="flex items-center justify-between flex-1 overflow-hidden transition-all duration-200 ml-3">
-                    <div className="ml-3 flex-1">
-                      <div className="text-white text-base font-medium truncate">
-                        {walletAddress
-                          ? `${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}`
-                          : "Anonymous"}
-                      </div>
-                      <div className="text-xs text-secondary hover:text-primary cursor-pointer">
-                        Upgrade to Pro
-                      </div>
-                    </div>
-                  </div>
-                </div>
 
-                {/* User Menu Dropdown */}
-                <div
-                  className={`absolute bottom-full mb-2 w-full right-0 py-2 bg-background-card backdrop-blur-sm rounded-lg border border-border shadow-xl transform transition-all duration-200 origin-bottom ${
-                    showUserMenu
-                      ? "opacity-100 scale-100 translate-y-0"
-                      : "opacity-0 scale-95 translate-y-2 pointer-events-none"
-                  }`}
-                >
-                  <div className="px-4 py-2 border-b border-border">
-                    <div className="text-sm font-medium text-white truncate">
-                      {walletAddress
-                        ? `${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}`
-                        : "Anonymous"}
-                    </div>
-                    <div className="text-xs text-secondary mt-1">Connected Wallet</div>
-                  </div>
-
-                  <Link
-                    href="/account"
-                    className="w-full px-4 py-2.5 text-sm font-medium text-white hover:text-primary hover:bg-background-overlay transition-colors flex items-center gap-3"
-                  >
-                    <FaUser className="text-base" />
-                    Account Settings
-                  </Link>
-                  <button
-                    onClick={() => {
-                      logout();
-                      setShowUserMenu(false);
-                    }}
-                    className="w-full px-4 py-2.5 text-sm font-medium text-white hover:text-primary hover:bg-background-overlay transition-colors flex items-center gap-3"
-                  >
-                    <FaSignOutAlt className="text-base" />
-                    Logout
-                  </button>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </aside>

@@ -24,8 +24,8 @@ export default function ThreadView({ messages, isMessageWaiting }: ThreadViewPro
 
 
   return (
-    <div className="flex-1 overflow-y-scroll overflow-x-hidden pr-4">
-      <div className="flex flex-col gap-4">
+
+      <div className="h-[85%] flex flex-col gap-4 overflow-y-scroll scrollbar-hide md:scrollbar-auto py-4 px-0 md:px-4 md:py-4">
         {messages.map((message, index) => (
           <div
             key={`${message._id}-${index}`}
@@ -39,7 +39,7 @@ export default function ThreadView({ messages, isMessageWaiting }: ThreadViewPro
                 }`}
             >
               {message.role === "user" ? (
-                <p>{message.content}</p>
+                <p className="text-sm">{message.content}</p>
               ) : (
                 <AIMessage message={message} />
               )}
@@ -57,6 +57,6 @@ export default function ThreadView({ messages, isMessageWaiting }: ThreadViewPro
 
         <div ref={messagesEndRef} />
       </div>
-    </div>
+
   );
 }

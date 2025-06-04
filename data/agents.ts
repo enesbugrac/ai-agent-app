@@ -8,6 +8,8 @@ export type AgentActionsMap = {
   [key in Agent]?: Action[];
 };
 
+export type ToolType = "arbitrage-scan" | "jupiter-swap" | "odos-swap";
+
 export interface Action {
   title: string;
   description: string;
@@ -17,7 +19,7 @@ export interface AgentData {
   name: string;
   subTitle?: string;
   description?: string;
-  type?: string;
+  type?: ToolType;
   logo?: string;
   actions?: Action[];
 }
@@ -96,7 +98,7 @@ export const agents: AgentData[] = [
     name: "Arbitra",
     subTitle: "Arbitrage Assistant",
     description: "Finds price differences for a selected token across platforms and helps you execute profitable trades with speed and precision.",
-    type: "Arbitrage",
+    type: "arbitrage-scan",
     logo: "/agentLogos/arbitrage.jpeg",
     actions: agentActions[Agent.ARBITRAGE_ASSISTANT] || []
   },
@@ -105,7 +107,7 @@ export const agents: AgentData[] = [
     name: "Juvex",
     subTitle: "Jupiter Swap Assistant",
     description: "Performs optimized swaps on the Solana Network using Jupiter protocol.",
-    type: "Swap",
+    type: "jupiter-swap",
     logo: "/agentLogos/jupiter-logo.webp",
     actions: agentActions[Agent.JUPITER_SWAP_ASSISTANT] || []
   },
@@ -114,7 +116,7 @@ export const agents: AgentData[] = [
     name: "Oden",
     subTitle: "Odos Swap Assistant",
     description: "Executes efficient swaps on the BSC Network via the Odos protocol.",
-    type: "Swap",
+    type: "odos-swap",
     logo: "/agentLogos/odos-logo.png",
     actions: agentActions[Agent.ODO_SWAP_ASSISTANT] || []
   },

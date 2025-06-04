@@ -65,7 +65,7 @@ const ChatInput: React.FC<ChatInputProps> = ({
   return (
     <div
       ref={inputContainerRef}
-      className="flex flex-col items-end bg-[#1A1D23] rounded-2xl shadow-sm w-full transition-transform duration-300 p-4" 
+      className=" flex flex-col items-end justify-between bg-[#1A1D23] rounded-2xl shadow-sm w-full transition-transform duration-300 p-4 my-2" 
     >
       <TextareaAutosize
         value={value}
@@ -78,7 +78,7 @@ const ChatInput: React.FC<ChatInputProps> = ({
       />
       <div className="flex items-center justify-between pt-2 w-full">
         <div className="px-2 py-1 rounded-md bg-primary flex items-center ">
-          <span className="text-black text-sm">{user?.credits ?? 0} credits</span>
+          <span className="text-black text-xs">{user?.credits ?? 0} credits</span>
         </div>
 
       <button
@@ -88,7 +88,7 @@ const ChatInput: React.FC<ChatInputProps> = ({
             (isSending || !value.trim()) ? "opacity-50 cursor-not-allowed" : ""
           }`}
         >
-          <IoSend className="text-lg" />
+          <IoSend className="text-md" />
         </button>
       </div>
     </div>

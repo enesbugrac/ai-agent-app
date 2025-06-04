@@ -109,7 +109,9 @@ export default function WalletSidebar({ isOpen, onClose }: WalletSidebarProps) {
                   <FaWallet className="text-primary" /> Wallet
                 </h2>
                 <button
-                  onClick={onClose}
+                  onClick={()=>{
+                    console.log("clicked")
+                    onClose()}}
                   className="text-secondary hover:text-primary transition-colors"
                 >
                   <FaTimes />

@@ -64,6 +64,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  
   return (
     <html lang="en">
       <body className={`${geist.variable} h-screen`}>
@@ -78,6 +79,7 @@ export default function RootLayout({
           />
           <Modal />
         </Providers>
+
       </body>
     </html>
   );

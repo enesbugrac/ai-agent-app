@@ -1,6 +1,6 @@
 import type { Config } from "tailwindcss";
 
-const colors = {
+export const colors = {
   primary: {
     DEFAULT: "#FFDB48",
     light: "#F3BA2F",

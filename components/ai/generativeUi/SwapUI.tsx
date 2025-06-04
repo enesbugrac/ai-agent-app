@@ -88,7 +88,7 @@ const SwapUI: React.FC<SwapUIProps> = ({ toolData }) => {
   return (
     <div
       ref={containerRef}
-      className="w-[50%] bg-[#1A1D23] rounded-xl overflow-hidden  text-center relative"
+      className="w-full md:w-[50%] bg-[#1A1D23] rounded-xl overflow-hidden  text-center relative"
     >
       <div className="absolute top-0 left-0 pointer-events-none z-10">
         <Confetti
