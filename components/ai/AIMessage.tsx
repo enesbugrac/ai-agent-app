@@ -2,13 +2,14 @@ import React from "react";
 import ArbitrageScanUI from "./generativeUi/ArbitrageScanUI";
 import SwapUI from "./generativeUi/SwapUI";
 import { ThreadMessage } from "@/types/thread.types";
-import { ArbitrageScanMetadata, SwapMetadata } from "@/types/tools.types";
+import { ArbitrageScanMetadata, PreditNextCandleMetadata, SwapMetadata } from "@/types/tools.types";
 
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { agents } from "@/data/agents";
+import PreditNextCandle from "./generativeUi/PreditNextCandle";
 
 type AIMessageProps = {
   message: ThreadMessage;
@@ -19,6 +20,8 @@ const AIMessage: React.FC<AIMessageProps> = ({ message }) => {
   const { content } = message;
   const metadata = toolJson?.metadata;
   const toolType = metadata?.type;
+
+  console.log("message", message);
 
   const renderAgentUi = () => {
     if (!toolJson) return null;
@@ -31,6 +34,8 @@ const AIMessage: React.FC<AIMessageProps> = ({ message }) => {
         return <SwapUI toolData={metadata as SwapMetadata} />;
       case "odos-swap":
         return <SwapUI toolData={metadata as SwapMetadata} />;
+      case "candle-prediction":
+        return <PreditNextCandle toolData={metadata as PreditNextCandleMetadata} />;
     }
   };
 

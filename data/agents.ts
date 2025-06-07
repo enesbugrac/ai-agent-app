@@ -2,13 +2,14 @@
 export enum Agent {
   ARBITRAGE_ASSISTANT = "arbitrage-assistant",
   JUPITER_SWAP_ASSISTANT = "jupiter-swap-assistant",
-  ODO_SWAP_ASSISTANT = "odos-swap-assistant",
+  ODO_SWAP_ASSISTANT = "odos-swap-assistant", 
+  CANDLE_PREDICTION_AGENT = "candle-prediction-assistant",
 }
 export type AgentActionsMap = {
   [key in Agent]?: Action[];
 };
 
-export type ToolType = "arbitrage-scan" | "jupiter-swap" | "odos-swap";
+export type ToolType = "arbitrage-scan" | "jupiter-swap" | "odos-swap" | "candle-prediction";
 
 export interface Action {
   title: string;
@@ -90,6 +91,12 @@ export const agentActions: AgentActionsMap = {
       description: 'Get the holders of a token.',
     },
   ],
+  [Agent.CANDLE_PREDICTION_AGENT]: [
+    {
+      title: 'Predict Candle',
+      description: 'Predict the direction of a candle based on the previous candles.',
+    },
+  ],
 };
 
 export const agents: AgentData[] = [
@@ -120,6 +127,15 @@ export const agents: AgentData[] = [
     logo: "/agentLogos/odos-logo.png",
     actions: agentActions[Agent.ODO_SWAP_ASSISTANT] || []
   },
+   {
+    id: Agent.CANDLE_PREDICTION_AGENT,
+    name: "Candle Prediction",
+    subTitle: "Candle Prediction Agent",
+    description: "Predicts the direction of a candle based on the previous candles.",
+    type: "candle-prediction",
+    logo: "/agentLogos/candle-prediction.png",
+    actions: agentActions[Agent.CANDLE_PREDICTION_AGENT] || []
+   }
 ];
 
 

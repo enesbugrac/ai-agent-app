@@ -9,7 +9,6 @@ import { useInput } from "@/hooks/input.hooks";
 import ThreadView from "@/components/thread/ThreadView";
 import { useAuthCache } from "@/hooks/auth.hooks";
 
-import ThreadHeader from "./ThreadHeader";
 import ChatInput from "./ChatInput";
 import { useAuthStore } from "@/store/useStore"; // Import the store
 

@@ -3,107 +3,136 @@ import {
   createChart,
   ColorType,
   CandlestickSeries,
+  Time,
 } from "lightweight-charts";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { PreditNextCandleMetadata } from "@/types/tools.types";
 
-const PreditNextCandle = (props: any) => {
-  const {
-    data,
-    colors: {
-      backgroundColor = "white",
-      lineColor = "#2962FF",
-      textColor = "black",
-      areaTopColor = "#2962FF",
-      areaBottomColor = "rgba(41, 98, 255, 0.28)",
-    } = {},
-  } = props;
+interface PreditNextCandleProps {
+  toolData: PreditNextCandleMetadata;
+}
+
+const getIntervalMilliseconds = (interval: string): number => {
+  const intervalMap: { [key: string]: number } = {
+    '1m': 60 * 1000,
+    '5m': 5 * 60 * 1000,
+    '15m': 15 * 60 * 1000,
+    '1h': 60 * 60 * 1000,
+    '4h': 4 * 60 * 60 * 1000,
+    '1D': 24 * 60 * 60 * 1000,
+    '1W': 7 * 24 * 60 * 60 * 1000,
+  };
+  return intervalMap[interval] || 24 * 60 * 60 * 1000; // default to 1 day
+};
+
+
+const PreditNextCandle: React.FC<PreditNextCandleProps> = ({ toolData }) => {
+
+  console.log("toolData", toolData);
+  const { prediction } = toolData;
+  const { candles, interval, prediction: { confidence, open, high, low, close } } = prediction;
+  const volume = candles.map((candle) => ({
+    time: candle.timestamp  as Time, // ✅ pure number, not wrapped in { timestamp }
+    value: candle.volume,
+  }));
+  
+  const actualCandles = candles.map(({ timestamp, open, high, low, close }) => ({
+    time: timestamp as Time, // ✅ pure number, not wrapped in { timestamp }
+    open,
+    high,
+    low,
+    close,
+  }));
+  
+
+  
+  const lastTimestamp = actualCandles[actualCandles.length - 1].time as number;
+  const predictedTime = (lastTimestamp + getIntervalMilliseconds(interval) / 1000) as Time;
+  
+  const predictedCandles = [
+    {
+        time: predictedTime as Time,
+      open,
+      high,
+      low,
+      close,
+    },
+  ];
+  
+
+  const colors = {
+    backgroundColor: "#1B1D22",
+    lineColor: "rgba(136, 136, 136, 0.2)", 
+    textColor: "white",
+    areaTopColor: "#2962FF",
+    areaBottomColor: "rgba(255, 219, 72, 0.2)",
+    gridColor: "rgba(136, 136, 136, 0.2)",
+  };
 
   const chartContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleResize = () => {
-      chart.applyOptions({ width: chartContainerRef.current?.clientWidth });
+      chart.applyOptions({ width: 800 });
     };
 
     const chart = createChart(chartContainerRef.current!, {
       layout: {
-        background: { type: ColorType.Solid, color: backgroundColor },
-        textColor,
+        background: { type: ColorType.Solid, color: colors.backgroundColor },
+        textColor: colors.textColor,
       },
-      width: chartContainerRef.current?.clientWidth || 0,
-      height: 500,
+      grid: {
+        vertLines: {
+          color: colors.gridColor,
+        },
+        horzLines: {
+          color: colors.gridColor,
+        },
+      },
+      width: 800,
+      height: 400,
+      rightPriceScale: {
+        visible: true,
+        scaleMargins: {
+          top: 0.2,
+          bottom: 0.2,
+        },
+      },
+      
     });
     chart.timeScale().fitContent();
 
     const newSeries = chart.addSeries(AreaSeries, {
-      lineColor,
-      topColor: areaTopColor,
-      bottomColor: areaBottomColor,
+      lineColor: colors.lineColor,
+      topColor: colors.areaTopColor,
+      bottomColor: colors.areaBottomColor,
     });
-    newSeries.setData(data);
+    newSeries.setData(volume);
 
-    const candlestickSeries = chart.addSeries(CandlestickSeries, {
+    const actualSeries = chart.addSeries(CandlestickSeries, {
       upColor: "#26a69a",
       downColor: "#ef5350",
-      borderVisible: false,
       wickUpColor: "#26a69a",
       wickDownColor: "#ef5350",
+      borderVisible: false,
+      priceLineVisible: true, // show the last‐price line
+      lastValueVisible: true, // show the last‐value label
     });
-    candlestickSeries.setData([
-      {
-        time: "2018-12-22",
-        open: 75.16,
-        high: 82.84,
-        low: 36.16,
-        close: 45.72,
-      },
-      { time: "2018-12-23", open: 45.12, high: 53.9, low: 45.12, close: 48.09 },
-      {
-        time: "2018-12-24",
-        open: 60.71,
-        high: 60.71,
-        low: 53.39,
-        close: 59.29,
-      },
-      { time: "2018-12-25", open: 68.26, high: 68.26, low: 59.04, close: 60.5 },
-      {
-        time: "2018-12-26",
-        open: 67.71,
-        high: 105.85,
-        low: 66.67,
-        close: 91.04,
-      },
-      { time: "2018-12-27", open: 91.04, high: 121.4, low: 82.7, close: 111.4 },
-      {
-        time: "2018-12-28",
-        open: 111.51,
-        high: 142.83,
-        low: 103.34,
-        close: 131.25,
-      },
-      {
-        time: "2018-12-29",
-        open: 131.33,
-        high: 151.17,
-        low: 77.68,
-        close: 96.43,
-      },
-      {
-        time: "2018-12-30",
-        open: 106.33,
-        high: 110.2,
-        low: 90.39,
-        close: 98.1,
-      },
-      {
-        time: "2018-12-31",
-        open: 109.87,
-        high: 114.69,
-        low: 85.66,
-        close: 111.26,
-      },
-    ]);
+    actualSeries.setData(actualCandles);
 
+    // 3. Add your predicted series (no last‐value label so it won't override)
+    const predictedSeries = chart.addSeries(CandlestickSeries, {
+      upColor: "rgba(255, 219, 72, 0.2)",
+      downColor: "rgba(255, 219, 72, 0.2)",
+      borderColor: "rgba(255, 219, 72, 1)",
+      wickUpColor: "rgba(255, 219, 72, 1)",
+      wickDownColor: "rgba(255, 219, 72, 1)",
+      borderVisible: true,
+      priceLineVisible: true, // hide the price‐line for this series
+      lastValueVisible: true, // and hide its last‐value label
+    });
+
+    predictedSeries.setData(predictedCandles);
     window.addEventListener("resize", handleResize);
 
     return () => {
@@ -112,17 +141,28 @@ const PreditNextCandle = (props: any) => {
       chart.remove();
     };
   }, [
-    data,
-    backgroundColor,
-    lineColor,
-    textColor,
-    areaTopColor,
-    areaBottomColor,
+    // volume,
+    // colors,
   ]);
 
   return (
-    <div className="w-full h-full">
-      <div ref={chartContainerRef} className="w-full h-full" />
+    <div className="w-full  bg-[#1A1D23] backdrop-blur-sm p-4 rounded-lg">
+
+        <div className="flex items-start justify-between mb-2 gap-2 ">
+          <div className="flex flex-col gap-1">
+            <h4 className="text-white font-medium text-md">BTCUSDT</h4>
+            <div className="flex items-center gap-2">
+              <p className="text-xs text-gray-400 border border-border px-2 py-1 rounded-md">Predicted Price: 10000</p>
+              <p className="text-xs text-gray-400 border border-border px-2 py-1 rounded-md">Interval: 1D</p>
+              <p className="text-xs text-gray-400 border border-border px-2 py-1 rounded-md">Confidence: 100%</p>
+            </div>
+          </div>
+        </div>
+
+     <div className="w-full h-full pt-4">
+     <div ref={chartContainerRef} className="w-full h-full rounded-lg border border-border " />
+     </div>
+
     </div>
   );
 };

@@ -61,7 +61,6 @@ export const useThreadsStore = create<ThreadsState>()(
             return { threads: [] };
           }
 
-          console.log('updates', updates);
           const originalMessagesMap = new Map(state.threads.map(thread => [thread._id, thread.messages]));
 
 

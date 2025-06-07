@@ -51,13 +51,6 @@ function ThreadStarter({ agentData }: Props) {
 
   return (
     <div className="flex flex-col h-screen bg-background">
-      <ThreadHeader agent={agentData} />
-
-      <div
-        className={`flex-1 flex flex-col w-[70%] mx-auto justify-between
-                     py-4 gap-4 h-[calc(100vh-4rem)] overflow-hidden`}
-      >
-
 
 
         <AgentView
@@ -91,7 +84,7 @@ function ThreadStarter({ agentData }: Props) {
             placeholder="Ask whatever you want..."
           />
         </motion.div>
-      </div>
+
     </div>
   );
 }

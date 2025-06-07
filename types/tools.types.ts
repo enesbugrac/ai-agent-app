@@ -66,4 +66,38 @@ type CoinMetadataType = {
 
 export type SwapTool = ToolJson<SwapMetadata>;
 
-export type PossibleToolJson = ArbitrageScanTool | SwapTool;
+type Candle = {
+  open: number;
+  high: number;
+  low: number;
+  close: number;
+  volume: number;
+  timestamp: number;
+};
+
+type CandlePrediction = {
+  symbol: string;
+  interval: string;
+  candles: Candle[];
+  prediction: {
+    direction: 'up' | 'down' | 'neutral';
+    confidence: number;
+    open: number;
+    high: number;
+    low: number;
+    close: number;
+  };
+};
+
+export type PreditNextCandleMetadata = {
+  type: 'candle-prediction';
+  prediction: CandlePrediction;
+};
+
+export type PreditNextCandleTool = ToolJson<PreditNextCandleMetadata>;
+
+export type PossibleToolJson = ArbitrageScanTool | SwapTool | PreditNextCandleTool;
+
+
+
+

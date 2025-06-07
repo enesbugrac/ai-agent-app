@@ -45,7 +45,6 @@ export default function WalletSidebar({ isOpen, onClose }: WalletSidebarProps) {
     const currentWallet =
       activeTab === "solana" ? solanaEmbeddedWallet : evmEmbeddedWallet;
     if (!currentWallet) return false;
-    console.log(privyUser.linkedAccounts);
 
     return privyUser.linkedAccounts.some(
       (account) =>

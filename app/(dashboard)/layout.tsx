@@ -1,74 +1,75 @@
 "use client";
 
-import PageHeader from "@/components/page/PageHeader";
+import { useMemo } from "react";
+import { useParams, usePathname } from "next/navigation";
+
 import Sidebar from "@/components/Sidebar";
-import { useAuthCache } from "@/hooks/auth.hooks";
-import { useParams, usePathname, useRouter } from "next/navigation";
-import { mainMenu } from "@/data/menuItems";
-import { FaTasks } from "react-icons/fa";
-import Page from "@/components/page/Page";
+import PageHeader from "@/components/page/PageHeader";
 import PageBody from "@/components/page/PageBody";
 import MobileContainer from "@/components/page/mobile/MobileContainer";
+import { mainMenu } from "@/data/menuItems";
 import { agents } from "@/data/agents";
-
-import { useMemo } from "react";
 import { useThreadQueryAsync } from "@/hooks/queries/thread.query";
 
-export default function DashboardLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-
-  const params = useParams();
-  const idParam = params.id as string | undefined;
+  const { id } = useParams();
   const { thread } = useThreadQueryAsync();
 
-  const getFirstPathSegment = (path: string): string | null => {
-    const segments = path.split("/").filter(Boolean);
-    return segments.length > 0 ? segments[0] : null;
-  };
+  // Extract the first segment of the pathname (e.g. /dashboard, /thread, etc.)
+  const firstPath = useMemo(() => {
+    const segment = pathname.split("/").filter(Boolean)[0];
+    return segment ? `/${segment}` : null;
+  }, [pathname]);
 
-  const currentMenuItem = mainMenu.find(
-    (item) => item.path === getFirstPathSegment(pathname)
-  );
+  const currentMenuItem = useMemo(() => {
+    return mainMenu.find((item) => item.path === firstPath);
+  }, [firstPath]);
 
-  const agent = useMemo(() => {
-    return agents.find((a) => a.id === thread?.agent);
+  const threadAgent = useMemo(() => {
+    return agents.find((agent) => agent.id === thread?.agent);
   }, [thread]);
 
-  const threadTitle = agent?.name || "Thread";
+  // Check if the route is an agent-specific page and extract agent info
+  const isAgentPage = useMemo(() => pathname.startsWith("/agent/"), [pathname]);
+  const agentFromPath = useMemo(() => {
+    if (!isAgentPage) return null;
+    const agentId = pathname.split("/")[2];
+    return agents.find((agent) => agent.id === agentId);
+  }, [pathname, isAgentPage]);
+
+  // Header logic
+  const headerProps = useMemo(() => {
+    if (currentMenuItem && !isAgentPage && firstPath !== "/thread") {
+      return {
+        title: currentMenuItem.name,
+        icon: currentMenuItem.icon,
+      };
+    }
+
+    const agentData = isAgentPage ? agentFromPath : threadAgent;
+    return {
+      title: agentData?.name || "Thread",
+      logo: agentData?.logo,
+      subTitle: agentData?.subTitle,
+    };
+  }, [currentMenuItem, threadAgent, agentFromPath, isAgentPage, firstPath]);
 
   return (
-    <div className="flex w-[100vw] ">
+    <div className="flex w-full">
       {/* Desktop */}
-      <div className="hidden md:flex w-full h-[100vh]">
+      <div className="hidden md:flex w-full h-screen">
         <Sidebar />
         <div className="w-[80%] flex-col h-full items-center justify-items-center">
-        {currentMenuItem?.path != "thread" ? (
-          <PageHeader
-            title={currentMenuItem?.name || "Dashboard"}
-            icon={currentMenuItem?.icon}
-          />
-        ) : (
-          <PageHeader
-            title={threadTitle}
-            logo={agent?.logo}
-            subTitle={agent?.subTitle}
-          />
-        )}
-
+          <PageHeader {...headerProps} />
           <PageBody>{children}</PageBody>
-
         </div>
- 
       </div>
 
       {/* Mobile */}
       <div className="md:hidden w-full">
         <MobileContainer />
-        <div className="w-full h-[calc(100vh-64px)] px-6"> 
+        <div className="w-full h-[calc(100vh-64px)] px-6">
           {children}
         </div>
       </div>
