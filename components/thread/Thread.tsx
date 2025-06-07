@@ -13,7 +13,7 @@ import ChatInput from "./ChatInput";
 import { useAuthStore } from "@/store/useStore"; // Import the store
 
 function Thread({}) {
-  const { input, setInput } = useInput();
+
   const { user } = useAuthCache();
   const { decreaseCredit } = useAuthStore(); // Get the decreaseCredit function from the store
   const { thread, isLoading } = useThreadQueryAsync();
@@ -22,11 +22,6 @@ function Thread({}) {
 
   const messages = thread?.messages;
 
-  // TODO: agents and assitances should be fetched from BE and stored on zuztang
-  // Find from zuztang
-  const agent = useMemo(() => {
-    return agents.find((a) => a.id === thread?.agent);
-  }, [thread]);
 
   const handleSend = async (messageContent: string) => {
     // Check credits using the user object from useAuth (or potentially useAuthStore if preferred)
@@ -34,8 +29,6 @@ function Thread({}) {
 
     // Decrease credit using the function from the store
     decreaseCredit();
-
-    setInput("");
     addMessageToThreadAsync(messageContent);
   };
 
@@ -55,15 +48,11 @@ function Thread({}) {
           isMessageWaiting={isMessageWaiting}
         />
 
-
           <ChatInput
-            value={input}
-            onChange={setInput}
-            onSend={() => handleSend(input)}
+            onSend={handleSend}
             isSending={isMessageWaiting}
             placeholder="Ask whatever you want..."
           />
-
       </>
 
   );

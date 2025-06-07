@@ -5,11 +5,10 @@ import { useAuthStore } from '@/store/useStore';
 import { useModalStore } from '@/store/modalStore'; 
 import WhitelistForm from '@/components/whitelist/WhitelistForm';
 import SuccessMessage from '@/components/common/SuccessMessage';
+import { useInput } from '@/hooks/input.hooks';
 
 type ChatInputProps = {
-  value: string;
-  onChange: (value: string) => void;
-  onSend: () => void;
+  onSend: (input:string) => void;
   isSending: boolean;
   placeholder?: string;
   inputContainerRef?: React.RefObject<HTMLDivElement | null>; 
@@ -18,8 +17,6 @@ type ChatInputProps = {
 };
 
 const ChatInput: React.FC<ChatInputProps> = ({
-  value,
-  onChange,
   onSend,
   isSending,
   placeholder = "Ask whatever you want...",
@@ -27,9 +24,12 @@ const ChatInput: React.FC<ChatInputProps> = ({
   minRows = 2,
   maxRows = 10,
 }) => {
+  const { input, setInput } = useInput();
 
   const { user } = useAuthStore();
-  const { openModal } = useModalStore(); // Get openModal function
+  const { openModal } = useModalStore();
+  
+  // Get openModal function
 
   const handleSend = () => {
     if (user?.credits === 0) {
@@ -51,12 +51,13 @@ const ChatInput: React.FC<ChatInputProps> = ({
         />
       ); 
     } else {
-      onSend(); 
+      onSend(input); 
+      setInput("");
     }
   };
    
   const handleKeyPress = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === 'Enter' && !e.shiftKey && !isSending && value.trim()) {
+    if (e.key === 'Enter' && !e.shiftKey && !isSending && input.trim()) {
       e.preventDefault();
       handleSend(); 
     }
@@ -68,8 +69,8 @@ const ChatInput: React.FC<ChatInputProps> = ({
       className=" flex flex-col items-end justify-between bg-[#1A1D23] rounded-2xl shadow-sm w-full transition-transform duration-300 p-4 my-2" 
     >
       <TextareaAutosize
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
         onKeyPress={handleKeyPress}
         minRows={minRows}
         maxRows={maxRows}
@@ -82,10 +83,10 @@ const ChatInput: React.FC<ChatInputProps> = ({
         </div>
 
       <button
-          disabled={isSending || !value.trim()} 
+          disabled={isSending || !input.trim()} 
           onClick={handleSend}
           className={`w-8 h-8 rounded-lg bg-primary text-background hover:bg-primary/90 transition-all flex items-center justify-center ${
-            (isSending || !value.trim()) ? "opacity-50 cursor-not-allowed" : ""
+            (isSending || !input.trim()) ? "opacity-50 cursor-not-allowed" : ""
           }`}
         >
           <IoSend className="text-md" />

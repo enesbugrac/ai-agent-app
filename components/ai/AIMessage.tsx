@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import ArbitrageScanUI from "./generativeUi/ArbitrageScanUI";
 import SwapUI from "./generativeUi/SwapUI";
 import { ThreadMessage } from "@/types/thread.types";
@@ -23,7 +23,7 @@ const AIMessage: React.FC<AIMessageProps> = ({ message }) => {
 
   console.log("message", message);
 
-  const renderAgentUi = () => {
+  const ageintUi = useMemo(()=>{
     if (!toolJson) return null;
 
 
@@ -37,7 +37,7 @@ const AIMessage: React.FC<AIMessageProps> = ({ message }) => {
       case "candle-prediction":
         return <PreditNextCandle toolData={metadata as PreditNextCandleMetadata} />;
     }
-  };
+  },[metadata])
 
   const agent = agents.find((agent) => agent.type === toolType);
 
@@ -50,7 +50,7 @@ const AIMessage: React.FC<AIMessageProps> = ({ message }) => {
         </div>
         <span className="ml-3 text-white font-medium text-sm">{agent?.name}</span>
       </div>
-      {toolJson?.isUi && <div className="ai-agent-tool-ui mt-2">{renderAgentUi()}</div>}
+      {toolJson?.isUi && <div className="ai-agent-tool-ui mt-2">{ageintUi}</div>}
 
       <div className="text-secondary mb-4 text-sm">
         <ReactMarkdown
