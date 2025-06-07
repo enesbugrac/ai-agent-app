@@ -45,13 +45,15 @@ const PreditNextCandle: React.FC<PreditNextCandleProps> = ({ toolData }) => {
   }));
   
 
+
+  console.log('prediction',prediction)
   
   const lastTimestamp = actualCandles[actualCandles.length - 1].time as number;
   const predictedTime = (lastTimestamp + getIntervalMilliseconds(interval) / 1000) as Time;
-  
+
   const predictedCandles = [
     {
-        time: predictedTime as Time,
+      time: predictedTime as Time,
       open,
       high,
       low,

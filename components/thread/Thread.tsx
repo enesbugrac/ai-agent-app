@@ -24,6 +24,7 @@ function Thread({}) {
 
 
   const handleSend = async (messageContent: string) => {
+    console.log('[handleSend]', messageContent)
     // Check credits using the user object from useAuth (or potentially useAuthStore if preferred)
     if (!messageContent.trim() || !(user?.credits ?? 0 > 0)) return;
 

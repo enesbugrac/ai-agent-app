@@ -51,6 +51,7 @@ const ChatInput: React.FC<ChatInputProps> = ({
         />
       ); 
     } else {
+      console.log(input, onSend)
       onSend(input); 
       setInput("");
     }

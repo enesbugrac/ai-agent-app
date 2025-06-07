@@ -77,9 +77,8 @@ function ThreadStarter({ agentData }: Props) {
           transition={{ duration: 0.5, ease: "easeOut" }}
         >
           <ChatInput
-            value={input}
-            onChange={setInput}
-            onSend={() => addNewThread(input)}
+           
+            onSend={addNewThread}
             isSending={isThreadCreating}
             placeholder="Ask whatever you want..."
           />
