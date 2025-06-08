@@ -50,9 +50,7 @@ function ThreadStarter({ agentData }: Props) {
   };
 
   return (
-    <div className="flex flex-col h-screen bg-background">
-
-
+    <>
         <AgentView
           agent={agentData}
           onPromptClick={addNewThread}
@@ -77,14 +75,13 @@ function ThreadStarter({ agentData }: Props) {
           transition={{ duration: 0.5, ease: "easeOut" }}
         >
           <ChatInput
-           
             onSend={addNewThread}
             isSending={isThreadCreating}
             placeholder="Ask whatever you want..."
           />
         </motion.div>
 
-    </div>
+    </>
   );
 }
 

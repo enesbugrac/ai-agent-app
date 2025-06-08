@@ -148,7 +148,7 @@ const Sidebar = () => {
       {/* Sidebar for desktop and mobile */}
       <aside
         className={`
-          z-30  h-full bg-background flex flex-col transition-all duration-300 border-r border-border
+          z-30  h-screen bg-background flex flex-col transition-all duration-300 border-r border-border
           w-[20%] 
           ${isMobileSidebarOpen ? "translate-x-0" : "-translate-x-full"} md:translate-x-0
            md:block
@@ -156,9 +156,9 @@ const Sidebar = () => {
         style={{ minWidth: "220px" }}
       >
         {/* Sidebar scrollable content for mobile */}
-        <div className="flex flex-col h-full z-[100] relative overflow-y-auto">
+        <div className="flex flex-col h-full z-[100] relative ">
           {/* Logo */}
-          <div className="flex-none">
+          <div className="flex">
             <Link
               href="/terminal"
               className="h-16 flex items-center px-4 border-b border-border cursor-pointer"
@@ -167,13 +167,13 @@ const Sidebar = () => {
             </Link>
           </div>
           {/* Main Menu */}
-          <div className="flex flex-col h-full bg-background-overlay flex-1">
+          <div className="flex flex-col h-full h-max-screen bg-background-overlay">
             {/* Fixed Main Nav */}
             <nav className="flex-none px-2 py-2 space-y-2">
               {mainMenu.map(renderMenuItem)}
             </nav>
             {/* Scrollable Threads */}
-            <div className="flex-1 overflow-y-auto max-h-[300px] overflow-x-hidden scrollbar-thin">
+            <div className="flex flex-col max-h-[60vh] overflow-y-auto  overflow-x-hidden scrollbar-thin">
               {todayThreads?.length > 0 && (
                 <div className="px-2 space-y-0.5">
                   <div className="px-3 py-2 text-[10px] font-medium text-white/60 uppercase tracking-wider">
@@ -191,13 +191,13 @@ const Sidebar = () => {
                 </div>
               )}
             </div>
-          </div>
-          {/* Fixed Bottom Menu */}
-          <div className="flex-none p-2 space-y-0.5 border-t border-border">
-            {bottomMenu.map(renderMenuItem)}
-            {/* User Profile */}
 
+               {/* Fixed Bottom Menu */}
+          <div className="p-2 space-y-0.5 border-t border-border">
+            {bottomMenu.map(renderMenuItem)}
           </div>
+          </div>
+       
         </div>
       </aside>
       {/* Overlay for mobile when sidebar is open */}
