@@ -18,7 +18,6 @@ export const useThreadQueryAsync = () => {
 
   const fetchThreadAsync = async () => {
     try {
-      console.log("fetching thread id", threadId);
       if (!threadId) {
         console.error("Thread ID is required");
         return;
@@ -40,7 +39,6 @@ export const useThreadQueryAsync = () => {
 
 
   useEffect(() => {
-    console.log("fetching thread");
     fetchThreadAsync();
 
     return () => {

@@ -33,32 +33,32 @@ const VisionAndMission = () => {
   return (
     <div
       ref={sectionRef}
-      className="w-full min-h-[100vh] flex flex-col items-center justify-center gap-10 relative px-4 font-syne"
+      className="w-full md:min-h-[100vh] flex flex-col items-center justify-center gap-10 relative px-4 font-syne p-6 md:p-0"
     >
-      <div className="w-full max-w-7xl flex flex-col gap-16">
+      <div className="w-full h-full max-w-7xl flex flex-col md:gap-16 gap-6">
         <h1
-          className={`text-white text-9xl tracking-wide font-bold ${
+          className={`text-white md:text-9xl text-4xl tracking-wide font-bold ${
             inView ? "animate__animated animate__slideInLeft" : "opacity-0"
           }`}
         >
           Vision and Mission
         </h1>
 
-        <div ref={cardsRef} className="w-full grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div ref={cardsRef} className="w-full grid grid-cols-1 md:grid-cols-2 md:gap-6 gap-4">
           {items.map((item, index) => (
             <div
               key={index}
-              className={`w-full h-[500px] gradient-background rounded-xl p-8 flex flex-col justify-between ${
+              className={`w-full md:h-[500px] h-[450px] gradient-background rounded-xl p-8 flex flex-col justify-between ${
                 cardsInView ? "animate__animated animate__zoomIn" : ""
               }`}
             >
               <div>
-                <h2 className="text-white text-4xl font-semibold mb-4">{item.title}</h2>
-                <p className="text-gray-300 text-lg leading-relaxed">
+                <h2 className="text-white md:text-4xl text-2xl font-semibold mb-4">{item.title}</h2>
+                <p className="text-gray-300 md:text-lg text-base leading-relaxed">
                   {item.description}
                 </p>
               </div>
-              <button className="mt-6 self-start bg-[#FFDB48] text-black font-medium px-5 py-2 rounded-lg hover:opacity-90 transition">
+              <button className="mt-2 md:mt-6 self-start bg-[#FFDB48] text-black font-medium px-5 py-2 rounded-lg hover:opacity-90 transition">
                 {item.buttonText}
               </button>
             </div>

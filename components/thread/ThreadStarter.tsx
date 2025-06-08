@@ -50,16 +50,7 @@ function ThreadStarter({ agentData }: Props) {
   };
 
   return (
-    <div className="flex flex-col h-screen bg-background">
-      <ThreadHeader agent={agentData} />
-
-      <div
-        className={`flex-1 flex flex-col w-[70%] mx-auto justify-between
-                     py-4 gap-4 h-[calc(100vh-4rem)] overflow-hidden`}
-      >
-
-
-
+    <>
         <AgentView
           agent={agentData}
           onPromptClick={addNewThread}
@@ -84,15 +75,13 @@ function ThreadStarter({ agentData }: Props) {
           transition={{ duration: 0.5, ease: "easeOut" }}
         >
           <ChatInput
-            value={input}
-            onChange={setInput}
-            onSend={() => addNewThread(input)}
+            onSend={addNewThread}
             isSending={isThreadCreating}
             placeholder="Ask whatever you want..."
           />
         </motion.div>
-      </div>
-    </div>
+
+    </>
   );
 }
 

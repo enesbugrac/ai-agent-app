@@ -1,13 +1,15 @@
-import React from "react";
+import React, { useMemo } from "react";
 import ArbitrageScanUI from "./generativeUi/ArbitrageScanUI";
 import SwapUI from "./generativeUi/SwapUI";
 import { ThreadMessage } from "@/types/thread.types";
-import { ArbitrageScanMetadata, SwapMetadata } from "@/types/tools.types";
+import { ArbitrageScanMetadata, PreditNextCandleMetadata, SwapMetadata } from "@/types/tools.types";
 
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
+import { agents } from "@/data/agents";
+import PreditNextCandle from "./generativeUi/PreditNextCandle";
 
 type AIMessageProps = {
   message: ThreadMessage;
@@ -16,12 +18,14 @@ type AIMessageProps = {
 const AIMessage: React.FC<AIMessageProps> = ({ message }) => {
   const { toolJson } = message;
   const { content } = message;
+  const metadata = toolJson?.metadata;
+  const toolType = metadata?.type;
 
-  const renderAgentUi = () => {
+  console.log("message", message);
+
+  const ageintUi = useMemo(()=>{
     if (!toolJson) return null;
 
-    const metadata = toolJson.metadata;
-    const toolType = metadata.type;
 
     switch (toolType) {
       case "arbitrage-scan":
@@ -30,20 +34,25 @@ const AIMessage: React.FC<AIMessageProps> = ({ message }) => {
         return <SwapUI toolData={metadata as SwapMetadata} />;
       case "odos-swap":
         return <SwapUI toolData={metadata as SwapMetadata} />;
+      case "candle-prediction":
+        return <PreditNextCandle toolData={metadata as PreditNextCandleMetadata} />;
     }
-  };
+  },[metadata])
+
+  const agent = agents.find((agent) => agent.type === toolType);
+
 
   return (
     <div className="message-component rounded-lg  w-full">
       <div className="flex items-center mb-4">
-        <div className="h-8 w-8 rounded-full bg-primary flex items-center justify-center text-black font-bold">
-          A
+        <div className="h-8 w-8 rounded-full  flex items-center justify-center text-black font-bold">
+          <img src={agent?.logo} alt={agent?.name} className="w-full h-full object-fill" />
         </div>
-        <span className="ml-3 text-white font-medium">AI Agent</span>
+        <span className="ml-3 text-white font-medium text-sm">{agent?.name}</span>
       </div>
-      {toolJson?.isUi && <div className="ai-agent-tool-ui mt-2">{renderAgentUi()}</div>}
+      {toolJson?.isUi && <div className="ai-agent-tool-ui mt-2">{ageintUi}</div>}
 
-      <div className="text-secondary mb-4">
+      <div className="text-secondary mb-4 text-sm">
         <ReactMarkdown
           remarkPlugins={[remarkGfm]}
           components={{

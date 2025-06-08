@@ -45,7 +45,6 @@ export default function WalletSidebar({ isOpen, onClose }: WalletSidebarProps) {
     const currentWallet =
       activeTab === "solana" ? solanaEmbeddedWallet : evmEmbeddedWallet;
     if (!currentWallet) return false;
-    console.log(privyUser.linkedAccounts);
 
     return privyUser.linkedAccounts.some(
       (account) =>
@@ -109,7 +108,9 @@ export default function WalletSidebar({ isOpen, onClose }: WalletSidebarProps) {
                   <FaWallet className="text-primary" /> Wallet
                 </h2>
                 <button
-                  onClick={onClose}
+                  onClick={()=>{
+                    console.log("clicked")
+                    onClose()}}
                   className="text-secondary hover:text-primary transition-colors"
                 >
                   <FaTimes />

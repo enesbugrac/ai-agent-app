@@ -149,27 +149,7 @@ export default function AccountPage() {
   ];
 
   return (
-    <div className="flex flex-col h-full bg-background">
-      {/* Header */}
-      <div className="h-16 bg-background-overlay/50 border-b border-border/50 backdrop-blur-sm px-6 flex items-center justify-between">
-        <h1 className="text-primary font-medium text-sm">Account Settings</h1>
-        {/* {user?.wallet && (
-          <a
-            href={`https://solscan.io/account/${user.wallet.address}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-secondary hover:text-primary text-xs flex items-center gap-1.5 transition-colors"
-          >
-            View on Explorer
-            <FaExternalLinkAlt className="text-[10px]" />
-          </a>
-        )} */}
-      </div>
-
-      {/* Main Content */}
-      <div className="flex-1 pt-3.5 overflow-y-auto">
-        <div className="max-w-3xl mx-auto space-y-8">
-          {/* Wallet Section */}
+    <div className="flex flex-col gap-4 w-full py-6">
           {user?.wallet && (
             <div className="space-y-4">
               <div>
@@ -226,8 +206,6 @@ export default function AccountPage() {
               ))}
             </div>
           </div>
-        </div>
-      </div>
     </div>
   );
 }

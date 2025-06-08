@@ -32,8 +32,8 @@ const ArbitrageScanUI: React.FC<ArbitrageScanUIProps> = ({ toolData }) => {
   return (
 
       <div className="w-full  bg-[#1A1D23] backdrop-blur-sm p-4 rounded-lg border border-border mb-4">
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-medium text-white flex items-center gap-2">
+        <div className="hidden md:flex items-center justify-between mb-4">
+          <h3 className="text-md font-medium text-white flex items-center gap-2">
             <FaChartLine className="text-primary" />
             Arbitrage Opportunities
           </h3>
@@ -52,7 +52,7 @@ const ArbitrageScanUI: React.FC<ArbitrageScanUIProps> = ({ toolData }) => {
               <div key={index} className="border-t border-slate-700 pt-4 first:border-t-0 first:pt-0">
                 <div className="flex items-center justify-between mb-3">
                   <div>
-                    <h4 className="text-white font-medium">{result.cryptoSymbol}</h4>
+                    <h4 className="text-white font-medium text-md">{result.cryptoSymbol}</h4>
                     <p className="text-xs text-gray-400">
                       Avg. Price: {result.averagePrice ? formatCurrency(result.averagePrice) : 'N/A'}
                     </p>
@@ -90,12 +90,12 @@ const ArbitrageScanUI: React.FC<ArbitrageScanUIProps> = ({ toolData }) => {
                             >
                               <td className="p-2 flex items-center gap-1">
                                 <FaExchangeAlt className="text-xs text-gray-500" />
-                                <span className="text-white">{opportunity.exchange}</span>
+                                <span className="text-white text-sm">{opportunity.exchange}</span>
                               </td>
-                              <td className="p-2 text-right text-white">
+                              <td className="p-2 text-right text-white text-sm">
                                 {formatCurrency(opportunity.price)}
                               </td>
-                              <td className={`p-2 text-right font-medium ${getPercentageColor(opportunity.differenceFromAveragePercentage)}`}>
+                              <td className={`p-2 text-right font-medium text-sm ${getPercentageColor(opportunity.differenceFromAveragePercentage)}`}>
                                 {formatPercentage(opportunity.differenceFromAveragePercentage)}
                               </td>
                             </tr>

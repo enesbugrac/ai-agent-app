@@ -33,13 +33,13 @@ const Header = () => {
         <div
           className={`flex flex-col items-center justify-center gap-6 text-center transition-all duration-700`}
         >
-          <p className="z-50 text-lg text-secondary">Your AI-Powered Task Force:</p>
-          <h1 className="z-50 text-[clamp(2rem,calc(2rem+2*((100vw-23.4375rem)/66.5625)),4rem)] font-semibold text-white leading-[1.1]">
+          <p className="z-50 md:text-lg text-md text-secondary">Your AI-Powered Task Force:</p>
+          <h1 className="z-50 md:text-[clamp(2rem,calc(2rem+2*((100vw-23.4375rem)/66.5625)),4rem)] text-2xl font-semibold text-white leading-[1.1]">
             Effortlessly Solve Problems,
             <br />
             Automate Work, and Get Results.
           </h1>
-          <p className="z-50 text-lg text-secondary max-w-2xl mx-auto">
+          <p className="z-50 text-md md:text-lg text-secondary max-w-2xl mx-auto">
             From swapping crypto to managing projects, our specialized AI agents handle
             the heavy lifting. Just ask, and watch it happen—smarter, faster, and
             hassle-free.

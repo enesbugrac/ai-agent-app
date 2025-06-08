@@ -1,4 +1,4 @@
-import { FaUser, FaEnvelope, FaFileAlt, FaCode, FaExchangeAlt, FaChartLine, FaWallet, FaCoins, FaSearch, FaHandHoldingUsd } from "react-icons/fa";
+import { FaUser, FaEnvelope, FaFileAlt, FaCode, FaExchangeAlt, FaChartLine, FaWallet, FaCoins, FaSearch, FaHandHoldingUsd, FaChartBar, FaChartArea, FaClock } from "react-icons/fa";
 import { IconType } from "react-icons";
 import { Agent } from "./agents";
 
@@ -82,6 +82,24 @@ export const agentPrompts: Record<Agent, Prompt[]> = {
       text: "What's the slippage for swapping 100 BUSD to CAKE?",
     },
   ],
+  [Agent.CANDLE_PREDICTION_AGENT]: [
+    {
+    icon: FaChartLine,
+    text: "Predict the next 1h candle for BTC"
+    },
+    {
+    icon: FaClock,
+    text: "What’s the next candle direction for ETH on a 15m timeframe?"
+    },
+    {
+    icon: FaChartArea,
+    text: "Forecast the following 4h candle for ADA"
+    },
+    {
+    icon: FaChartBar,
+    text: "Analyze and predict the next daily candle for DOGE"
+    }
+    ]
 };
 
 // For backward compatibility

@@ -38,7 +38,7 @@ const Navbar = ({ login }: NavbarProps) => {
 
   return (
     <nav
-      className={`z-40 fixed top-3 left-0 right-0 h-16 flex justify-between items-center px-4 max-w-7xl rounded-lg mx-auto transition-all duration-200 bg-[#13151a] border-[1px] border-border backdrop-blur-md shadow-md
+      className={`z-40 fixed md:top-3 top-0 left-0 right-0 h-16 flex justify-between items-center px-4 max-w-7xl md:rounded-lg mx-auto transition-all duration-200 bg-[#13151a] border-[1px] border-border backdrop-blur-md shadow-md
       `}
     >
       <div className=" flex-1 hidden md:flex items-center gap-8">

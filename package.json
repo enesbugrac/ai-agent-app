@@ -22,6 +22,8 @@
     "canvas-confetti": "^1.9.3",
     "ethers": "^6.9.2",
     "framer-motion": "^12.5.0",
+    "lightweight-charts": "^5.0.7",
+    "luxon": "^3.6.1",
     "next": "15.1.7",
     "react": "^19.0.0",
     "react-confetti": "^6.4.0",

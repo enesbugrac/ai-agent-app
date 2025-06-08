@@ -1,7 +1,10 @@
 import React from "react";
+import { IconType } from "react-icons";
+import Account from "../account-menu/Account";
 
 interface PageHeaderProps {
-  icon?: React.ReactNode | null;
+  icon?: IconType | null;
+  logo?: string | null;
   title?: string | React.ReactNode | null;
   subTitle?: string | React.ReactNode | null;
   className?: string;
@@ -9,17 +12,21 @@ interface PageHeaderProps {
 
 const PageHeader = ({
   icon = null,
+  logo = null,
   title,
   subTitle,
   className,
 }: PageHeaderProps) => {
+  const Icon = icon;
+
   return (
     <div
-      className={`fixed top-0 right-0 z-10 w-[80%] h-16 bg-background  border-b border-border  pl-6 pr-[10%] flex items-center justify-between ${className}`}
+      className={`w-full z-10 h-16 bg-background  border-b border-border  px-6 flex items-center justify-between ${className}`}
     >
       <div className="flex items-center gap-3">
         <div className="rounded bg-background flex items-center justify-center">
-          {icon}
+          {logo && <img src={logo} alt="logo" className="w-10 h-10" />}
+          {Icon && <Icon className="text-primary text-lg" />}
         </div>
 
         <div>
@@ -27,6 +34,7 @@ const PageHeader = ({
           <span className="text-secondary text-xs">{subTitle}</span>
         </div>
       </div>
+        <Account />
     </div>
   );
 };

@@ -1,20 +1,27 @@
-import { IoSparkles } from "react-icons/io5";
+"use client"
 import AgentCard from "@/components/AgentCard";
 import { agents } from "@/data/agents";
-import PageHeader from "@/components/page/PageHeader";
-import PageBody from "@/components/page/PageBody";
-import Page from "@/components/page/Page";
-
+import Logo from "@/components/Logo";
+import { useState } from "react";
 export default function SpecialAgents() {
-  return (
-  <Page>
-      <PageHeader
-        icon={<IoSparkles className="text-primary text-lg" />}
-        title="Special Agents"
-      />
 
-      {/* Main Content */}
-      <PageBody className="gap-4">
+  const [showAgents, setShowAgents] = useState(true);
+  
+  const WaitPage = () => {
+    return (
+      <div className="gap-4 h-full  justify-center">
+        <div className="w-full h-full flex flex-col items-center justify-center gap-4">
+          <Logo/>
+          <p className="text-secondary">
+            Keep following to get more agents with different capabilities.
+          </p>
+        </div>
+      </div>
+    )
+  }
+  return (
+  < >
+   { showAgents ? <div className="flex flex-col gap-4 h-full  justify-center">
         <div className="w-full flex items-center justify-between">
           <div>
             <h2 className="text-2xl font-medium text-white mb-2">
@@ -35,7 +42,7 @@ export default function SpecialAgents() {
           </div>
         </div>
 
-        {/* Filter Bar */}
+
         <div className="w-full flex items-center gap-4 p-4 bg-[#1A1D23] rounded-xl border border-border">
           <input
             type="text"
@@ -50,20 +57,20 @@ export default function SpecialAgents() {
           </button>
         </div>
 
-        {/* Agent Cards Grid */}
         <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {agents.map((agent) => (
             <AgentCard
               key={agent.name}
               id={agent.id}
               name={agent.name}
+              subTitle={agent.subTitle}
               description={agent.description}
               type={agent.type}
               logo={agent.logo}
             />
           ))}
         </div>
-      </PageBody>
-    </Page>
+      </div> : <WaitPage />}
+    </>
   );
 }

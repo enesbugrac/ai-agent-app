@@ -126,6 +126,7 @@ const AnimatedLayout = () => {
                 name={agent.name}
                 type={agent.type}
                 logo={agent.logo}
+                clickable={false}
               />
             </motion.div>
           ))}

@@ -19,6 +19,7 @@
     --color-background: #13151a;
     --color-background-card: rgba(19, 21, 26, 0.95);
     --color-background-overlay: rgba(19, 21, 26, 0.5);
+    --color-background-highlight: rgba(255, 219, 72, 0.1);
 
     /* Text Colors */
     --color-text-primary: #ffffff;
@@ -122,6 +123,15 @@ body {
 
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
+}
+
+.scrollbar-auto {
+  -ms-overflow-style: auto;
+  scrollbar-width: auto;
+}
+
+.scrollbar-auto::-webkit-scrollbar {
+  display: block;
 }
 
 /* Smooth transitions */
@@ -460,3 +470,24 @@ button:focus {
   background: var(--color-primary);
 }
 
+
+.ant-dropdown-menu-item:hover{
+  color: var(--color-text-primary) !important;
+  background: var(--color-background-highlight) !important;
+}
+
+.ant-dropdown-menu-item-divider{
+  background: rgba(136, 136, 136, 0.2) !important;
+}
+
+.ant-drawer-content-wrapper{
+  background: var(--color-background) !important;
+}
+
+.ant-drawer-header{
+  border-bottom: 1px solid var(--color-border) !important;
+}
+
+.ant-drawer-close{
+  color: var(--color-text-primary) !important;
+}

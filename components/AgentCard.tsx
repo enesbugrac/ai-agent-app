@@ -5,6 +5,11 @@ import { Tooltip } from "antd";
 import AgentDescription from "./AgentDescription"; // Renamed import
 import { AgentData } from "@/data/agents";
 
+interface AgentCardProps extends AgentData {
+  className?: string;
+  clickable?: boolean;
+}
+
 export default function AgentCard({
   id,
   name,
@@ -12,18 +17,17 @@ export default function AgentCard({
   description,
   logo,
   actions,
-}: AgentData) {
-  return (
-    <Link href={`/agent/${id}`} className="block group h-[200px] relative ">
-      <div className="z-40 bg-background p-4 rounded-lg border border-border shadow-lg backdrop-blur-sm h-full  transition-all duration-300">
+  className,
+  clickable = true,
+}: AgentCardProps) {
+  const content = (
+    <div className="z-40 bg-background p-4 rounded-lg border border-border shadow-lg backdrop-blur-sm h-full  transition-all duration-300">
         <div className="flex  gap-3 mb-4 border-b border-border   pb-4">
-          <div className="rounded bg-background flex items-center justify-center  border border-border">
-            <Image
+          <div className="w-10 h-10 rounded bg-background flex items-center justify-center  border border-border">
+            <img
               src={logo || ""}
               alt=""
-              width={40}
-              height={40}
-              className="rounded-lg"
+              className="rounded-lg w-full h-full object-cover"
             />
           </div>
 
@@ -67,6 +71,15 @@ export default function AgentCard({
           {description}
         </div>
       </div>
+  );
+
+  return clickable ? (
+    <Link href={`/agent/${id}`} className={`block group h-[200px] relative ${className} cursor-pointer`}>
+      {content}
     </Link>
+  ) : (
+    <div className={`block group h-[200px] relative ${className} cursor-default`}>
+      {content}
+    </div>
   );
 }
