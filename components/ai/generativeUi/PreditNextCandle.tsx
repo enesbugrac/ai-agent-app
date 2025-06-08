@@ -8,9 +8,16 @@ import {
 } from "lightweight-charts";
 import React, { useEffect, useRef, useState } from "react";
 import { PreditNextCandleMetadata } from "@/types/tools.types";
+import { DateTime } from 'luxon';
 
 interface PreditNextCandleProps {
   toolData: PreditNextCandleMetadata;
+}
+
+const getFormattedCandleTime = (time?:number)=>{
+  console.log('time',DateTime.fromMillis(time).toFormat('yyyy-MM-dd'))
+ return time
+     
 }
 
 const getIntervalMilliseconds = (interval: string): number => {
@@ -36,9 +43,11 @@ const PreditNextCandle: React.FC<PreditNextCandleProps> = ({ toolData }) => {
     time: candle.time  as Time, // ✅ pure number, not wrapped in { timestamp }
     value: candle.volume,
   }));
+
+  console.log('candles',candles.map(c=>c.time))
   
-  const actualCandles = candles.map(({ time, open, high, low, close }) => ({
-    time: new Date(time).toISOString().split(".")[0], // ✅ pure number, not wrapped in { timestamp }
+  const actualCandles = candles.map(({ time,timestamp,  open, high, low, close }) => ({
+    time: getFormattedCandleTime(time ?? timestamp) ,// ✅ pure number, not wrapped in { timestamp }
     open,
     high,
     low,
@@ -49,12 +58,12 @@ const PreditNextCandle: React.FC<PreditNextCandleProps> = ({ toolData }) => {
 
   console.log('prediction',prediction)
   
-  const lastTimestamp = candles[candles.length - 1].time ;
+  const lastTimestamp = candles[candles.length - 1].time??candles[candles.length - 1].timestamp ;
   const predictedTime = (lastTimestamp + getIntervalMilliseconds(interval) / 1000);
 
   const predictedCandles = [
     {
-      time: new Date(predictedTime).toISOString().split(".")[0],
+      time: getFormattedCandleTime(predictedTime),
       open,
       high,
       low,

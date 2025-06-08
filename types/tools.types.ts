@@ -73,6 +73,7 @@ type Candle = {
   close: number;
   volume: number;
   time: number;
+  timestamp?:number
 };
 
 type CandlePrediction = {
