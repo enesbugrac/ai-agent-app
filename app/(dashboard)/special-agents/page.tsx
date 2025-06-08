@@ -1,10 +1,6 @@
 "use client"
-import { IoSparkles } from "react-icons/io5";
 import AgentCard from "@/components/AgentCard";
 import { agents } from "@/data/agents";
-import PageHeader from "@/components/page/PageHeader";
-import PageBody from "@/components/page/PageBody";
-import Page from "@/components/page/Page";
 import Logo from "@/components/Logo";
 import { useState } from "react";
 export default function SpecialAgents() {
@@ -25,12 +21,6 @@ export default function SpecialAgents() {
   }
   return (
   < >
-      {/* <PageHeader
-        icon={<IoSparkles className="text-primary text-lg" />}
-        title="Special Agents"
-      /> */}
-
-
    { showAgents ? <div className="flex flex-col gap-4 h-full  justify-center">
         <div className="w-full flex items-center justify-between">
           <div>
@@ -67,13 +57,13 @@ export default function SpecialAgents() {
           </button>
         </div>
 
-
         <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {agents.map((agent) => (
             <AgentCard
               key={agent.name}
               id={agent.id}
               name={agent.name}
+              subTitle={agent.subTitle}
               description={agent.description}
               type={agent.type}
               logo={agent.logo}

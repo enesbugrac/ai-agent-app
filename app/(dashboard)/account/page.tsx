@@ -149,8 +149,8 @@ export default function AccountPage() {
   ];
 
   return (
-    <div className="flex flex-col bg-red-500 overflow-y-auto">
-          {/* {user?.wallet && (
+    <div className="flex flex-col gap-4 w-full py-6">
+          {user?.wallet && (
             <div className="space-y-4">
               <div>
                 <h2 className="text-lg font-medium text-white">Your Wallet</h2>
@@ -185,10 +185,10 @@ export default function AccountPage() {
                 </div>
               </div>
             </div>
-          )} */}
+          )}
 
           {/* Connected Accounts */}
-          {/* <div className="space-y-4">
+          <div className="space-y-4">
             <div>
               <h2 className="text-lg font-medium text-white">Connected Accounts</h2>
               <p className="text-secondary text-xs mt-1">
@@ -205,7 +205,7 @@ export default function AccountPage() {
                 />
               ))}
             </div>
-          </div> */}
+          </div>
     </div>
   );
 }

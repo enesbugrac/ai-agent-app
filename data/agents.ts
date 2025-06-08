@@ -96,6 +96,10 @@ export const agentActions: AgentActionsMap = {
       title: 'Predict Candle',
       description: 'Predict the direction of a candle based on the previous candles.',
     },
+    {
+      title: 'Get Candle',
+      description: 'Get the previous candles.',
+    },
   ],
 };
 
@@ -106,7 +110,7 @@ export const agents: AgentData[] = [
     subTitle: "Arbitrage Assistant",
     description: "Finds price differences for a selected token across platforms and helps you execute profitable trades with speed and precision.",
     type: "arbitrage-scan",
-    logo: "/agentLogos/arbitrage.jpeg",
+    logo: "/agentLogos/arbitra.jpeg",
     actions: agentActions[Agent.ARBITRAGE_ASSISTANT] || []
   },
   {
@@ -115,7 +119,7 @@ export const agents: AgentData[] = [
     subTitle: "Jupiter Swap Assistant",
     description: "Performs optimized swaps on the Solana Network using Jupiter protocol.",
     type: "jupiter-swap",
-    logo: "/agentLogos/jupiter-logo.webp",
+    logo: "/agentLogos/juvex.png",
     actions: agentActions[Agent.JUPITER_SWAP_ASSISTANT] || []
   },
   {
@@ -124,12 +128,12 @@ export const agents: AgentData[] = [
     subTitle: "Odos Swap Assistant",
     description: "Executes efficient swaps on the BSC Network via the Odos protocol.",
     type: "odos-swap",
-    logo: "/agentLogos/odos-logo.png",
+    logo: "/agentLogos/oden.jpeg",
     actions: agentActions[Agent.ODO_SWAP_ASSISTANT] || []
   },
    {
     id: Agent.CANDLE_PREDICTION_AGENT,
-    name: "Candle Prediction",
+    name: "Predix",
     subTitle: "Candle Prediction Agent",
     description: "Predicts the direction of a candle based on the previous candles.",
     type: "candle-prediction",
@@ -164,4 +168,12 @@ export const landingAgents: LandingAgents[] = [
     opacity: 0,
     img: "agent"
   },
+  {
+    ...agents[3],
+    translate: { x: 0, y: 0, z: 150 },
+    rotate: { x: 13, y: 0, z: 0 },
+    scale: 1,
+    opacity: 0,
+    img: "agent"
+  }
 ];

@@ -25,7 +25,7 @@ export const mainMenu: MenuItem[] = [
       icon: IoSparkles,
       badge: "Coming Soon",
       path: "/special-agents",
-      active: true,
+      active: false,
     },
     // {
     //   name: "Thread",

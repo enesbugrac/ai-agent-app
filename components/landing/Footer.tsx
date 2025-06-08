@@ -8,9 +8,7 @@ const Footer = () => {
       title: "Navigation",
       links: [
         { href: "/", label: "Home" },
-        { href: "/technology", label: "Technology" },
         { href: "/about", label: "About" },
-        { href: "/careers", label: "Careers" },
         { href: "/contacts", label: "Contacts" },
       ],
       isLinkType: true,
@@ -30,19 +28,19 @@ const Footer = () => {
     },
   ];
   return (
-    <footer className="w-full relative flex flex-col items-center justify-center  pt-8 overflow-hidden mt-12">
+    <footer className="w-full relative flex flex-col items-center justify-center  md:pt-8 overflow-hidden mt-12 p-6 md:p-0">
       {/* <Image src={landingPageBackground} alt="footer-bg" className=" w-full h-full object-cover object-top" /> */}
-      <Logo
+      {/* <Logo
         withText={false}
         className="absolute -top-[23%] right-[12%] opacity-20"
         width={500}
         height={500}
-      />
+      /> */}
 
       <div className="w-full max-w-7xl flex flex-col h-[70vh]">
         <div
           id="footer-links"
-          className="w-[50%] flex flex-1 flex-col md:flex-row justify-between gap-10 "
+          className="md:w-[50%] w-full flex flex-1 flex-row flex-wrap justify-between gap-10 "
         >
           {footerData.map((section, index) => (
             <div key={index} className="flex flex-col gap-6">
@@ -69,7 +67,7 @@ const Footer = () => {
           ))}
         </div>
 
-        <h1 className="w-full  text-white text-[14rem] font-syne tracking-[7.2rem] font-bold ">
+        <h1 className="w-full  text-white text-[6rem] md:text-[14rem]  font-syne md:tracking-[7.2rem] font-bold ">
           AIGEN
         </h1>
 

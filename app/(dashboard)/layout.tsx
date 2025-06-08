@@ -1,20 +1,95 @@
 "use client";
-
 import { useMemo } from "react";
-import { useParams, usePathname } from "next/navigation";
+import { usePathname } from "next/navigation";
 
 import Sidebar from "@/components/Sidebar";
 import PageHeader from "@/components/page/PageHeader";
 import PageBody from "@/components/page/PageBody";
-import MobileContainer from "@/components/page/mobile/MobileContainer";
 import { mainMenu } from "@/data/menuItems";
+import { FaHome, FaTasks, FaBook, FaComments, FaUser } from "react-icons/fa";
+import { IoHeart, IoSparkles } from "react-icons/io5";
+import { MenuItem } from "@/data/menuItems";
 import { agents } from "@/data/agents";
 import { useThreadQueryAsync } from "@/hooks/queries/thread.query";
+import MobileSidebar from "@/components/page/mobile/MobileSidebar";
+import MobileHeader from "@/components/page/mobile/MobileHeader";
 
-export default function DashboardLayout({ children }: { children: React.ReactNode }) {
+export default function DashboardLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const pathname = usePathname();
-  const { id } = useParams();
   const { thread } = useThreadQueryAsync();
+
+  // Mobile-specific menu items (same as in MobileSidebar)
+  const mobileMenu: MenuItem[] = [
+    { name: "Terminal", icon: FaHome, path: "/terminal", active: true },
+    {
+      name: "Tasks",
+      icon: FaTasks,
+      path: "/tasks",
+      active: true,
+    },
+    {
+      name: "Special Agents",
+      icon: IoSparkles,
+      badge: "Coming Soon",
+      path: "/special-agents",
+      active: false,
+    },
+    {
+      name: "Favorites",
+      icon: IoHeart,
+      badge: "Coming Soon",
+      path: "/favorites",
+      active: false,
+    },
+    {
+        name: "Documentation",
+        icon: FaBook,
+        path: "https://aigen-3.gitbook.io/aigen-lab",
+        active: true,
+    }
+  ];
+
+  const pages = [
+    {
+      name: "Terminal",
+      icon: FaHome,
+      path: "/terminal",
+    },
+    {
+      name: "Tasks",
+      icon: FaTasks,
+      path: "/tasks",
+    },
+    {
+      name: "Special Agents",
+      icon: IoSparkles,
+      path: "/special-agents",
+    },
+    {
+      name: "Favorites",
+      icon: IoHeart,
+      path: "/favorites",
+    },
+    {
+      name: "Documentation",
+      icon: FaBook,
+      path: "https://aigen-3.gitbook.io/aigen-lab",
+    },
+    {
+      name: "Thread",
+      icon: FaComments,
+      path: "/thread",
+    },
+    {
+      name: "Account",
+      icon: FaUser,
+      path: "/account",
+    },
+  ];
 
   // Extract the first segment of the pathname (e.g. /dashboard, /thread, etc.)
   const firstPath = useMemo(() => {
@@ -23,7 +98,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   }, [pathname]);
 
   const currentMenuItem = useMemo(() => {
-    return mainMenu.find((item) => item.path === firstPath);
+    return pages.find((item) => item.path === firstPath);
   }, [firstPath]);
 
   const threadAgent = useMemo(() => {
@@ -38,7 +113,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     return agents.find((agent) => agent.id === agentId);
   }, [pathname, isAgentPage]);
 
-  // Header logic
+  // Header logic for desktop
   const headerProps = useMemo(() => {
     if (currentMenuItem && !isAgentPage && firstPath !== "/thread") {
       return {
@@ -55,6 +130,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     };
   }, [currentMenuItem, threadAgent, agentFromPath, isAgentPage, firstPath]);
 
+  // Header logic for mobile
+
   return (
     <div className="flex w-full">
       {/* Desktop */}
@@ -68,10 +145,11 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
       {/* Mobile */}
       <div className="md:hidden w-full">
-        <MobileContainer />
-        <div className="w-full h-[calc(100vh-64px)] px-6">
-          {children}
-        </div>
+        <MobileHeader 
+         {...headerProps}
+        />
+        <MobileSidebar />
+        <div className="w-full h-[100vh] px-4 pt-[calc(64px+1rem)] pb-1">{children}</div>
       </div>
     </div>
   );

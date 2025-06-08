@@ -1,33 +1,42 @@
-import React, { useMemo } from "react";
-import { Button, Drawer } from "antd";
+import React, { useMemo, useState } from "react";
+import { ConfigProvider, Drawer, Dropdown, MenuProps, ThemeConfig } from "antd";
 import { useMobileSidebarStore } from "../../../store/mobileBasedOperation";
 import Logo from "@/components/Logo";
 import Link from "next/link";
 
 import { MdClose } from "react-icons/md";
-import { FaBook, FaTasks } from "react-icons/fa";
+import { FaBook, FaCheck, FaCopy, FaSignOutAlt, FaTasks, FaUser, FaWallet } from "react-icons/fa";
 import { MenuItem } from "@/data/menuItems";
 import { FaHome } from "react-icons/fa";
 import { IoHeart, IoSparkles } from "react-icons/io5";
 import { usePathname } from "next/navigation";
 import { useThreadsStore } from "@/store/useThreadsStore";
 import { BsChatDots } from "react-icons/bs";
-import { isToday } from "@/utils/date";
-import Account from "@/components/account-menu/Account";
-import { useAuthCache } from "@/hooks/auth.hooks";
+import { useAuthCache, useAuthMutations    } from "@/hooks/auth.hooks";
 import { MdOutlineMoreHoriz } from "react-icons/md";
+import { colors } from "@/tailwind.config";
+import WalletButton from "@/components/wallet/WalletButton";
+import { IoMdSettings } from "react-icons/io";
 
 const MobileSidebar = () => {
   const { user } = useAuthCache();
-
-  const { open, setOpen, loading, setLoading } = useMobileSidebarStore();
+  const { logout } = useAuthMutations();
+  const { open, setOpen, loading } = useMobileSidebarStore();
   const walletAddress = user?.privyData?.wallet?.address ?? "Anonymous";
   const formattedWalletAddress = useMemo(() => {
     if (!walletAddress) return "Anonymous";
     return `${walletAddress.slice(0, 10)}...${walletAddress.slice(-4)}`;
   }, [walletAddress]);
 
-
+  const [isCopied, setIsCopied] = useState(false);
+  const handleCopyAddress = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    navigator.clipboard.writeText(walletAddress || "");
+    setIsCopied(true);
+    setTimeout(() => {
+      setIsCopied(false);
+    }, 1000);
+  };
   const mainMenu: MenuItem[] = [
     { name: "Terminal", icon: FaHome, path: "/terminal", active: true },
     {
@@ -138,6 +147,52 @@ const MobileSidebar = () => {
     [threads]
   );
 
+  const customTheme: ThemeConfig = {
+    components: {
+      Dropdown: {
+        colorBgElevated: colors.background.DEFAULT,
+        colorText: colors.text.primary,
+      },
+    },
+  };
+
+  const items: MenuProps["items"] = [
+    {
+      key: "address",
+      label: <div className="flex items-center gap-2" onClick={handleCopyAddress}>
+        <span className="">
+
+          {walletAddress
+            ? `${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}`
+            : "Anonymous"}
+        </span>
+      </div>,
+      icon: isCopied ? <FaCheck color={colors.text.tertiary}/> : <FaCopy />,
+    },
+    {
+      type: "divider",
+    },
+    {
+      key: "profile",
+      label: <Link href="/account">Profile</Link>,
+      icon: <FaUser />,
+      onClick: () => {
+        setOpen(false);
+      }
+    },
+    {
+      key: "settings",
+      label: "Settings",
+      icon: <IoMdSettings />,
+      onClick: () => {
+        setOpen(false);
+      }
+    },
+    {key: "logout", label: "Logout", icon: <FaSignOutAlt />, onClick: () => {
+      logout();
+    }},
+  ];    
+
   return (
     <Drawer
       closable={false}
@@ -168,7 +223,17 @@ const MobileSidebar = () => {
 
      <div className="absolute bottom-0 left-0 right-0 bg-background h-[72px] px-6 flex items-center justify-between border-t border-border">
      {formattedWalletAddress}
-     <MdOutlineMoreHoriz className="text-primary" size={24} />
+     <ConfigProvider theme={customTheme}>
+      <Dropdown
+        menu={{ items }}
+        placement="topLeft"
+         rootClassName="border rounded-md bg-background"
+         overlayClassName="bg-background"
+      >
+             <MdOutlineMoreHoriz className="text-primary" size={24} />
+
+      </Dropdown>
+      </ConfigProvider>
      </div>
     </Drawer>
   );

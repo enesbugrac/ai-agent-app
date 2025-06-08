@@ -48,7 +48,7 @@ const TypingText = ({ text }: TypingTextProps) => {
   return (
     <motion.div
       ref={textRef}
-      className="relative text-white text-4xl font-syne leading-[1.3] tracking-wide min-w-full min-h-[250px]"
+      className="relative text-white md:text-4xl text-2xl font-syne leading-[1.3] tracking-wide min-w-full min-h-[250px]"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}

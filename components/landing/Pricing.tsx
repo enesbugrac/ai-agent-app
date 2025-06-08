@@ -16,31 +16,38 @@ const Pricing = () => {
   return (
     <section
       id="pricing"
-      className="w-full h-[100vh] flex flex-col items-center justify-center gap-10 relative"
+      className="w-full md:h-[100vh] flex flex-col items-center justify-center gap-10 relative p-6 md:p-0"
     >
-      <div className="w-full max-w-7xl flex flex-col gap-16">
+      <div className="w-full h-full max-w-7xl flex flex-col justify-center md:gap-16 gap-6">
         <h1
           ref={pricingTitleRef}
-          className={`text-white text-9xl font-syne tracking-wide font-bold line-clamp-1 ${
-            pricingTitleInView ? "animate__animated animate__fadeInLeft" : "opacity-0"
+          className={`text-white md:text-9xl text-4xl font-syne tracking-wide font-bold md:line-clamp-1 ${
+            pricingTitleInView
+              ? "animate__animated animate__fadeInLeft"
+              : "opacity-0"
           }`}
         >
           Pricing
         </h1>
 
-        <div ref={pricingCardsRef} className="w-full flex flex-wrap justify-between">
+        <div
+          ref={pricingCardsRef}
+          className="w-full flex flex-col md:flex-row flex-wrap justify-between"
+        >
           <div
             id="free-credits"
-            className={`group bg-primary rounded-xl p-6 w-[calc(25%-0.5rem)] min-h-[350px] flex flex-col justify-between font-syne cursor-pointer transition-opacity duration-500 ${
-              pricingCardsInView ? "animate__animated animate__bounceInLeft" : "opacity-0"
+            className={`group bg-primary rounded-xl p-6 md:w-[calc(25%-0.5rem)] w-full min-h-[350px] flex flex-col justify-between font-syne cursor-pointer transition-opacity duration-500 ${
+              pricingCardsInView
+                ? "animate__animated animate__bounceInLeft"
+                : "opacity-0"
             }`}
           >
-            <span className="text-black/70 group-hover:text-black transition-colors duration-300 text-4xl font-medium">
+            <span className="text-black/70 group-hover:text-black transition-colors duration-300 md:text-4xl text-2xl font-medium">
               Free
             </span>
 
             <div className="flex flex-col justify-center gap-2">
-              <h2 className="text-black group-hover:text-black transition-colors duration-300 text-[10rem]">
+              <h2 className="text-black group-hover:text-black transition-colors duration-300 text-[10rem] ">
                 15
               </h2>
               <p className="text-black/70 group-hover:text-black transition-colors duration-300 text-xl">
@@ -51,22 +58,22 @@ const Pricing = () => {
 
           <div
             id="fixed-price"
-            className={`group gradient-background hover:bg-primary transition-all duration-300 rounded-xl p-6 w-[75%] min-h-[350px] flex flex-col justify-between relative overflow-hidden font-syne cursor-pointer ${
+            className={`group gradient-background hover:bg-primary rounded-xl p-6 md:w-[75%] w-full min-h-[350px] flex flex-col justify-between font-syne cursor-pointer transition-opacity duration-500 ${
               pricingCardsInView
                 ? "animate__animated animate__bounceInRight"
                 : "opacity-0"
             }`}
           >
-            <span className="text-white/70 group-hover:text-black transition-colors duration-300 text-4xl font-medium line-clamp-1">
+            <span className="text-white/70 group-hover:text-black transition-colors duration-300 md:text-4xl text-2xl font-medium">
               Fixed price
             </span>
 
             <div className="flex flex-col justify-center gap-2">
-              <h2 className="text-white group-hover:text-black transition-colors duration-300 text-[10rem]">
+              <h2 className="text-white group-hover:text-black transition-colors duration-300 text-[3rem] md:text-[10rem]">
                 $10 - 1000 cr
               </h2>
               <p className="text-white/70 group-hover:text-black transition-colors duration-300 text-xl">
-                buy as many credits as you need
+              buy as many credits as you need
               </p>
             </div>
           </div>

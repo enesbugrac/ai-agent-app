@@ -4,6 +4,7 @@ import {
   ColorType,
   CandlestickSeries,
   Time,
+  UTCTimestamp,
 } from "lightweight-charts";
 import React, { useEffect, useRef, useState } from "react";
 import { PreditNextCandleMetadata } from "@/types/tools.types";
@@ -32,12 +33,12 @@ const PreditNextCandle: React.FC<PreditNextCandleProps> = ({ toolData }) => {
   const { prediction } = toolData;
   const { candles, interval, prediction: { confidence, open, high, low, close } } = prediction;
   const volume = candles.map((candle) => ({
-    time: candle.timestamp  as Time, // ✅ pure number, not wrapped in { timestamp }
+    time: candle.time  as Time, // ✅ pure number, not wrapped in { timestamp }
     value: candle.volume,
   }));
   
-  const actualCandles = candles.map(({ timestamp, open, high, low, close }) => ({
-    time: timestamp as Time, // ✅ pure number, not wrapped in { timestamp }
+  const actualCandles = candles.map(({ time, open, high, low, close }) => ({
+    time: new Date(time).toISOString().split(".")[0], // ✅ pure number, not wrapped in { timestamp }
     open,
     high,
     low,
@@ -48,12 +49,12 @@ const PreditNextCandle: React.FC<PreditNextCandleProps> = ({ toolData }) => {
 
   console.log('prediction',prediction)
   
-  const lastTimestamp = actualCandles[actualCandles.length - 1].time as number;
-  const predictedTime = (lastTimestamp + getIntervalMilliseconds(interval) / 1000) as Time;
+  const lastTimestamp = candles[candles.length - 1].time ;
+  const predictedTime = (lastTimestamp + getIntervalMilliseconds(interval) / 1000);
 
   const predictedCandles = [
     {
-      time: predictedTime as Time,
+      time: new Date(predictedTime).toISOString().split(".")[0],
       open,
       high,
       low,
@@ -109,7 +110,7 @@ const PreditNextCandle: React.FC<PreditNextCandleProps> = ({ toolData }) => {
       topColor: colors.areaTopColor,
       bottomColor: colors.areaBottomColor,
     });
-    newSeries.setData(volume);
+    // newSeries.setData(volume);
 
     const actualSeries = chart.addSeries(CandlestickSeries, {
       upColor: "#26a69a",
@@ -152,11 +153,11 @@ const PreditNextCandle: React.FC<PreditNextCandleProps> = ({ toolData }) => {
 
         <div className="flex items-start justify-between mb-2 gap-2 ">
           <div className="flex flex-col gap-1">
-            <h4 className="text-white font-medium text-md">BTCUSDT</h4>
+            <h4 className="text-white font-medium text-md">{prediction.symbol}</h4>
             <div className="flex items-center gap-2">
-              <p className="text-xs text-gray-400 border border-border px-2 py-1 rounded-md">Predicted Price: 10000</p>
-              <p className="text-xs text-gray-400 border border-border px-2 py-1 rounded-md">Interval: 1D</p>
-              <p className="text-xs text-gray-400 border border-border px-2 py-1 rounded-md">Confidence: 100%</p>
+              <p className="text-xs text-gray-400 border border-border px-2 py-1 rounded-md">Predicted Price: {prediction.prediction.close}</p>
+              <p className="text-xs text-gray-400 border border-border px-2 py-1 rounded-md">Interval: {interval}</p>
+              <p className="text-xs text-gray-400 border border-border px-2 py-1 rounded-md">Confidence: {prediction.prediction.confidence}%</p>
             </div>
           </div>
         </div>

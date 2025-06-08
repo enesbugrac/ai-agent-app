@@ -1,13 +1,9 @@
 "use client";
 
-import Page from "@/components/page/Page";
-import PageHeader from "@/components/page/PageHeader";
-import PageBody from "@/components/page/PageBody";
 import React, { useState, useEffect } from "react";
 import PrimaryButton from "@/components/PrimaryButton";
 import { MdOutlineDone } from "react-icons/md";
 
-import { FaTasks } from "react-icons/fa";
 import { useTasksQuery } from "@/hooks/queries/tasks.query";
 import { useAuthStore } from "@/store/useStore";
 import { usePrivy, User } from "@privy-io/react-auth";

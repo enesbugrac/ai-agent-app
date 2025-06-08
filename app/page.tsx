@@ -3,6 +3,8 @@
 import { usePrivy } from "@privy-io/react-auth";
 
 import "animate.css/animate.min.css";
+import "animate.css";
+
 import Pricing from "@/components/landing/Pricing";
 import Navbar from "@/components/landing/Navbar";
 import AnimatedLayout from "@/components/landing/AnimatedLayout";
@@ -11,9 +13,14 @@ import VisionAndMission from "@/components/landing/VisionAndMission";
 import FeaturesSection from "@/components/landing/FeatureSection";
 import Header from "@/components/landing/Header";
 import Footer from "@/components/landing/Footer";
+import AgentsOnMobile from "@/components/landing/AgentsOnMobile";
+import { useEffect, useState } from "react";
+import useDeviceSize from "@/hooks/useDeviceSize";
 
 export default function Home() {
   const { login } = usePrivy();
+
+  const {isMobile} = useDeviceSize();
 
   return (
     <div className="min-h-screen bg-background overflow-x-hidden w-full">
@@ -21,7 +28,7 @@ export default function Home() {
         <Navbar login={login} />
         <Header />
         <DescriptionSection />
-        <AnimatedLayout />
+        {isMobile ? <AgentsOnMobile /> : <AnimatedLayout />}
         <FeaturesSection />
         <Pricing />
         <VisionAndMission />
