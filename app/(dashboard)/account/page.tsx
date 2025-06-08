@@ -150,62 +150,61 @@ export default function AccountPage() {
 
   return (
     <div className="flex flex-col gap-4 w-full py-6">
-          {user?.wallet && (
-            <div className="space-y-4">
-              <div>
-                <h2 className="text-lg font-medium text-white">Your Wallet</h2>
-                <p className="text-secondary text-xs mt-1">
-                  Manage your connected wallet and view transactions
-                </p>
+      {user?.wallet && (
+        <div className="space-y-4">
+          <div>
+            <h2 className="text-lg font-medium text-white">Your Wallet</h2>
+            <p className="text-secondary text-xs mt-1">
+              Manage your connected wallet and view transactions
+            </p>
+          </div>
+          <div className="bg-background/50 hover:bg-background-overlay rounded-lg border border-border/50 p-4 transition-all backdrop-blur-sm">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-lg bg-background-overlay flex items-center justify-center">
+                <FaWallet className="text-xl text-primary/80" />
               </div>
-              <div className="bg-background/50 hover:bg-background-overlay rounded-lg border border-border/50 p-4 transition-all backdrop-blur-sm">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-lg bg-background-overlay flex items-center justify-center">
-                    <FaWallet className="text-xl text-primary/80" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="text-white text-sm font-medium">Connected Wallet</div>
-                    <div className="text-secondary mt-1 flex items-center gap-2">
-                      <code className="bg-background/80 px-2 py-1 rounded text-xs font-mono truncate">
-                        {user.wallet.address}
-                      </code>
-                      <button
-                        onClick={handleCopyAddress}
-                        className="p-1.5 rounded hover:bg-background-overlay text-secondary hover:text-primary transition-colors"
-                        title="Copy address"
-                      >
-                        {copied ? (
-                          <FaCheck className="text-[10px]" />
-                        ) : (
-                          <FaCopy className="text-[10px]" />
-                        )}
-                      </button>
-                    </div>
-                  </div>
+              <div className="flex-1 min-w-0">
+                <div className="text-white text-sm font-medium">Connected Wallet</div>
+                <div className="text-secondary mt-1 flex items-center gap-2">
+                  <code className="bg-background/80 px-2 py-1 rounded text-xs font-mono truncate">
+                    {user.wallet.address}
+                  </code>
+                  <button
+                    onClick={handleCopyAddress}
+                    className="p-1.5 rounded hover:bg-background-overlay text-secondary hover:text-primary transition-colors"
+                    title="Copy address"
+                  >
+                    {copied ? (
+                      <FaCheck className="text-[10px]" />
+                    ) : (
+                      <FaCopy className="text-[10px]" />
+                    )}
+                  </button>
                 </div>
               </div>
             </div>
-          )}
-
-          {/* Connected Accounts */}
-          <div className="space-y-4">
-            <div>
-              <h2 className="text-lg font-medium text-white">Connected Accounts</h2>
-              <p className="text-secondary text-xs mt-1">
-                Link your accounts to enable additional features and seamless
-                authentication
-              </p>
-            </div>
-            <div className="grid grid-cols-1 gap-3">
-              {connectors.map((connector) => (
-                <ConnectorButton
-                  key={connector.name}
-                  {...connector}
-                  isLoading={loading === connector.name.toLowerCase()}
-                />
-              ))}
-            </div>
           </div>
+        </div>
+      )}
+
+      {/* Connected Accounts */}
+      <div className="space-y-4">
+        <div>
+          <h2 className="text-lg font-medium text-white">Connected Accounts</h2>
+          <p className="text-secondary text-xs mt-1">
+            Link your accounts to enable additional features and seamless authentication
+          </p>
+        </div>
+        <div className="grid grid-cols-1 gap-3">
+          {connectors.map((connector) => (
+            <ConnectorButton
+              key={connector.name}
+              {...connector}
+              isLoading={loading === connector.name.toLowerCase()}
+            />
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
