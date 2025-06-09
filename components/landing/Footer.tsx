@@ -1,5 +1,4 @@
 import React from "react";
-import Logo from "../Logo";
 import Link from "next/link";
 
 const Footer = () => {
@@ -44,9 +43,7 @@ const Footer = () => {
         >
           {footerData.map((section, index) => (
             <div key={index} className="flex flex-col gap-6">
-              <h3 className="text-secondary text-md font-medium ">
-                {section.title}
-              </h3>
+              <h3 className="text-secondary text-md font-medium ">{section.title}</h3>
               <ul className="flex flex-col gap-4">
                 {section.links.map((link, linkIndex) => (
                   <li key={linkIndex}>

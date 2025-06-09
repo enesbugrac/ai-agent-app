@@ -1,11 +1,6 @@
-import { agents } from "@/data/agents";
-import {
-  useThreadMutation,
-  useThreadQueryAsync,
-} from "@/hooks/queries/thread.query";
+import { useThreadMutation, useThreadQueryAsync } from "@/hooks/queries/thread.query";
 
-import React, { useMemo } from "react";
-import { useInput } from "@/hooks/input.hooks";
+import React from "react";
 import ThreadView from "@/components/thread/ThreadView";
 import { useAuthCache } from "@/hooks/auth.hooks";
 
@@ -13,7 +8,6 @@ import ChatInput from "./ChatInput";
 import { useAuthStore } from "@/store/useStore"; // Import the store
 
 function Thread({}) {
-
   const { user } = useAuthCache();
   const { decreaseCredit } = useAuthStore(); // Get the decreaseCredit function from the store
   const { thread, isLoading } = useThreadQueryAsync();
@@ -22,9 +16,8 @@ function Thread({}) {
 
   const messages = thread?.messages;
 
-
   const handleSend = async (messageContent: string) => {
-    console.log('[handleSend]', messageContent)
+    console.log("[handleSend]", messageContent);
     // Check credits using the user object from useAuth (or potentially useAuthStore if preferred)
     if (!messageContent.trim() || !(user?.credits ?? 0 > 0)) return;
 
@@ -34,28 +27,19 @@ function Thread({}) {
   };
 
   if (!isLoading && !thread) {
-    return (
-      <div className="flex flex-col h-screen bg-background">
-        Thread not found
-      </div>
-    );
+    return <div className="flex flex-col h-screen bg-background">Thread not found</div>;
   }
 
   return (
+    <>
+      <ThreadView messages={messages ?? []} isMessageWaiting={isMessageWaiting} />
 
-      <>
-        <ThreadView
-          messages={messages ?? []}
-          isMessageWaiting={isMessageWaiting}
-        />
-
-          <ChatInput
-            onSend={handleSend}
-            isSending={isMessageWaiting}
-            placeholder="Ask whatever you want..."
-          />
-      </>
-
+      <ChatInput
+        onSend={handleSend}
+        isSending={isMessageWaiting}
+        placeholder="Ask whatever you want..."
+      />
+    </>
   );
 }
 

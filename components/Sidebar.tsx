@@ -3,34 +3,15 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useRef, useEffect, useMemo } from "react";
-import { IconType } from "react-icons";
-import {
-  FaHome,
-  FaHistory,
-  FaQuestionCircle,
-  FaBook,
-  FaSignOutAlt,
-  FaUser,
-  FaTasks,
-  FaBars,
-  FaTimes,
-} from "react-icons/fa";
-import { IoSparkles } from "react-icons/io5";
+import { FaBook } from "react-icons/fa";
 import { BsChatDots } from "react-icons/bs";
 import { useThreadsStore } from "@/store/useThreadsStore";
 import { isToday } from "@/utils/date";
-import { useAuthCache, useAuthMutations } from "@/hooks/auth.hooks";
 import Logo from "./Logo";
 import { mainMenu, MenuItem } from "@/data/menuItems";
 
-
 const Sidebar = () => {
-  const [showUserMenu, setShowUserMenu] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
-  const { user } = useAuthCache();
-
-  const { logout } = useAuthMutations();
-  const walletAddress = user?.privyData?.wallet?.address;
 
   const pathname = usePathname();
   const threads = useThreadsStore((state) => state.threads);
@@ -68,7 +49,6 @@ const Sidebar = () => {
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        setShowUserMenu(false);
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
@@ -76,26 +56,26 @@ const Sidebar = () => {
   }, []);
 
   const bottomMenu: MenuItem[] = [
-
     { name: "Documentation", icon: FaBook, path: "https://aigen-3.gitbook.io/aigen-lab" },
-
   ];
 
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
   const renderMenuItem = (item: MenuItem, index: number) => {
     const isActive = item.active !== false;
     const isExternal = item.path?.startsWith("http");
-  
+
     const commonClass = `flex items-center justify-between px-3 h-12 rounded transition-all duration-200 relative group ${
       pathname === item.path
         ? "text-primary bg-primary/10 border border-primary/20"
         : "text-white/80 hover:text-primary hover:bg-background-highlight"
     } ${isActive ? "cursor-pointer" : "cursor-default opacity-60"}`;
-  
+
     const content = (
       <>
         <div className="flex items-center gap-3">
-          {item.icon && <item.icon className={`text-lg transition-colors duration-200`} />}
+          {item.icon && (
+            <item.icon className={`text-lg transition-colors duration-200`} />
+          )}
           <span className="text-sm overflow-hidden transition-all duration-200">
             {item.name}
           </span>
@@ -107,7 +87,7 @@ const Sidebar = () => {
         )}
       </>
     );
-  
+
     if (!isActive) {
       return (
         <div key={index + item.name} className={commonClass} title={item.name}>
@@ -115,7 +95,7 @@ const Sidebar = () => {
         </div>
       );
     }
-  
+
     if (isExternal) {
       return (
         <a
@@ -130,7 +110,7 @@ const Sidebar = () => {
         </a>
       );
     }
-  
+
     return (
       <Link
         key={index + item.name}
@@ -144,7 +124,6 @@ const Sidebar = () => {
   };
   return (
     <>
-   
       {/* Sidebar for desktop and mobile */}
       <aside
         className={`
@@ -192,12 +171,11 @@ const Sidebar = () => {
               )}
             </div>
 
-               {/* Fixed Bottom Menu */}
-          <div className="p-2 space-y-0.5 border-t border-border">
-            {bottomMenu.map(renderMenuItem)}
+            {/* Fixed Bottom Menu */}
+            <div className="p-2 space-y-0.5 border-t border-border">
+              {bottomMenu.map(renderMenuItem)}
+            </div>
           </div>
-          </div>
-       
         </div>
       </aside>
       {/* Overlay for mobile when sidebar is open */}

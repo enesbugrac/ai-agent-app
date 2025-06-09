@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import { Button } from "antd";
+import React, { useState } from "react";
 import { useMobileSidebarStore } from "../../../store/mobileBasedOperation";
 import { RiMenu2Line } from "react-icons/ri";
 import WalletButton from "@/components/wallet/WalletButton";
@@ -10,20 +9,26 @@ interface MobileHeaderProps {
   title: string;
   logo?: string;
   subTitle?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   icon?: React.ComponentType<any>;
 }
 
-const MobileHeader: React.FC<MobileHeaderProps> = ({ title, logo, subTitle, icon: Icon }) => {
+const MobileHeader: React.FC<MobileHeaderProps> = ({
+  title,
+  logo,
+  subTitle,
+  icon: Icon,
+}) => {
   const { setOpen, setLoading } = useMobileSidebarStore();
 
   const handleOpenDrawer = () => {
     setOpen(true);
-    setLoading(false); 
+    setLoading(false);
   };
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  const handleOpenSidebar = ()  => {
+  const handleOpenSidebar = () => {
     setIsSidebarOpen(true);
   };
 
@@ -38,17 +43,16 @@ const MobileHeader: React.FC<MobileHeaderProps> = ({ title, logo, subTitle, icon
         />
       </div>
       <div className="flex-1 flex  justify-center gap-3">
-        {logo && <img src={logo} alt="logo" className="w-10 h-10 rounded border border-border" />}
+        {logo && (
+          <img src={logo} alt="logo" className="w-10 h-10 rounded border border-border" />
+        )}
         {Icon && <Icon className="text-primary text-xl" />}
         <div className="text-left">
           <h1 className="text-primary text-sm font-medium">{title}</h1>
           {subTitle && <p className="text-secondary text-xs">{subTitle}</p>}
         </div>
       </div>
-      <div
-        className="flex items-center justify-end"
-        onClick={handleOpenSidebar}
-      >
+      <div className="flex items-center justify-end" onClick={handleOpenSidebar}>
         <WalletButton
           isSidebarOpen={isSidebarOpen}
           setIsSidebarOpen={setIsSidebarOpen}

@@ -1,14 +1,12 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 
-import { useInput } from "@/hooks/input.hooks";
 import { useThreadMutation } from "@/hooks/queries/thread.query";
 
 import { useRouter } from "next/navigation";
 import ThreadView from "@/components/thread/ThreadView";
 import { useAuthCache } from "@/hooks/auth.hooks";
 import { usePrivy } from "@privy-io/react-auth";
-import ThreadHeader from "./ThreadHeader";
 import ChatInput from "./ChatInput";
 import { useAuthStore } from "@/store/useStore";
 import { AgentData } from "@/data/agents";
@@ -19,12 +17,10 @@ type Props = {
 };
 
 function ThreadStarter({ agentData }: Props) {
-  const { input, setInput } = useInput();
   const { login } = usePrivy();
   const { user } = useAuthCache();
   const { decreaseCredit } = useAuthStore();
-  const { createThreadAsync, isThreadCreating, initialMessage } =
-    useThreadMutation();
+  const { createThreadAsync, isThreadCreating, initialMessage } = useThreadMutation();
   const [welcomeMessageDisappear, setWelcomeMessageDisappear] = useState(false);
   const [animateChatInputDown, setAnimateChatInputDown] = useState(false);
   const router = useRouter();
@@ -51,36 +47,34 @@ function ThreadStarter({ agentData }: Props) {
 
   return (
     <>
-        <AgentView
-          agent={agentData}
-          onPromptClick={addNewThread}
-          welcomeMessageDissapear={welcomeMessageDisappear}
+      <AgentView
+        agent={agentData}
+        onPromptClick={addNewThread}
+        welcomeMessageDissapear={welcomeMessageDisappear}
+      />
+
+      {isThreadCreating && (
+        <ThreadView
+          messages={initialMessage ? [initialMessage] : []}
+          isMessageWaiting={true}
         />
+      )}
 
-
-        {isThreadCreating && (
-          <ThreadView
-            messages={initialMessage ? [initialMessage] : []}
-            isMessageWaiting={true}
-          />
-        )}
-
-        <motion.div
-          className="w-full"
-          initial={{ y: "-18vh", opacity: 1 }}
-          animate={{
-            y: animateChatInputDown ? 0 : "-18vh",
-            opacity: 1
-          }}
-          transition={{ duration: 0.5, ease: "easeOut" }}
-        >
-          <ChatInput
-            onSend={addNewThread}
-            isSending={isThreadCreating}
-            placeholder="Ask whatever you want..."
-          />
-        </motion.div>
-
+      <motion.div
+        className="w-full"
+        initial={{ y: "-18vh", opacity: 1 }}
+        animate={{
+          y: animateChatInputDown ? 0 : "-18vh",
+          opacity: 1,
+        }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
+      >
+        <ChatInput
+          onSend={addNewThread}
+          isSending={isThreadCreating}
+          placeholder="Ask whatever you want..."
+        />
+      </motion.div>
     </>
   );
 }

@@ -5,53 +5,16 @@ import { usePathname } from "next/navigation";
 import Sidebar from "@/components/Sidebar";
 import PageHeader from "@/components/page/PageHeader";
 import PageBody from "@/components/page/PageBody";
-import { mainMenu } from "@/data/menuItems";
 import { FaHome, FaTasks, FaBook, FaComments, FaUser } from "react-icons/fa";
 import { IoHeart, IoSparkles } from "react-icons/io5";
-import { MenuItem } from "@/data/menuItems";
 import { agents } from "@/data/agents";
 import { useThreadQueryAsync } from "@/hooks/queries/thread.query";
 import MobileSidebar from "@/components/page/mobile/MobileSidebar";
 import MobileHeader from "@/components/page/mobile/MobileHeader";
 
-export default function DashboardLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const { thread } = useThreadQueryAsync();
-
-  // Mobile-specific menu items (same as in MobileSidebar)
-  const mobileMenu: MenuItem[] = [
-    { name: "Terminal", icon: FaHome, path: "/terminal", active: true },
-    {
-      name: "Tasks",
-      icon: FaTasks,
-      path: "/tasks",
-      active: true,
-    },
-    {
-      name: "Special Agents",
-      icon: IoSparkles,
-      badge: "Coming Soon",
-      path: "/special-agents",
-      active: false,
-    },
-    {
-      name: "Favorites",
-      icon: IoHeart,
-      badge: "Coming Soon",
-      path: "/favorites",
-      active: false,
-    },
-    {
-        name: "Documentation",
-        icon: FaBook,
-        path: "https://aigen-3.gitbook.io/aigen-lab",
-        active: true,
-    }
-  ];
 
   const pages = [
     {
@@ -145,9 +108,7 @@ export default function DashboardLayout({
 
       {/* Mobile */}
       <div className="md:hidden w-full">
-        <MobileHeader 
-         {...headerProps}
-        />
+        <MobileHeader {...headerProps} />
         <MobileSidebar />
         <div className="w-full h-[100vh] px-4 pt-[calc(64px+1rem)] pb-1">{children}</div>
       </div>

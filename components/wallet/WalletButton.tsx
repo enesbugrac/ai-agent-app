@@ -1,21 +1,26 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { FaWallet } from "react-icons/fa";
 import { motion } from "framer-motion";
-import WalletSidebar from "./WalletSidebar";
 import { IconBaseProps } from "react-icons";
-
 
 interface WalletButtonProps {
   isSidebarOpen: boolean;
   setIsSidebarOpen: (isSidebarOpen: boolean) => void;
   onlyIcon?: boolean;
   onlyText?: boolean;
-  iconProps?: IconBaseProps
+  iconProps?: IconBaseProps;
 }
 
-export default function WalletButton({ isSidebarOpen, setIsSidebarOpen, onlyIcon, onlyText, iconProps }: WalletButtonProps) {
+export default function WalletButton({
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  isSidebarOpen,
+  setIsSidebarOpen,
+  onlyIcon,
+  onlyText,
+  iconProps,
+}: WalletButtonProps) {
   return (
     <>
       <motion.button

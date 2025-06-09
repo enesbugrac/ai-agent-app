@@ -5,17 +5,16 @@ import Logo from "@/components/Logo";
 import Link from "next/link";
 
 import { MdClose } from "react-icons/md";
-import { FaBook, FaCheck, FaCopy, FaSignOutAlt, FaTasks, FaUser, FaWallet } from "react-icons/fa";
+import { FaBook, FaCheck, FaCopy, FaSignOutAlt, FaTasks, FaUser } from "react-icons/fa";
 import { MenuItem } from "@/data/menuItems";
 import { FaHome } from "react-icons/fa";
 import { IoHeart, IoSparkles } from "react-icons/io5";
 import { usePathname } from "next/navigation";
 import { useThreadsStore } from "@/store/useThreadsStore";
 import { BsChatDots } from "react-icons/bs";
-import { useAuthCache, useAuthMutations    } from "@/hooks/auth.hooks";
+import { useAuthCache, useAuthMutations } from "@/hooks/auth.hooks";
 import { MdOutlineMoreHoriz } from "react-icons/md";
 import { colors } from "@/tailwind.config";
-import WalletButton from "@/components/wallet/WalletButton";
 import { IoMdSettings } from "react-icons/io";
 
 const MobileSidebar = () => {
@@ -60,30 +59,31 @@ const MobileSidebar = () => {
       active: false,
     },
     {
-        name: "Documentation",
-        icon: FaBook,
-        path: "https://aigen-3.gitbook.io/aigen-lab",
-        active: true,
-    }
+      name: "Documentation",
+      icon: FaBook,
+      path: "https://aigen-3.gitbook.io/aigen-lab",
+      active: true,
+    },
   ];
 
   const pathname = usePathname();
 
-
   const renderMenuItem = (item: MenuItem, index: number) => {
     const isActive = item.active !== false;
     const isExternal = item.path?.startsWith("http");
-  
+
     const commonClass = `flex items-center justify-between px-3 h-12 rounded transition-all duration-200 relative group ${
       pathname === item.path
         ? "text-primary bg-primary/10 border border-primary/20"
         : "text-white/80 hover:text-primary hover:bg-background-highlight"
     } ${isActive ? "cursor-pointer" : "cursor-default opacity-60"}`;
-  
+
     const content = (
       <>
         <div className="flex items-center gap-3">
-          {item.icon && <item.icon className={`text-lg transition-colors duration-200`} />}
+          {item.icon && (
+            <item.icon className={`text-lg transition-colors duration-200`} />
+          )}
           <span className="text-sm overflow-hidden transition-all duration-200">
             {item.name}
           </span>
@@ -95,7 +95,7 @@ const MobileSidebar = () => {
         )}
       </>
     );
-  
+
     if (!isActive) {
       return (
         <div key={index + item.name} className={commonClass} title={item.name}>
@@ -103,7 +103,7 @@ const MobileSidebar = () => {
         </div>
       );
     }
-  
+
     if (isExternal) {
       return (
         <a
@@ -118,7 +118,7 @@ const MobileSidebar = () => {
         </a>
       );
     }
-  
+
     return (
       <Link
         key={index + item.name}
@@ -126,24 +126,21 @@ const MobileSidebar = () => {
         className={commonClass}
         title={item.name}
         onClick={() => setOpen(false)}
-
       >
         {content}
       </Link>
     );
   };
 
-
   const threads = useThreadsStore((state) => state.threads);
 
   const formattedThreads = useMemo(
     () =>
-      threads
-        .map((thread) => ({
-          name: thread?.name,
-          icon: BsChatDots,
-          path: `/thread/${thread._id}`,
-        })),
+      threads.map((thread) => ({
+        name: thread?.name,
+        icon: BsChatDots,
+        path: `/thread/${thread._id}`,
+      })),
     [threads]
   );
 
@@ -159,15 +156,16 @@ const MobileSidebar = () => {
   const items: MenuProps["items"] = [
     {
       key: "address",
-      label: <div className="flex items-center gap-2" onClick={handleCopyAddress}>
-        <span className="">
-
-          {walletAddress
-            ? `${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}`
-            : "Anonymous"}
-        </span>
-      </div>,
-      icon: isCopied ? <FaCheck color={colors.text.tertiary}/> : <FaCopy />,
+      label: (
+        <div className="flex items-center gap-2" onClick={handleCopyAddress}>
+          <span className="">
+            {walletAddress
+              ? `${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}`
+              : "Anonymous"}
+          </span>
+        </div>
+      ),
+      icon: isCopied ? <FaCheck color={colors.text.tertiary} /> : <FaCopy />,
     },
     {
       type: "divider",
@@ -178,7 +176,7 @@ const MobileSidebar = () => {
       icon: <FaUser />,
       onClick: () => {
         setOpen(false);
-      }
+      },
     },
     {
       key: "settings",
@@ -186,12 +184,17 @@ const MobileSidebar = () => {
       icon: <IoMdSettings />,
       onClick: () => {
         setOpen(false);
-      }
+      },
     },
-    {key: "logout", label: "Logout", icon: <FaSignOutAlt />, onClick: () => {
-      logout();
-    }},
-  ];    
+    {
+      key: "logout",
+      label: "Logout",
+      icon: <FaSignOutAlt />,
+      onClick: () => {
+        logout();
+      },
+    },
+  ];
 
   return (
     <Drawer
@@ -200,9 +203,12 @@ const MobileSidebar = () => {
       title={
         <div className="flex items-center justify-between">
           <Link href="/terminal" className="flex items-center  cursor-pointer">
-            <Logo width={40} height={40} textClassName="text-xl"/>
+            <Logo width={40} height={40} textClassName="text-xl" />
           </Link>
-          <button onClick={() => setOpen(false)} className="border border-border rounded-md p-1">
+          <button
+            onClick={() => setOpen(false)}
+            className="border border-border rounded-md p-1"
+          >
             <MdClose className="text-primary" size={24} />{" "}
           </button>
         </div>
@@ -211,30 +217,28 @@ const MobileSidebar = () => {
       open={open}
       loading={loading}
       onClose={() => setOpen(false)}
-      className="relative !bg-background !text-primary" 
+      className="relative !bg-background !text-primary"
     >
+      {mainMenu.map((item, index) => renderMenuItem(item, index))}
 
-        {mainMenu.map((item, index) => renderMenuItem(item, index))}
-
-     <div className="mt-4 overflow-y-auto">
+      <div className="mt-4 overflow-y-auto">
         <h1>Threads</h1>
         {formattedThreads.map((item, index) => renderMenuItem(item, index))}
-     </div>
+      </div>
 
-     <div className="absolute bottom-0 left-0 right-0 bg-background h-[72px] px-6 flex items-center justify-between border-t border-border">
-     {formattedWalletAddress}
-     <ConfigProvider theme={customTheme}>
-      <Dropdown
-        menu={{ items }}
-        placement="topLeft"
-         rootClassName="border rounded-md bg-background"
-         overlayClassName="bg-background"
-      >
-             <MdOutlineMoreHoriz className="text-primary" size={24} />
-
-      </Dropdown>
-      </ConfigProvider>
-     </div>
+      <div className="absolute bottom-0 left-0 right-0 bg-background h-[72px] px-6 flex items-center justify-between border-t border-border">
+        {formattedWalletAddress}
+        <ConfigProvider theme={customTheme}>
+          <Dropdown
+            menu={{ items }}
+            placement="topLeft"
+            rootClassName="border rounded-md bg-background"
+            overlayClassName="bg-background"
+          >
+            <MdOutlineMoreHoriz className="text-primary" size={24} />
+          </Dropdown>
+        </ConfigProvider>
+      </div>
     </Drawer>
   );
 };
