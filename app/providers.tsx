@@ -4,7 +4,6 @@ import LoadingAnimation from "@/components/loading/LoadingAnimation";
 import { useAuthAsync } from "@/hooks/auth.hooks";
 import { PrivyProvider } from "@privy-io/react-auth";
 import { toSolanaWalletConnectors } from "@privy-io/react-auth/solana";
-import { useEffect } from "react";
 import { bsc } from "viem/chains";
 
 const solanaConnectors = toSolanaWalletConnectors();
@@ -20,7 +19,6 @@ export function Providers({ children }: { children: React.ReactNode }) {
           logo: "https://i.imgur.com/oCSydNJ.png",
           walletChainType: "ethereum-and-solana",
         },
-        
 
         loginMethods: ["email", "wallet"],
         supportedChains: [bsc],
