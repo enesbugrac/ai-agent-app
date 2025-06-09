@@ -3,8 +3,8 @@ import { FaCheckCircle } from "react-icons/fa";
 import { BiTransferAlt } from "react-icons/bi";
 import Confetti from "react-confetti";
 import { useState } from "react";
-import { useRef } from "react";
 import { useEffect } from "react";
+import { useRef } from "react";
 import { SwapMetadata } from "@/types/tools.types";
 
 interface SwapUIProps {
