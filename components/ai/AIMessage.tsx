@@ -16,17 +16,15 @@ type AIMessageProps = {
 };
 
 const AIMessage: React.FC<AIMessageProps> = ({ message }) => {
+  console.log('message', message)
   const { toolJson } = message;
   const { content } = message;
   const metadata = toolJson?.metadata;
   const toolType = metadata?.type;
 
-  console.log("message", message);
 
   const ageintUi = useMemo(()=>{
     if (!toolJson) return null;
-
-
     switch (toolType) {
       case "arbitrage-scan":
         return <ArbitrageScanUI toolData={metadata as ArbitrageScanMetadata} />;
@@ -37,10 +35,9 @@ const AIMessage: React.FC<AIMessageProps> = ({ message }) => {
       case "candle-prediction":
         return <PreditNextCandle toolData={metadata as PreditNextCandleMetadata} />;
     }
-  },[metadata])
+  },[metadata, toolType, toolJson])
 
   const agent = agents.find((agent) => agent.type === toolType);
-
 
   return (
     <div className="message-component rounded-lg  w-full">

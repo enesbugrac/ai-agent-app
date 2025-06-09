@@ -53,7 +53,7 @@ function ThreadStarter({ agentData }: Props) {
         welcomeMessageDissapear={welcomeMessageDisappear}
       />
 
-      {isThreadCreating && (
+      {initialMessage && (
         <ThreadView
           messages={initialMessage ? [initialMessage] : []}
           isMessageWaiting={true}

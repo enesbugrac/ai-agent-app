@@ -40,10 +40,6 @@ export const useThreadQueryAsync = () => {
 
   useEffect(() => {
     fetchThreadAsync();
-
-    return () => {
-      console.log("unmounting thread");
-    }
   }, [threadId]);
 
   return { thread: currentThread, fetchThreadAsync, isLoading };
@@ -85,28 +81,14 @@ export const useThreadMutation = () => {
       };
       setInitialMessage(userMessage);
 
-      const data = await privateFetch<{ threadId: string; content: string }>("/threads", {
+      const newThread = await privateFetch<Thread>("/threads", {
         method: "POST",
         body: JSON.stringify({ message, agent }),
       });
 
-      const newThread: Thread = {
-        _id: data.threadId,
-        messages: [
-          userMessage,
-          {
-            _id: `${Date.now()}-assistant`,
-            threadId: data.threadId,
-            role: MessageRole.ASSISTANT,
-            content: data.content,
-          },
-        ],
-        agent: agent as Agent,
-        userId: "temp",
-        name: message.slice(0, 30) + "...",
-        openAiThreadId: "temp",
-      };
 
+      console.log('new thread', newThread)
+    
       addThread(newThread);
       return newThread;
     } catch (error) {

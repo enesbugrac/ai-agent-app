@@ -22,9 +22,7 @@ export default function ThreadView({ messages, isMessageWaiting }: ThreadViewPro
   }, [messages, isMessageWaiting]);
 
 
-
   return (
-
       <div className="h-[85%] w-[100%] flex  flex-col gap-4 overflow-y-scroll scrollbar-hide md:scrollbar-auto py-4 px-0 md:px-4 md:py-4">
         {messages.map((message, index) => (
           <div

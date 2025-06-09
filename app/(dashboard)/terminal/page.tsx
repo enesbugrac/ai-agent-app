@@ -5,7 +5,7 @@ import { agents } from "@/data/agents";
 import AgentCard from "@/components/AgentCard";
 
 export default function Home() {
-  const featuredAgents = agents.slice(0, 4); // Show first 2 agents on home page
+  const featuredAgents = agents.slice(0, 1); // Show first 2 agents on home page
 
   return (
     <>
@@ -43,7 +43,7 @@ export default function Home() {
                 My Agents
               </button> */}
           </div>
-          <div className="text-xs text-primary/50">3 agents available</div>
+          <div className="text-xs text-primary/50">1 agents available</div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-8 pb-8 w-full overflow-y-scroll h-fit">

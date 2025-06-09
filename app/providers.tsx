@@ -37,12 +37,6 @@ export function Providers({ children }: { children: React.ReactNode }) {
 function AuthQueryProvider({ children }: { children: React.ReactNode }) {
   const { isLoading } = useAuthAsync();
 
-  useEffect(() => {
-    return () => {
-      console.log("unmounting");
-    };
-  }, []);
-
   return (
     <>
       {isLoading && <LoadingAnimation />}
