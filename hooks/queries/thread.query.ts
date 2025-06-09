@@ -23,8 +23,17 @@ export const useThreadQueryAsync = () => {
         return;
       }
 
+      if (threadId.length!==24) {
+        console.error("Thread ID is required");
+        return;
+      }
+
       setIsLoading(true);
       const data = await privateFetch<Thread>(`/threads/${threadId}`);
+     if(!data._id){
+        throw Error('Thread fetch error')
+     }
+
       upsertThread(threadId as string, {
         ...data,
         messages: data.messages,
@@ -86,9 +95,7 @@ export const useThreadMutation = () => {
         body: JSON.stringify({ message, agent }),
       });
 
-
       console.log('new thread', newThread)
-    
       addThread(newThread);
       return newThread;
     } catch (error) {
@@ -96,7 +103,6 @@ export const useThreadMutation = () => {
       throw error;
     } finally {
       setIsThreadCreating(false);
-      setInitialMessage(null);
     }
   };
 

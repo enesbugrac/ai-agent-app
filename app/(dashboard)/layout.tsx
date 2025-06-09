@@ -8,13 +8,13 @@ import PageBody from "@/components/page/PageBody";
 import { FaHome, FaTasks, FaBook, FaComments, FaUser } from "react-icons/fa";
 import { IoHeart, IoSparkles } from "react-icons/io5";
 import { agents } from "@/data/agents";
-import { useThreadQueryAsync } from "@/hooks/queries/thread.query";
+import {  useCurrentThreadCache } from "@/hooks/queries/thread.query";
 import MobileSidebar from "@/components/page/mobile/MobileSidebar";
 import MobileHeader from "@/components/page/mobile/MobileHeader";
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const { thread } = useThreadQueryAsync();
+  const { thread } = useCurrentThreadCache();
 
   const pages = [
     {
