@@ -33,7 +33,9 @@ const Header = () => {
         <div
           className={`flex flex-col items-center justify-center gap-6 text-center transition-all duration-700`}
         >
-          <p className="z-50 md:text-lg text-md text-secondary">Your AI-Powered Task Force:</p>
+          <p className="z-50 md:text-lg text-md text-secondary">
+            Your AI-Powered Task Force:
+          </p>
           <h1 className="z-50 md:text-[clamp(2rem,calc(2rem+2*((100vw-23.4375rem)/66.5625)),4rem)] text-2xl font-semibold text-white leading-[1.1]">
             Effortlessly Solve Problems,
             <br />
@@ -50,7 +52,7 @@ const Header = () => {
                 className="flex-1 py-3 text-sm flex items-center justify-center gap-2"
                 text={
                   <>
-                    Join the Whitelist <FaArrowRight className="text-sm" />
+                    Join the Waitlist <FaArrowRight className="text-sm" />
                   </>
                 }
               />

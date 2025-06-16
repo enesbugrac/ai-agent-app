@@ -6,14 +6,14 @@ import { ReactNode } from "react";
 
 interface JoinWhitelistButtonProps {
   className?: string;
-  variant?: 'primary' | 'secondary' | 'outline';
+  variant?: "primary" | "secondary" | "outline";
   text?: ReactNode;
 }
 
-const JoinWhitelistButton = ({ 
-  className = "", 
-  variant = 'primary',
-  text = "Join Whitelist"
+const JoinWhitelistButton = ({
+  className = "",
+  variant = "primary",
+  text = "Join Waitlist",
 }: JoinWhitelistButtonProps) => {
   const { openModal } = useModalStore();
 
@@ -24,11 +24,11 @@ const JoinWhitelistButton = ({
   // Generate button styles based on variant
   const getButtonStyles = () => {
     switch (variant) {
-      case 'primary':
+      case "primary":
         return "bg-primary text-black hover:bg-primary/90";
-      case 'secondary':
+      case "secondary":
         return "bg-background-highlight text-white hover:bg-background-highlight/90";
-      case 'outline':
+      case "outline":
         return "bg-transparent border border-primary text-primary hover:bg-primary/10";
       default:
         return "bg-primary text-black hover:bg-primary/90";
@@ -45,4 +45,4 @@ const JoinWhitelistButton = ({
   );
 };
 
-export default JoinWhitelistButton; 
+export default JoinWhitelistButton;

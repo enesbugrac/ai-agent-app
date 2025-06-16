@@ -45,21 +45,16 @@ const WhitelistForm: React.FC<WhitelistFormProps> = ({
     try {
       const response = await addEmailToWhitelist(email);
       if (response.status === "exists") {
-
         setIsExistingEmail(true);
         setSuccess(true);
         setEmail("");
       } else {
-  
         setSuccess(true);
         setEmail("");
       }
-
     } catch (err) {
       const errorMessage =
-        err instanceof Error
-          ? err.message
-          : "Failed to join whitelist. Please try again.";
+        err instanceof Error ? err.message : "Failed to join waitlist. Please try again.";
       setError(errorMessage);
     } finally {
       setIsSubmitting(false);
@@ -71,26 +66,28 @@ const WhitelistForm: React.FC<WhitelistFormProps> = ({
       {success ? (
         <>
           {isExistingEmail ? (
-            <>{existingEmailSuccessContent || 
-              <SuccessMessage
-                title="You're already on the list!"
-                message="Thank you for joining. We'll notify you for the upcoming features."
-              />
-            }</>
+            <>
+              {existingEmailSuccessContent || (
+                <SuccessMessage
+                  title="You're already on the list!"
+                  message="Thank you for joining. We'll notify you for the upcoming features."
+                />
+              )}
+            </>
           ) : (
-            <>{successContent || 
-              <SuccessMessage
-                title="You're on the list!"
-                message="Thank you for joining. We'll notify you for the upcoming features."
-              />
-            }</>
+            <>
+              {successContent || (
+                <SuccessMessage
+                  title="You're on the list!"
+                  message="Thank you for joining. We'll notify you for the upcoming features."
+                />
+              )}
+            </>
           )}
         </>
       ) : (
         <>
-          <h3 className="text-white text-lg font-medium mb-2">
-            Join the Whitelist
-          </h3>
+          <h3 className="text-white text-lg font-medium mb-2">Join the Waitlist</h3>
           <p className="text-secondary text-sm mb-6">
             {description} {/* Use description prop */}
           </p>
@@ -123,7 +120,7 @@ const WhitelistForm: React.FC<WhitelistFormProps> = ({
                   : "bg-primary hover:bg-primary/90"
               }`}
             >
-              {isSubmitting ? "Submitting..." : "Join Whitelist"}
+              {isSubmitting ? "Submitting..." : "Join Waitlist"}
             </button>
           </form>
         </>

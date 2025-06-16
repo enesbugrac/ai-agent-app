@@ -2,17 +2,7 @@
 
 import { usePrivy } from "@privy-io/react-auth";
 import { useState } from "react";
-import {
-  FaTwitter,
-  FaDiscord,
-  FaGoogle,
-  FaGithub,
-  FaWallet,
-  FaCheck,
-  FaPlus,
-  FaSpinner,
-  FaCopy,
-} from "react-icons/fa";
+import { FaTwitter, FaWallet, FaCheck, FaPlus, FaSpinner, FaCopy } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
 
 interface ConnectorProps {
@@ -71,15 +61,7 @@ const ConnectorButton = ({
 );
 
 export default function AccountPage() {
-  const {
-    user,
-    linkEmail,
-    linkWallet,
-    linkDiscord,
-    linkGoogle,
-    linkGithub,
-    linkTwitter,
-  } = usePrivy();
+  const { user, linkEmail, linkWallet, linkTwitter } = usePrivy();
 
   const [loading, setLoading] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
@@ -124,27 +106,6 @@ export default function AccountPage() {
       isConnected: !!user?.twitter,
       onClick: () => handleConnect("twitter", linkTwitter),
       description: "Share your activities directly to Twitter",
-    },
-    {
-      name: "Discord",
-      icon: FaDiscord,
-      isConnected: !!user?.discord,
-      onClick: () => handleConnect("discord", linkDiscord),
-      description: "Join our community and get instant updates",
-    },
-    {
-      name: "Google",
-      icon: FaGoogle,
-      isConnected: !!user?.google,
-      onClick: () => handleConnect("google", linkGoogle),
-      description: "Quick sign-in with your Google account",
-    },
-    {
-      name: "GitHub",
-      icon: FaGithub,
-      isConnected: !!user?.github,
-      onClick: () => handleConnect("github", linkGithub),
-      description: "Connect with GitHub for developer features",
     },
   ];
 

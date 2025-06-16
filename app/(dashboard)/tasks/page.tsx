@@ -7,6 +7,8 @@ import { MdOutlineDone } from "react-icons/md";
 import { useTasksQuery } from "@/hooks/queries/tasks.query";
 import { useAuthStore } from "@/store/useStore";
 import { usePrivy, User } from "@privy-io/react-auth";
+import { useModalStore } from "@/store/modalStore";
+import WhitelistForm from "@/components/whitelist/WhitelistForm";
 
 const TasksPage = () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -15,7 +17,7 @@ const TasksPage = () => {
   const { getTasks, completeTask } = useTasksQuery();
   const { user } = useAuthStore();
   const { user: privyUser } = usePrivy();
-
+  const { openModal } = useModalStore();
   // Fetch tasks on component mount
 
   useEffect(() => {
@@ -39,13 +41,13 @@ const TasksPage = () => {
     switch (type) {
       case "FOLLOW":
         console.log("Following @AIGEN...");
-        window.open("https://x.com/AIGEN_AI", "_blank");
+        window.open("https://x.com/aigenlabai", "_blank");
         completeTask((privyUser as User).id, id);
         break;
 
       case "LIKE":
         console.log("Liking tweet...");
-        window.open("https://x.com/AIGEN_AI/status/1234567890", "_blank");
+        window.open("https://x.com/aigenlabai/status/1932525703838228528", "_blank");
         completeTask((privyUser as User).id!, id);
         break;
 
@@ -53,6 +55,13 @@ const TasksPage = () => {
         console.warn("Unknown task type:", type);
     }
   };
+
+  useEffect(() => {
+    if (tasks.every((task) => task.completed)) {
+      openModal(<WhitelistForm />);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tasks]);
 
   if (isLoading) {
     return (
@@ -66,9 +75,7 @@ const TasksPage = () => {
     <div className="w-full flex flex-col gap-4 py-6">
       <div className="w-full flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-medium text-white mb-2">
-            Community Missions
-          </h2>
+          <h2 className="text-2xl font-medium text-white mb-2">Community Missions</h2>
           <p className="text-secondary">Complete missions to earn rewards</p>
         </div>
         <div className="flex flex-col md:flex-row items-center gap-2">
@@ -96,10 +103,6 @@ const TasksPage = () => {
                   {task.value || task.description}
                 </p>
               </div>
-              <div className="flex flex-1 flex-col md:flex-row items-center justify-center text-center text-secondary/50 text-xs md:text-sm">
-                 <span className="text-tertiary text-xs md:text-sm font-medium">{task.points}</span>
-                 <span className="text-secondary/50 text-xs md:text-sm"> $AIGEN</span>
-              </div>
               <div className="flex justify-end w-[20%] md:w-[30%]">
                 {!task.completed ? (
                   <PrimaryButton
@@ -110,8 +113,7 @@ const TasksPage = () => {
                       "completed" && "Completed"}
                     {user?.tasks.find((t) => t.taskId === task._id)?.status ===
                       "pending" && "Pending"}
-                    {!user?.tasks.find((t) => t.taskId === task._id) &&
-                      "Complete"}
+                    {!user?.tasks.find((t) => t.taskId === task._id) && "Complete"}
                   </PrimaryButton>
                 ) : (
                   <MdOutlineDone className="w-4 h-4 text-tertiary" />
