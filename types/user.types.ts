@@ -6,6 +6,7 @@ export type UserProfile = {
   wallet: string;
   role: string;
   credits: number;
+  creditsUsage:number;
   threads: Thread[];
   tasks: UserTasks[];
 };

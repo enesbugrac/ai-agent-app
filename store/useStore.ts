@@ -20,7 +20,7 @@ export const useAuthStore = create<AuthState>()(
         const currentUser = get().user;
         if (currentUser && currentUser.credits >= 1) { // Check if credits >= 1
           set({
-            user: { ...currentUser, credits: currentUser.credits - 1 }, // Decrease by 1
+            user: { ...currentUser, credits: currentUser.credits - 1 , creditsUsage: currentUser.creditsUsage +1 }, // Decrease by 1
           });
         } else {
           // Optional: Handle insufficient credits case, e.g., log a warning

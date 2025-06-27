@@ -1,5 +1,5 @@
 import { usePrivy, useLogout } from "@privy-io/react-auth";
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -86,7 +86,9 @@ export function usePrivateFetch() {
   ); // The function depends on getToken and logout, so it's memoized based on it
 
   // Return only the privateFetch function, wrapped in an object structure
-  return { privateFetch };
+  return  useMemo(()=>{
+    return {privateFetch}
+  },[privateFetch])
 }
 
 /**
@@ -145,5 +147,7 @@ export function usePublicFetch() {
   );
 
   // Return the publicFetch function
-  return { publicFetch };
+  return  useMemo(()=>{
+    return {publicFetch}
+  },[publicFetch])
 }
