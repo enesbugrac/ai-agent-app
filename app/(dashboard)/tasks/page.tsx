@@ -65,11 +65,16 @@ const TasksPage = () => {
   };
 
   useEffect(() => {
-    if (tasks.every((task) => task.completed)) {
-      openModal(<WhitelistForm />);
+if(!user||isLoading){
+  return
+}
+
+    if (tasks.every((task) => task.completed) && !user?.whitelistEmail) {
+    
+      openModal(<WhitelistForm  />);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tasks]);
+  }, [tasks, user,isLoading]);
 
   if (isLoading || isAgentsUsedLoading) {
     return (

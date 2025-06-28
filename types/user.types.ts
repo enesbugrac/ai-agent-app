@@ -9,6 +9,7 @@ export type UserProfile = {
   creditsUsage:number;
   threads: Thread[];
   tasks: UserTasks[];
+  whitelistEmail:string|null
 };
 
 export type UserTasks = {

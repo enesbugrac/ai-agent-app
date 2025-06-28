@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useWhitelistQuery } from "@/hooks/queries/whitelist.query";
 import { ReactNode } from "react";
 import SuccessMessage from "@/components/common/SuccessMessage";
+import { useAuthCache } from "@/hooks/auth.hooks";
 
 interface WhitelistFormProps {
   description?: string;
@@ -16,6 +17,7 @@ const WhitelistForm: React.FC<WhitelistFormProps> = ({
   successContent,
   existingEmailSuccessContent,
 }) => {
+  const {user} = useAuthCache()
   const [email, setEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
@@ -43,7 +45,7 @@ const WhitelistForm: React.FC<WhitelistFormProps> = ({
     setIsSubmitting(true);
 
     try {
-      const response = await addEmailToWhitelist(email);
+      const response = await addEmailToWhitelist(email,!!user);
       if (response.status === "exists") {
         setIsExistingEmail(true);
         setSuccess(true);
