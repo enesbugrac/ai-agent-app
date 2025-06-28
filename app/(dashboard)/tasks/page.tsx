@@ -19,6 +19,7 @@ const TasksPage = () => {
     totalAgentPoints,
   } = useAgentTasks();
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [tasks, setTasks] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const { getTasks, completeTask } = useTasksQuery();
@@ -65,16 +66,15 @@ const TasksPage = () => {
   };
 
   useEffect(() => {
-if(!user||isLoading){
-  return
-}
+    if (!user || isLoading) {
+      return;
+    }
 
     if (tasks.every((task) => task.completed) && !user?.whitelistEmail) {
-    
-      openModal(<WhitelistForm  />);
+      openModal(<WhitelistForm />);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tasks, user,isLoading]);
+  }, [tasks, user, isLoading]);
 
   if (isLoading || isAgentsUsedLoading) {
     return (
