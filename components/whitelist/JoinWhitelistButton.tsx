@@ -12,6 +12,7 @@ interface JoinWhitelistButtonProps {
 
 const JoinWhitelistButton = ({
   className = "",
+
   variant = "primary",
   text = "Join Waitlist",
 }: JoinWhitelistButtonProps) => {
