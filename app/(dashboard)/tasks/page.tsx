@@ -16,6 +16,7 @@ const TasksPage = () => {
   const {
     agentTasks,
     isLoading: isAgentsUsedLoading,
+
     totalAgentPoints,
   } = useAgentTasks();
 
