@@ -74,33 +74,48 @@ export const useAgentTasks = ()=>{
   const {user} = useAuthCache()
 
 
-
   const agentTasks = useMemo(()=>{
    return  [
       {
         id:'Arbitra',
-        title:"Use Arbitra ",
-        description:"Use Arbitra Agnet to earn points",
+        title:"Use Arbitra",
+        description:"Use Arbitra Agent to earn points",
         completed: agentsUsed.includes(Agent.ARBITRAGE_ASSISTANT),
         link:'/agent/arbitrage-assistant',
+        point: 15,
       },
-      {
-        id:'Credit',
-        title:"Agent credit",
-        description:"Spend your credit to earn points",
-        point: user?.creditsUsage??0 * 2,
-        link:'/agent/arbitrage-assistant',
-        completed: user?.creditsUsage??0>0
-      },
+      // {
+      //   id:'Juvex',
+      //   title:"Use Juvex",
+      //   description:"Use Juvex Agent to earn points",
+      //   completed: agentsUsed.includes(Agent.JUPITER_SWAP_ASSISTANT),
+      //   link:'/agent/jupiter-swap-assistant',
+      //   point: 15,
+      // },
+      // {
+      //   id:'Oden',
+      //   title:"Use Oden",
+      //   description:"Use Oden Agent to earn points",
+      //   completed: agentsUsed.includes(Agent.ODO_SWAP_ASSISTANT),
+      //   link:'/agent/odos-swap-assistant',
+      //   point: 15,
+      // },
+      // {
+      //   id:'Predix',
+      //   title:"Use Predix",
+      //   description:"Use Predix Agent to earn points",
+      //   completed: agentsUsed.includes(Agent.CANDLE_PREDICTION_AGENT),
+      //   link:'/agent/candle-prediction-assistant',
+      //   point: 15,
+      //   },
     ]
   },[agentsUsed]) 
 
 
-  const totalPoints = agentTasks.reduce((acc, t) => {
+
+  const totalAgentPoints = agentTasks.reduce((acc, t) => {
     // Eğer t.point tanımlıysa onu ekle,
     // değilse t.completed true ise 15 ekle, değilse 0 ekle
-
-    console.log('t',t.completed)
     const pts = t.point ?? (t.completed ? 15 : 0);
   
     return acc + pts;
@@ -109,6 +124,6 @@ export const useAgentTasks = ()=>{
   
 
   return {
-    agentsUsed, isLoading, agentTasks, totalPoints
+    agentsUsed, isLoading, agentTasks, totalAgentPoints
   }
 }

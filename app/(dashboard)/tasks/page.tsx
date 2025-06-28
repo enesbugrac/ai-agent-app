@@ -13,7 +13,7 @@ import Link from "next/link";
 
 const TasksPage = () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const {agentTasks, isLoading:isAgentsUsedLoading, totalPoints}  = useAgentTasks()
+  const {agentTasks, isLoading:isAgentsUsedLoading, totalAgentPoints}  = useAgentTasks()
 
   const [tasks, setTasks] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -74,6 +74,15 @@ const TasksPage = () => {
     );
   }
 
+  const communityPoints = tasks.reduce((acc, task) => {
+    if (task.completed) {
+      return acc + (task.point ?? 0); 
+    }
+    return acc;
+  }, 0);
+
+  const totalPoints = totalAgentPoints + (user?.creditsUsage??0 * 2) + communityPoints;
+
   return (
     <div className="w-full flex flex-col gap-4 py-6">
       <div className="w-full flex items-center justify-between">
@@ -83,7 +92,8 @@ const TasksPage = () => {
         </div>
         <div className="flex flex-col md:flex-row items-center gap-2">
           <span className="text-secondary text-xs md:text-sm">Earned:</span>
-          <span className="text-tertiary text-xs md:text-sm font-medium">{totalPoints} $AIGEN</span>
+          <span className="text-tertiary text-xs md:text-sm font-medium">{totalPoints} Points
+          </span> 
         </div>
       </div>
 
@@ -134,12 +144,41 @@ const TasksPage = () => {
         </div>
 
       <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-4">
+
+             <div
+             className={` border flex items-center justify-between border-tertiary rounded-lg p-4 `}
+           >
+             <div className="flex flex-col gap-2 w-[50%] ">
+               <h1 className="text-tertiary">Total Credit Usage</h1>
+               <p className="text-tertiary/50 text-xs md:text-sm truncate">
+               Spend your credit to earn points
+               </p>
+             </div>
+             <div className="flex justify-end w-[20%] md:w-[30%]">
+               {
+                 !user?.creditsUsage ? (
+                   <Link
+                     href={"/agent/arbitrage-assistant"}
+              
+                   >
+                        <PrimaryButton className="md:min-w-[100px] text-xs md:text-sm"> Complete</PrimaryButton>
+                   </Link>
+                 ) : (
+                   <div className="flex items-center gap-2">
+                     <p className="text-tertiary text-xs md:text-sm truncate">
+                       {user?.creditsUsage} Points
+                     </p>
+                     <MdOutlineDone className="w-4 h-4 text-tertiary" />
+                   </div>
+                 )
+               }
+             </div>
+           </div>
+
           {agentTasks.map((agentTask) => (
             <div
               key={agentTask.id}
-              className={`border flex items-center justify-between border-border rounded-lg p-4 ${
-                (agentTask.completed ) ? "border-tertiary/40" : ""
-              }`}
+              className={`border flex items-center justify-between rounded-lg p-4`}
             >
               <div className="flex flex-col gap-2 w-[50%]">
                 <h1>{agentTask.title}</h1>
@@ -149,19 +188,20 @@ const TasksPage = () => {
               </div>
               <div className="flex justify-end w-[20%] md:w-[30%]">
                 {
-                  agentTask.point ?  <p className="text-primary text-xs md:text-sm truncate">
-                    {agentTask.point}
-                  </p>:
                   !agentTask.completed ? (
                     <Link
                       href={agentTask.link}
                
                     >
-                         <PrimaryButton    className="md:min-w-[100px] text-xs md:text-sm"> Earn point</PrimaryButton>
-            
+                         <PrimaryButton className="md:min-w-[100px] text-xs md:text-sm"> Complete</PrimaryButton>
                     </Link>
                   ) : (
-                    <MdOutlineDone className="w-4 h-4 text-tertiary" />
+                    <div className="flex items-center gap-2">
+                      <p className="text-tertiary text-xs md:text-sm truncate">
+                        {agentTask.point} Points
+                      </p>
+                      <MdOutlineDone className="w-4 h-4 text-tertiary" />
+                    </div>
                   )
                 }
               </div>
