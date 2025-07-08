@@ -133,6 +133,7 @@ const TasksPage = () => {
                   <PrimaryButton
                     onClick={() => handleTaskAction(task.type, task._id)}
                     className="md:min-w-[100px] text-xs md:text-sm"
+                    disabled={user?.tasks.find((t) => t.taskId === task._id)?.status === "pending"}
                   >
                     {user?.tasks.find((t) => t.taskId === task._id)?.status ===
                       "completed" && "Completed"}
