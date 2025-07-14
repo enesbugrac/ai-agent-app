@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 import { Providers } from "./providers";
 import { ToastContainer } from "react-toastify";
@@ -68,6 +69,20 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geist.variable} h-screen`}>
+        {/* Google Analytics */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-S1B72JQS3Z"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-S1B72JQS3Z');
+          `}
+        </Script>
+
         <Providers>
           <main className="flex-1 ">{children}</main>
           <ToastContainer
