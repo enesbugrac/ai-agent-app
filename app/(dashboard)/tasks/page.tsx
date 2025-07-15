@@ -27,7 +27,6 @@ const TasksPage = () => {
   const { user } = useAuthStore();
   const { user: privyUser } = usePrivy();
   const { openModal } = useModalStore();
-  // Fetch tasks on component mount
 
   useEffect(() => {
     const fetchTasks = async () => {
@@ -133,7 +132,9 @@ const TasksPage = () => {
                   <PrimaryButton
                     onClick={() => handleTaskAction(task.type, task._id)}
                     className="md:min-w-[100px] text-xs md:text-sm"
-                    disabled={user?.tasks.find((t) => t.taskId === task._id)?.status === "pending"}
+                    disabled={
+                      user?.tasks.find((t) => t.taskId === task._id)?.status === "pending"
+                    }
                   >
                     {user?.tasks.find((t) => t.taskId === task._id)?.status ===
                       "completed" && "Completed"}
