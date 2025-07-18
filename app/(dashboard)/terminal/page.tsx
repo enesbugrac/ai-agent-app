@@ -1,12 +1,10 @@
 "use client";
 
 import { FaMapMarkerAlt } from "react-icons/fa";
-import { agents } from "@/data/agents";
 import AgentCard from "@/components/AgentCard";
+import { agents } from "@/data/agents";
 
 export default function Home() {
-  const featuredAgents = agents.slice(0, 1); // Show first 2 agents on home page
-
   return (
     <>
       <div className="w-full h-full md:px-4 md:py-10">
@@ -47,7 +45,7 @@ export default function Home() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-8 pb-8 w-full overflow-y-scroll h-fit">
-          {featuredAgents.map((agent) => (
+          {agents.map((agent) => (
             <AgentCard
               key={agent.name}
               id={agent.id}
